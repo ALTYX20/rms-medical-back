@@ -124,8 +124,8 @@ class CompanyService implements CompanyServiceInterface
         $serializer = new Serializer(array(new DateTimeNormalizer()));
         $companyID =  $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
         $company = $this->entityManager->getRepository(Company::class)->find($companyID);
-        $periodsubscriptionDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[period_subscription]'), \DateTime::class);
         if($company){
+            $periodsubscriptionDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[period_subscription]'), \DateTime::class);
             $company->setName($this->propertyAccessor->getValue($this->ConvertToArray($request), '[name]'));
             $company->setEmail($this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]'));
             $company->setAdresse($this->propertyAccessor->getValue($this->ConvertToArray($request), '[adresse]'));
@@ -144,6 +144,22 @@ class CompanyService implements CompanyServiceInterface
             $this->entityManager->flush($company);
             return $company;
         }
-        return 'No product found for id '.$userID;
+        return 'No Company found for id '.$companyID;
+    }
+
+
+    /**
+     * @param Request $request
+     */
+    public function DisableCompany(Request $request){
+
+        $companyID =  $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
+        $company = $this->entityManager->getRepository(Company::class)->find($companyID);
+        if($company){
+            $company->setStatus(false);
+            $this->entityManager->flush($company);
+            return $company;
+        }
+        return 'No Company found for id '.$companyID;
     }
 }

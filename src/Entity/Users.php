@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Users
  *
- * @ORM\Table(name="users", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})}, indexes={@ORM\Index(name="IDX_1483A5E9979B1AD6", columns={"company_id"})})
+ * @ORM\Table(name="users", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @ORM\Entity
  */
 class Users
@@ -98,15 +100,31 @@ class Users
      */
     private $dateNaissance;
 
+
+
     /**
-     * @var \Company
-     *
-     * @ORM\ManyToOne(targetEntity="Company")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="company_id", referencedColumnName="id")
-     * })
+     * @ORM\OneToMany(targetEntity="App\Entity\Presentation", mappedBy="presentationCreator")
+     */
+    private $presentations;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="employes")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $company;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Project", inversedBy="projectCreator")
+     */
+    private $project;
+
+
+
+    public function __construct()
+    {
+        $this->presentations = new ArrayCollection();
+        $this->project = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -256,6 +274,66 @@ class Users
 
         return $this;
     }
+
+
+    /**
+     * @return Collection|Presentation[]
+     */
+    public function getPresentations(): Collection
+    {
+        return $this->presentations;
+    }
+
+    public function addPresentation(Presentation $presentation): self
+    {
+        if (!$this->presentations->contains($presentation)) {
+            $this->presentations[] = $presentation;
+            $presentation->setPresentationCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removePresentation(Presentation $presentation): self
+    {
+        if ($this->presentations->contains($presentation)) {
+            $this->presentations->removeElement($presentation);
+            // set the owning side to null (unless already changed)
+            if ($presentation->getPresentationCreator() === $this) {
+                $presentation->setPresentationCreator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProject(): Collection
+    {
+        return $this->project;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->project->contains($project)) {
+            $this->project[] = $project;
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->project->contains($project)) {
+            $this->project->removeElement($project);
+        }
+
+        return $this;
+    }
+
+
 
 
 }

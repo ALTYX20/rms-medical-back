@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +50,16 @@ class Media
      * @ORM\Column(name="type", type="string", length=255, nullable=false)
      */
     private $type;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Presentation", mappedBy="Media")
+     */
+    private $presentations;
+
+    public function __construct()
+    {
+        $this->presentations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,6 +110,34 @@ class Media
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Presentation[]
+     */
+    public function getPresentations(): Collection
+    {
+        return $this->presentations;
+    }
+
+    public function addPresentation(Presentation $presentation): self
+    {
+        if (!$this->presentations->contains($presentation)) {
+            $this->presentations[] = $presentation;
+            $presentation->addMedium($this);
+        }
+
+        return $this;
+    }
+
+    public function removePresentation(Presentation $presentation): self
+    {
+        if ($this->presentations->contains($presentation)) {
+            $this->presentations->removeElement($presentation);
+            $presentation->removeMedium($this);
+        }
 
         return $this;
     }

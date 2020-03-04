@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -55,6 +57,16 @@ class Product
      * @ORM\Column(name="description", type="text", length=0, nullable=false)
      */
     private $description;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Presentation", mappedBy="product")
+     */
+    private $presentations;
+
+    public function __construct()
+    {
+        $this->presentations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -117,6 +129,34 @@ class Product
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Presentation[]
+     */
+    public function getPresentations(): Collection
+    {
+        return $this->presentations;
+    }
+
+    public function addPresentation(Presentation $presentation): self
+    {
+        if (!$this->presentations->contains($presentation)) {
+            $this->presentations[] = $presentation;
+            $presentation->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removePresentation(Presentation $presentation): self
+    {
+        if ($this->presentations->contains($presentation)) {
+            $this->presentations->removeElement($presentation);
+            $presentation->removeProduct($this);
+        }
 
         return $this;
     }

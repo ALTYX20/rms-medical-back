@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +50,26 @@ class Project
      * @ORM\Column(name="territories", type="string", length=255, nullable=false)
      */
     private $territories;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Presentation", mappedBy="project")
+     */
+    private $presentations;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Users", mappedBy="project")
+     */
+    private $projectCreator;
+
+
+
+    public function __construct()
+    {
+        $this->presentations = new ArrayCollection();
+        $this->projectCreator = new ArrayCollection();
+
+    }
 
     public function getId(): ?int
     {
@@ -101,6 +123,65 @@ class Project
 
         return $this;
     }
+
+
+    /**
+     * @return Collection|Presentation[]
+     */
+    public function getPresentations(): Collection
+    {
+        return $this->presentations;
+    }
+
+    public function addPresentation(Presentation $presentation): self
+    {
+        if (!$this->presentations->contains($presentation)) {
+            $this->presentations[] = $presentation;
+            $presentation->addProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removePresentation(Presentation $presentation): self
+    {
+        if ($this->presentations->contains($presentation)) {
+            $this->presentations->removeElement($presentation);
+            $presentation->removeProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Users[]
+     */
+    public function getProjectCreator(): Collection
+    {
+        return $this->projectCreator;
+    }
+
+    public function addProjectCreator(Users $projectCreator): self
+    {
+        if (!$this->projectCreator->contains($projectCreator)) {
+            $this->projectCreator[] = $projectCreator;
+            $projectCreator->addProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProjectCreator(Users $projectCreator): self
+    {
+        if ($this->projectCreator->contains($projectCreator)) {
+            $this->projectCreator->removeElement($projectCreator);
+            $projectCreator->removeProject($this);
+        }
+
+        return $this;
+    }
+
+    
 
 
 }

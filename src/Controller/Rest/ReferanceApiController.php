@@ -16,6 +16,12 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 
 class ReferanceApiController  extends AbstractFOSRestController
 {
+    private $referanceService;
+
+    public function __construct(referanceServiceInterface $ReferanceService)
+    {
+        $this->ReferanceService = $ReferanceService;
+    }
 
     
 }
