@@ -10,5 +10,8 @@ interface PresentationServiceInterface
 {
     function getAllPresentation();
     function getPresentationById(int $id);
+    function SetPresentation(Request $request);
+    function DeletePresentation(Request $request);
+    function ModifyPresentation(Request $request);
     
 }

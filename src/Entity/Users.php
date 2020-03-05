@@ -108,10 +108,20 @@ class Users
     private $presentations;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="employes")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="employes" , fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(nullable=false)
      */
     private $company;
+
+    /**
+     * @var \Company
+     *
+     * @ORM\ManyToOne(targetEntity="Company")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     * })
+     */
+    //private $company;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Project", inversedBy="projectCreator")
@@ -122,6 +132,7 @@ class Users
 
     public function __construct()
     {
+        //$companyName=$this->company->getName();
         $this->presentations = new ArrayCollection();
         $this->project = new ArrayCollection();
     }
@@ -273,8 +284,8 @@ class Users
         $this->company = $company;
 
         return $this;
-    }
-
+    } 
+ 
 
     /**
      * @return Collection|Presentation[]
@@ -331,6 +342,11 @@ class Users
         }
 
         return $this;
+    }
+
+    public function getCompanyName(): ?string
+    {
+        return $companyName;
     }
 
 

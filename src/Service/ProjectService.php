@@ -55,5 +55,29 @@ class ProjectService implements ProjectServiceInterface
     {
         return $this->entityManager->getRepository(Project::class)->find($id);
     }
+
+
+    /**
+     * @param Request $request
+     */
+    public function SetProject(Request $request){
+
+    }
+
+
+    /**
+     * @param Request $request
+     */
+    public function ModifyProject(Request $request){
+
+    }
+
+    
+    /**
+     * @param Request $request
+     */
+    public function DeleteProject(Request $request){
+
+    }
     
 }

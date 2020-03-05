@@ -10,5 +10,8 @@ interface ProductServiceInterface
 {
     function getAllProduct();
     function getProductById(int $id);
+    function SetProduct(Request $request);
+    function DeleteProduct(Request $request);
+    function ModifyProduct(Request $request);
     
 }

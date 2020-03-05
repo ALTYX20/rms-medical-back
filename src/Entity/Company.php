@@ -129,7 +129,7 @@ class Company
     private $status;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Users", mappedBy="company", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Users", mappedBy="company", orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $employes;
 
@@ -326,12 +326,12 @@ class Company
     /**
      * @return Collection|Users[]
      */
-    public function getEmployes(): Collection
+    protected function getEmployes(): Collection
     {
         return $this->employes;
     }
 
-    public function addEmploye(Users $employe): self
+    protected function addEmploye(Users $employe): self
     {
         if (!$this->employes->contains($employe)) {
             $this->employes[] = $employe;
