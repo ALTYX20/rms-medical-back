@@ -52,4 +52,50 @@ class ProductApiController  extends AbstractFOSRestController
         }
         return View::create(null, Response::HTTP_NOT_FOUND);
     }
+
+    /**
+     * Creates a User resource
+     * @Rest\Post("/product")
+     * @param Request $request
+     * @return View
+     */
+    public function AddProduct(Request $request): View
+    {
+        if ($request){
+
+            $product = $this->ProductService->SetProduct($request);
+            // In case our POST was a success we need to return a 201 HTTP CREATED response
+            return View::create($product, Response::HTTP_CREATED);
+
+        }
+        return View::create(null, Response::HTTP_NOT_FOUND);
+    }
+
+
+    /**
+     * Modify product byID 
+     * @Rest\Put("/product")
+     * @param Request $request
+     * @return View
+     */
+    public function ModifyUser(Request $request): View
+    {
+        $product = $this->ProductService->ModifyProduct($request);
+        return View::create($product, Response::HTTP_OK);
+    }
+
+
+    /**
+     * Delete product byID 
+     * @Rest\Delete("/product")
+     * @param Request $request
+     * @return View
+     */
+    public function DeleteProduct(Request $request): View
+    {
+        $product = $this->ProductService->DeleteProduct($request);
+        return View::create($product, Response::HTTP_OK);
+    }
+
+    
 }

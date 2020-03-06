@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ProductServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Serializer\Serializer;
 
 class ProductService implements ProductServiceInterface
 {
@@ -66,11 +67,11 @@ class ProductService implements ProductServiceInterface
             return 'this product already exist';
         }
         $product = new Product();
-        $product->setNom($this->entityManager->getRepository(Product::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]')));
-        $product->setLogo($this->entityManager->getRepository(Product::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]')));
-        $product->setPrix($this->entityManager->getRepository(Product::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prix]')));
-        $product->setType($this->entityManager->getRepository(Product::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]')));
-        $product->setDescription($this->entityManager->getRepository(Product::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]')));
+        $product->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
+        $product->setLogo($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]'));
+        $product->setPrix($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prix]'));
+        $product->setType($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]'));
+        $product->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
         
         //Prepar and inject product into database
         $this->entityManager->persist($product);
@@ -89,11 +90,11 @@ class ProductService implements ProductServiceInterface
         $product = $this->entityManager->getRepository(Product::class)->findOneBy(['nom' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]')]);
         if($product){
 
-            $product->setNom($this->entityManager->getRepository(Product::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]')));
-            $product->setType($this->entityManager->getRepository(Product::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]')));
-            $product->setLogo($this->entityManager->getRepository(Product::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]')));
-            $product->setPrix($this->entityManager->getRepository(Product::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prix]')));
-            $product->setDescription($this->entityManager->getRepository(Product::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]')));
+            $product->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
+            $product->setType($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]'));
+            $product->setLogo($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]'));
+            $product->setPrix($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prix]'));
+            $product->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
         
             $this->entityManager->flush();
 

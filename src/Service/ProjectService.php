@@ -61,7 +61,23 @@ class ProjectService implements ProjectServiceInterface
      * @param Request $request
      */
     public function SetProject(Request $request){
+        $project = $this->entityManager->getRepository(Project::class)->findOneBy(['titre' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')]);
+        if($project){
+            return 'this project already exist';
+        }
+        $project = new Project();
+        $project->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
+        $project->setLogo($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]'));
+        $project->setStatus($this->propertyAccessor->getValue($this->ConvertToArray($request), '[status]'));
+        $project->setTerritories($this->propertyAccessor->getValue($this->ConvertToArray($request), '[territories]'));
+        //$project->addPresentation($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]'));
+        //$project->addProjectCreator($this->propertyAccessor->getValue($this->ConvertToArray($request), '[projectCreator]'));
+        
+        //Prepar and inject product into database
+        $this->entityManager->persist($project);
+        $this->entityManager->flush();
 
+        return 'project added successfully ';
     }
 
 
@@ -70,6 +86,22 @@ class ProjectService implements ProjectServiceInterface
      */
     public function ModifyProject(Request $request){
 
+        $project = $this->entityManager->getRepository(Project::class)->findOneBy(['titre' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')]);
+        if($project){
+
+            $project->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
+            $project->setLogo($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]'));
+            $project->setStatus($this->propertyAccessor->getValue($this->ConvertToArray($request), '[status]'));
+            $project->setTerritories($this->propertyAccessor->getValue($this->ConvertToArray($request), '[territories]'));
+            //$project->addPresentation($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]'));
+            //$project->addProjectCreator($this->propertyAccessor->getValue($this->ConvertToArray($request), '[projectcreator]'));
+        
+            $this->entityManager->flush();
+
+            return 'project '.$project->getTitre().' Modifed successfully ';
+        }
+
+        return 'project was not found ';
     }
 
     
@@ -78,6 +110,14 @@ class ProjectService implements ProjectServiceInterface
      */
     public function DeleteProject(Request $request){
 
+        $projectID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
+        $project = $this->entityManager->getRepository(Project::class)->find($projectID);
+        if($project){
+            $this->entityManager->remove($project);
+            $this->entityManager->flush();
+            return 'project has been Deleted' ;
+        }
+            return 'project dosn\'t exist';
     }
     
 }

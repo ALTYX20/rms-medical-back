@@ -31,26 +31,70 @@ class ProjectApiController  extends AbstractFOSRestController
      * @Rest\Get("/project", name="get_all_projects")
      * @return View
      */
-    public function findAllProduct(): View
+    public function findAllProject(): View
     {
-        $product = $this->ProductService->getAllProduct();
-        return View::create($product, Response::HTTP_OK);
+        $project = $this->ProjectService->getAllProject();
+        return View::create($project, Response::HTTP_OK);
 
     }
 
     /**
-     * Retrieves an product resource
-     * @Rest\Get("/product/{id}")
+     * Retrieves an Project resource
+     * @Rest\Get("/project/{id}")
      * @param int $id
      * @return View
      */
-    public function findProductById(int $id): View
+    public function findProjectById(int $id): View
     {
-        $product = $this->ProductService->getProductById($id);
-        if ($product) {
-            return View::create($product, Response::HTTP_OK);
+        $project = $this->ProjectService->getProjectById($id);
+        if ($project) {
+            return View::create($project, Response::HTTP_OK);
         }
         return View::create(null, Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Creates a User resource
+     * @Rest\Post("/project")
+     * @param Request $request
+     * @return View
+     */
+    public function AddProject(Request $request): View
+    {
+        if ($request){
+
+            $project = $this->ProjectService->SetProject($request);
+            // In case our POST was a success we need to return a 201 HTTP CREATED response
+            return View::create($project, Response::HTTP_CREATED);
+
+        }
+        return View::create(null, Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Modify Project byID 
+     * @Rest\Put("/project")
+     * @param Request $request
+     * @return View
+     */
+    public function ModifyProject(Request $request): View
+    {
+        $project = $this->ProjectService->ModifyProject($request);
+        return View::create($project, Response::HTTP_OK);
+    }
+
+
+
+    /**
+     * Delete project byID 
+     * @Rest\Delete("/project")
+     * @param Request $request
+     * @return View
+     */
+    public function DeleteProject(Request $request): View
+    {
+        $project = $this->ProjectService->DeleteProject($request);
+        return View::create($project, Response::HTTP_OK);
     }
 
     

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 interface CompanyServiceInterface
 {
     function getAllCompanys();
-    function getcompanysById(int $id);
+    function getcompanyById(int $id);
     function SetCompany(Request $request);
     function DeleteCompany(Request $request);
     function ModifyCompany(Request $request);

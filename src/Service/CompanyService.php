@@ -51,7 +51,7 @@ class CompanyService implements CompanyServiceInterface
      * @param int $id
      * @return object|null
      */
-    function getCompanysById(int $id)
+    function getCompanyById(int $id)
     {
         return $this->entityManager->getRepository(Company::class)->find($id);
     }
