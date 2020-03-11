@@ -113,15 +113,6 @@ class Users
      */
     private $company;
 
-    /**
-     * @var \Company
-     *
-     * @ORM\ManyToOne(targetEntity="Company")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="company_id", referencedColumnName="id")
-     * })
-     */
-    //private $company;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Project", inversedBy="projectCreator")

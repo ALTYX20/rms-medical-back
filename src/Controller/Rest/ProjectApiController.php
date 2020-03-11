@@ -54,7 +54,7 @@ class ProjectApiController  extends AbstractFOSRestController
     }
 
     /**
-     * Creates a User resource
+     * Creates a Project resource
      * @Rest\Post("/project")
      * @param Request $request
      * @return View

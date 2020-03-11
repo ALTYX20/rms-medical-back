@@ -54,9 +54,19 @@ class UsersService implements UsersServiceInterface
      * @param int $id
      * @return object|null
      */
-    function getUsersById(int $id)
+    function getUsersById(int $id) 
     {
-        return $this->entityManager->getRepository(Users::class)->find($id);
+        
+        $query = $this->entityManager->createQuery(
+            'select u.id,u.nom ,u.prenom,u.email,u.adresse,u.codepostal,u.city,u.numTel,u.sexe,u.role,u.motpass,u.dateNaissance ,
+            c.name,c.email 
+            from App:Company as c ,App:Users as u 
+            WHERE(u.id = :id and u.company = c.id)'
+        )->setParameter('id', $id);
+        
+        $user = $query->getResult();
+        return $user;
+        //return $this->entityManager->getRepository(Users::class)->showUser($id);
     }
 
 

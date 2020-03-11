@@ -53,5 +53,47 @@ class PresentationApiController  extends AbstractFOSRestController
         }
         return View::create(null, Response::HTTP_NOT_FOUND);
     }
+
+    /**
+     * Creates a presentation resource
+     * @Rest\Post("/presentation")
+     * @param Request $request
+     * @return View
+     */
+    public function AddPresentation(Request $request): View
+    {
+        if ($request){
+
+            $presentation = $this->PresentationService->SetPresentation($request);
+            // In case our POST was a success we need to return a 201 HTTP CREATED response
+            return View::create($presentation, Response::HTTP_CREATED);
+
+        }
+        return View::create(null, Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Modify presentation byID 
+     * @Rest\Put("/presentation")
+     * @param Request $request
+     * @return View
+     */
+    public function ModifyProject(Request $request): View
+    {
+        $presentation = $this->PresentationService->ModifyPresentation($request);
+        return View::create($presentation, Response::HTTP_OK);
+    }
     
+
+    /**
+     * Delete presentation byID 
+     * @Rest\Delete("/presentation")
+     * @param Request $request
+     * @return View
+     */
+    public function DeletePresentation(Request $request): View
+    {
+        $presentation = $this->PresentationService->DeletePresentation($request);
+        return View::create($presentation, Response::HTTP_OK);
+    }
 }

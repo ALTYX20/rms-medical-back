@@ -65,10 +65,10 @@ class MediaService implements MediaServiceInterface
             return 'this file already exist';
         }
         $media = new Media();
-        $media->setTitre($this->entityManager->getRepository(Media::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')));
-        $media->setDescription($this->entityManager->getRepository(Media::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]')));
-        $media->setLien($this->entityManager->getRepository(Media::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[lien]')));
-        $media->setType($this->entityManager->getRepository(Media::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]')));
+        $media->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
+        $media->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
+        $media->setLien($this->propertyAccessor->getValue($this->ConvertToArray($request), '[lien]'));
+        $media->setType($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]'));
         
         //Prepar and inject media into database
         $this->entityManager->persist($media);
@@ -86,9 +86,9 @@ class MediaService implements MediaServiceInterface
         $media = $this->entityManager->getRepository(Media::class)->findOneBy(['id' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[id]')]);
         if($media){
 
-            $media->setTitre($this->entityManager->getRepository(Media::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')));
-            $media->setDescription($this->entityManager->getRepository(Media::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[Description]')));
-            $media->setLien($this->entityManager->getRepository(Media::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[lien]')));
+            $media->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
+            $media->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
+            $media->setLien($this->propertyAccessor->getValue($this->ConvertToArray($request), '[lien]'));
         
             $this->entityManager->flush();
 
@@ -105,7 +105,7 @@ class MediaService implements MediaServiceInterface
     public function DeleteMedia(Request $request){
 
         $mediaID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $media = $this->entityManager->getRepository(Media::class)->find($companyID);
+        $media = $this->entityManager->getRepository(Media::class)->find($mediaID);
         if($media){
             $this->entityManager->remove($media);
             $this->entityManager->flush();

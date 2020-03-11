@@ -4,6 +4,9 @@
 namespace App\Service;
 
 use App\Entity\Project;
+use App\Entity\Presentation;
+use App\Entity\Users;
+
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ProjectServiceInterface;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -70,8 +73,10 @@ class ProjectService implements ProjectServiceInterface
         $project->setLogo($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]'));
         $project->setStatus($this->propertyAccessor->getValue($this->ConvertToArray($request), '[status]'));
         $project->setTerritories($this->propertyAccessor->getValue($this->ConvertToArray($request), '[territories]'));
-        //$project->addPresentation($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]'));
-        //$project->addProjectCreator($this->propertyAccessor->getValue($this->ConvertToArray($request), '[projectCreator]'));
+        if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')){
+            $project->addPresentation($this->entityManager->getRepository(Presentation::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')));
+        }
+        $project->addProjectCreator($this->entityManager->getRepository(Users::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project_creator]')));
         
         //Prepar and inject product into database
         $this->entityManager->persist($project);
@@ -93,9 +98,11 @@ class ProjectService implements ProjectServiceInterface
             $project->setLogo($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]'));
             $project->setStatus($this->propertyAccessor->getValue($this->ConvertToArray($request), '[status]'));
             $project->setTerritories($this->propertyAccessor->getValue($this->ConvertToArray($request), '[territories]'));
-            //$project->addPresentation($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]'));
-            //$project->addProjectCreator($this->propertyAccessor->getValue($this->ConvertToArray($request), '[projectcreator]'));
-        
+            if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')){
+                $project->addPresentation($this->entityManager->getRepository(Presentation::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')));
+            }
+            $project->addProjectCreator($this->entityManager->getRepository(Users::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project_creator]')));
+            
             $this->entityManager->flush();
 
             return 'project '.$project->getTitre().' Modifed successfully ';

@@ -126,7 +126,7 @@ class Media
     {
         if (!$this->presentations->contains($presentation)) {
             $this->presentations[] = $presentation;
-            $presentation->addMedium($this);
+            $presentation->addMedia($this);
         }
 
         return $this;
@@ -136,7 +136,7 @@ class Media
     {
         if ($this->presentations->contains($presentation)) {
             $this->presentations->removeElement($presentation);
-            $presentation->removeMedium($this);
+            $presentation->removeMedia($this);
         }
 
         return $this;

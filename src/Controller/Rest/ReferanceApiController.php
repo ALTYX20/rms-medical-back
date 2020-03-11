@@ -23,5 +23,80 @@ class ReferanceApiController  extends AbstractFOSRestController
         $this->ReferanceService = $ReferanceService;
     }
 
+
+    /**
+     * Retrieves All referances resource.
+     *
+     * This call post modes data.
+     *
+     * @Rest\Get("/referance", name="get_all_referances")
+     * @return View
+     */
+    public function findAllReferance(): View
+    {
+        $referance = $this->ReferanceService->getAllReferance();
+        return View::create($referance, Response::HTTP_OK);
+
+    }
+
+    /**
+     * Retrieves an referance resource
+     * @Rest\Get("/referance/{id}")
+     * @param int $id
+     * @return View
+     */
+    public function findReferanceById(int $id): View
+    {
+        $referance = $this->ReferanceService->getReferanceById($id);
+        if ($referance) {
+            return View::create($referance, Response::HTTP_OK);
+        }
+        return View::create(null, Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Creates a referance resource
+     * @Rest\Post("/referance")
+     * @param Request $request
+     * @return View
+     */
+    public function AddReferance(Request $request): View
+    {
+        if ($request){
+
+            $referance = $this->ReferanceService->SetReferance($request);
+            // In case our POST was a success we need to return a 201 HTTP CREATED response
+            return View::create($referance, Response::HTTP_CREATED);
+
+        }
+        return View::create(null, Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Modify referance byID 
+     * @Rest\Put("/referance")
+     * @param Request $request
+     * @return View
+     */
+    public function ModifyReferance(Request $request): View
+    {
+        $referance = $this->ReferanceService->ModifyReferance($request);
+        return View::create($referance, Response::HTTP_OK);
+    }
+
+
+
+    /**
+     * Delete referance byID 
+     * @Rest\Delete("/referance")
+     * @param Request $request
+     * @return View
+     */
+    public function DeleteReferance(Request $request): View
+    {
+        $referance = $this->ReferanceService->DeleteReferance($request);
+        return View::create($referance, Response::HTTP_OK);
+    }
+
     
 }

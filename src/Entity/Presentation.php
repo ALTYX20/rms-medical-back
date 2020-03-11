@@ -38,28 +38,28 @@ class Presentation
     private $territories;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="presentations")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="presentations", fetch ="EXTRA_LAZY")
      * @ORM\JoinColumn(nullable=false)
      */
     private $presentationCreator;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Project", inversedBy="presentations")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Project", inversedBy="presentations", fetch ="EXTRA_LAZY")
      */
     private $project;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Media", inversedBy="presentations")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Media", inversedBy="presentations", fetch ="EXTRA_LAZY")
      */
     private $Media;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Product", inversedBy="presentations")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Product", inversedBy="presentations", fetch ="EXTRA_LAZY")
      */
     private $product;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Referance", inversedBy="presentations")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Referance", inversedBy="presentations", fetch ="EXTRA_LAZY")
      */
     private $referance;
 
@@ -146,19 +146,19 @@ class Presentation
         return $this->Media;
     }
 
-    public function addMedium(Media $medium): self
+    public function addMedia(Media $media): self
     {
-        if (!$this->Media->contains($medium)) {
-            $this->Media[] = $medium;
+        if (!$this->Media->contains($media)) {
+            $this->Media[] = $media;
         }
 
         return $this;
     }
 
-    public function removeMedium(Media $medium): self
+    public function removeMedia(Media $media): self
     {
-        if ($this->Media->contains($medium)) {
-            $this->Media->removeElement($medium);
+        if ($this->Media->contains($media)) {
+            $this->Media->removeElement($media);
         }
 
         return $this;

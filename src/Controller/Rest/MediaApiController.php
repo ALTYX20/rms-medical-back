@@ -33,7 +33,7 @@ class MediaApiController  extends AbstractFOSRestController
      */
     public function findAllMedia(): View
     {
-        $media = $this->UsersService->getAllMedia();
+        $media = $this->MediaService->getAllMedia();
         return View::create($media, Response::HTTP_OK);
 
     }
@@ -51,6 +51,50 @@ class MediaApiController  extends AbstractFOSRestController
             return View::create($media, Response::HTTP_OK);
         }
         return View::create(null, Response::HTTP_NOT_FOUND);
+    }
+
+
+    /**
+     * Creates a Media resource
+     * @Rest\Post("/media")
+     * @param Request $request
+     * @return View
+     */
+    public function AddMedia(Request $request): View
+    {
+        if ($request){
+
+            $media = $this->MediaService->SetMedia($request);
+            // In case our POST was a success we need to return a 201 HTTP CREATED response
+            return View::create($media, Response::HTTP_CREATED);
+
+        }
+        return View::create(null, Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Modify Media byID 
+     * @Rest\Put("/media")
+     * @param Request $request
+     * @return View
+     */
+    public function ModifyMedia(Request $request): View
+    {
+        $media = $this->MediaService->ModifyMedia($request);
+        return View::create($media, Response::HTTP_OK);
+    }
+
+
+    /**
+     * Delete media byID 
+     * @Rest\Delete("/media")
+     * @param Request $request
+     * @return View
+     */
+    public function DeleteProject(Request $request): View
+    {
+        $media = $this->MediaService->DeleteMedia($request);
+        return View::create($media, Response::HTTP_OK);
     }
 
 }

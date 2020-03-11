@@ -47,4 +47,14 @@ class UsersRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function showUser($id){
+
+        return $queryBuilder
+            ->select('id', 'name')
+            ->from('users');
+
+        
+
+    }
 }

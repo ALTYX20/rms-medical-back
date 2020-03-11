@@ -65,8 +65,8 @@ class ReferanceService implements ReferanceServiceInterface
             return 'this referance already exist';
         }
         $referance = new Referance();
-        $referance->setTitre($this->entityManager->getRepository(Referance::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')));
-        $referance->setDescription($this->entityManager->getRepository(Referance::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]')));
+        $referance->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
+        $referance->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
         
         //Prepar and inject product into database
         $this->entityManager->persist($referance);
@@ -84,8 +84,8 @@ class ReferanceService implements ReferanceServiceInterface
         $referance = $this->entityManager->getRepository(Referance::class)->findOneBy(['titre' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')]);
         if($referance){
 
-            $referance->setTitre($this->entityManager->getRepository(Referance::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')));
-            $referance->setDescription($this->entityManager->getRepository(Referance::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]')));
+            $referance->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
+            $referance->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
             $this->entityManager->flush();
 
             return ' referance '.$referance->getTitre().' Modifed successfully ';
