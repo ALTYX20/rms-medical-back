@@ -124,6 +124,12 @@ class Users
      */
     private $logs;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Equip", inversedBy="leader")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $equip;
+
 
 
     public function __construct()
@@ -367,6 +373,18 @@ class Users
                 $log->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEquip(): ?Equip
+    {
+        return $this->equip;
+    }
+
+    public function setEquip(?Equip $equip): self
+    {
+        $this->equip = $equip;
 
         return $this;
     }

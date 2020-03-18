@@ -133,9 +133,15 @@ class Company
      */
     private $employes;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Equip", mappedBy="company", orphanRemoval=true)
+     */
+    private $equips;
+
     public function __construct()
     {
         $this->employes = new ArrayCollection();
+        $this->equips = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -348,6 +354,37 @@ class Company
             // set the owning side to null (unless already changed)
             if ($employe->getCompany() === $this) {
                 $employe->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Equip[]
+     */
+    public function getEquips(): Collection
+    {
+        return $this->equips;
+    }
+
+    public function addEquip(Equip $equip): self
+    {
+        if (!$this->equips->contains($equip)) {
+            $this->equips[] = $equip;
+            $equip->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquip(Equip $equip): self
+    {
+        if ($this->equips->contains($equip)) {
+            $this->equips->removeElement($equip);
+            // set the owning side to null (unless already changed)
+            if ($equip->getCompany() === $this) {
+                $equip->setCompany(null);
             }
         }
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Mar 18, 2020 at 05:58 PM
+-- Generation Time: Mar 18, 2020 at 11:21 PM
 -- Server version: 8.0.18
 -- PHP Version: 7.3.12
 
@@ -58,6 +58,20 @@ INSERT INTO `company` (`id`, `name`, `email`, `adresse`, `numtel`, `website`, `s
 (4, 'Company1', 'Company1@mail.com', 'adressCompany1', '22555555', 'www.Company1.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany1', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type1', 'support3', 1),
 (5, 'Company5', 'Company5@mail.com', 'adressCompany5', '22555555', 'www.Company5.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany5', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type1', 'support3', 1),
 (6, 'Company4', 'Company3@mail.com', 'adressCompany3', '22555555', 'www.Company3.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany3', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type3', 'support3', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `equip`
+--
+
+DROP TABLE IF EXISTS `equip`;
+CREATE TABLE IF NOT EXISTS `equip` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_F273C3B0979B1AD6` (`company_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -134,8 +148,7 @@ CREATE TABLE IF NOT EXISTS `migration_versions` (
 
 INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES
 ('20200304202348', '2020-03-04 20:24:15'),
-('20200304203058', '2020-03-04 20:31:36'),
-('20200317155836', '2020-03-17 16:00:47');
+('20200304203058', '2020-03-04 20:31:36');
 
 -- --------------------------------------------------------
 
@@ -356,6 +369,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `role` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `motpass` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_naissance` date NOT NULL,
+  `equip_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `IDX_1483A5E9979B1AD6` (`company_id`)
@@ -365,15 +379,15 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `company_id`, `nom`, `prenom`, `email`, `adresse`, `codepostal`, `city`, `num_tel`, `sexe`, `role`, `motpass`, `date_naissance`) VALUES
-(9, 2, 'User5name', 'user5prename', 'user5@email.com', 'adrresUser5', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
-(10, 2, 'User3name', 'user3prename', 'user3@email.com', 'adrresUser3', '22', 'nabeul', '25222555', 'homme', 'admin', '11223344', '1996-02-04'),
-(11, 4, 'User7name', 'user7prename', 'user7@email.com', 'adrresUser7', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
-(12, 4, 'User8name', 'user8prename', 'user8@email.com', 'adrresUser8', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
-(13, 5, 'User9name', 'user9prename', 'user9@email.com', 'adrresUser9', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
-(14, 4, 'User10name', 'user10prename', 'user10@email.com', 'adrresUser10', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
-(15, 2, 'User11name', 'user11prename', 'user11@email.com', 'adrresUser11', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
-(16, 4, 'User12name', 'user12prename', 'user12@email.com', 'adrresUser12', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04');
+INSERT INTO `users` (`id`, `company_id`, `nom`, `prenom`, `email`, `adresse`, `codepostal`, `city`, `num_tel`, `sexe`, `role`, `motpass`, `date_naissance`, `equip_id`) VALUES
+(9, 2, 'User5name', 'user5prename', 'user5@email.com', 'adrresUser5', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04', 0),
+(10, 2, 'User3name', 'user3prename', 'user3@email.com', 'adrresUser3', '22', 'nabeul', '25222555', 'homme', 'admin', '11223344', '1996-02-04', 0),
+(11, 4, 'User7name', 'user7prename', 'user7@email.com', 'adrresUser7', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04', 0),
+(12, 4, 'User8name', 'user8prename', 'user8@email.com', 'adrresUser8', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04', 0),
+(13, 5, 'User9name', 'user9prename', 'user9@email.com', 'adrresUser9', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04', 0),
+(14, 4, 'User10name', 'user10prename', 'user10@email.com', 'adrresUser10', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04', 0),
+(15, 2, 'User11name', 'user11prename', 'user11@email.com', 'adrresUser11', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04', 0),
+(16, 4, 'User12name', 'user12prename', 'user12@email.com', 'adrresUser12', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04', 0);
 
 -- --------------------------------------------------------
 
@@ -404,6 +418,12 @@ INSERT INTO `users_project` (`users_id`, `project_id`) VALUES
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `equip`
+--
+ALTER TABLE `equip`
+  ADD CONSTRAINT `FK_F273C3B0979B1AD6` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`);
 
 --
 -- Constraints for table `log`
