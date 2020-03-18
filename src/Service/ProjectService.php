@@ -6,7 +6,7 @@ namespace App\Service;
 use App\Entity\Project;
 use App\Entity\Presentation;
 use App\Entity\Users;
-
+use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ProjectServiceInterface;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -93,6 +93,16 @@ class ProjectService implements ProjectServiceInterface
         $this->entityManager->persist($project);
         $this->entityManager->flush();
 
+        //add to Log 
+        $log = new Log();
+        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project_creator]')));// after will get user id from session
+        $log->setAction("Add Project");
+        $log->setModule("Project");
+        $log->setUrl('/project');
+        $this->entityManager->persist($log);
+        $this->entityManager->flush(); 
+
         return 'project added successfully ';
     }
 
@@ -116,6 +126,16 @@ class ProjectService implements ProjectServiceInterface
             
             $this->entityManager->flush();
 
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Modify Project");
+            $log->setModule("Project");
+            $log->setUrl('/project');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush(); 
+
             return 'project '.$project->getTitre().' Modifed successfully ';
         }
 
@@ -133,6 +153,17 @@ class ProjectService implements ProjectServiceInterface
         if($project){
             $this->entityManager->remove($project);
             $this->entityManager->flush();
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Delete Project");
+            $log->setModule("Project");
+            $log->setUrl('/project');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush();
+
             return 'project has been Deleted' ;
         }
             return 'project dosn\'t exist';

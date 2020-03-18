@@ -4,6 +4,7 @@
 namespace App\Service;
 
 use App\Entity\Media;
+use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\MediaServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,6 +85,16 @@ class MediaService implements MediaServiceInterface
         $this->entityManager->persist($media);
         $this->entityManager->flush();
 
+        //add to Log 
+        $log = new Log();
+        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setAction("Add Media");
+        $log->setModule("Media");
+        $log->setUrl('/media');
+        $this->entityManager->persist($log);
+        $this->entityManager->flush(); 
+
         return 'Media added successfully ';
     }
 
@@ -102,6 +113,16 @@ class MediaService implements MediaServiceInterface
         
             $this->entityManager->flush();
 
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Modify Media");
+            $log->setModule("Media");
+            $log->setUrl('/media');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush(); 
+
             return 'Media Modifed successfully ';
         }
 
@@ -119,6 +140,16 @@ class MediaService implements MediaServiceInterface
         if($media){
             $this->entityManager->remove($media);
             $this->entityManager->flush();
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Delete Media");
+            $log->setModule("Media");
+            $log->setUrl('/media');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush(); 
             return 'media has been Deleted' ;
         }
             return 'media dosn\'t exist';

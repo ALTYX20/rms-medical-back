@@ -128,7 +128,6 @@ class Users
 
     public function __construct()
     {
-        $projectName=$this->project->getTitre();
         $this->presentations = new ArrayCollection();
         $this->project = new ArrayCollection();
         $this->logs = new ArrayCollection();

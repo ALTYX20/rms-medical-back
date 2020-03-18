@@ -4,6 +4,7 @@
 namespace App\Service;
 
 use App\Entity\Product;
+use App\Entity\log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ProductServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,6 +88,16 @@ class ProductService implements ProductServiceInterface
         $this->entityManager->persist($product);
         $this->entityManager->flush();
 
+        //add to Log 
+        $log = new Log();
+        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setAction("Add Product");
+        $log->setModule("Product");
+        $log->setUrl('/product');
+        $this->entityManager->persist($log);
+        $this->entityManager->flush(); 
+
         return 'Product added successfully ';
     }
 
@@ -108,6 +119,16 @@ class ProductService implements ProductServiceInterface
         
             $this->entityManager->flush();
 
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Modify Product");
+            $log->setModule("Product");
+            $log->setUrl('/product');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush(); 
+
             return 'Product '.$product->getNom().' Modifed successfully ';
         }
 
@@ -125,6 +146,16 @@ class ProductService implements ProductServiceInterface
         if($product){
             $this->entityManager->remove($product);
             $this->entityManager->flush();
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Delete Product");
+            $log->setModule("Product");
+            $log->setUrl('/product');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush(); 
             return 'product has been Deleted' ;
         }
             return 'product dosn\'t exist';

@@ -9,7 +9,7 @@ use App\Entity\Product;
 use App\Entity\Media;
 use App\Entity\Referance;
 use App\Entity\Project;
-
+use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\PresentationServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -126,6 +126,16 @@ class PresentationService implements PresentationServiceInterface
         //Prepar and inject product into database
         $this->entityManager->persist($presentation);
         $this->entityManager->flush();
+        
+        //add to Log 
+        $log = new Log();
+        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setAction("Add Presentation");
+        $log->setModule("Presentation");
+        $log->setUrl('/presentation');
+        $this->entityManager->persist($log);
+        $this->entityManager->flush();
 
         return 'Presentation added successfully ';
     }
@@ -145,9 +155,9 @@ class PresentationService implements PresentationServiceInterface
             if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project]')){
 
                 //remove all old related Project
-                $projects[] = $this->getProject();
+                $projects[] = $presentation->getProject();
                 foreach($projects as $project){
-                    $this->removeProject($project);
+                    $presentation->removeProject($project);
                 }
 
                 //adding new project
@@ -193,7 +203,16 @@ class PresentationService implements PresentationServiceInterface
             }
 
             $this->entityManager->flush();
-
+            
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Modify Presentation");
+            $log->setModule("Presentation");
+            $log->setUrl('/presentation');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush();
             return ' presentation '.$presentation->getTitre().' Modifed successfully ';
         }
 
@@ -211,6 +230,17 @@ class PresentationService implements PresentationServiceInterface
         if($presentation){
             $this->entityManager->remove($presentation);
             $this->entityManager->flush();
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Delete Presentation");
+            $log->setModule("Presentation");
+            $log->setUrl('/presentation');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush();
+
             return 'presentation has been Deleted' ;
         }
             return 'presentation dosn\'t exist';

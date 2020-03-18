@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Mar 17, 2020 at 03:34 PM
+-- Generation Time: Mar 18, 2020 at 05:58 PM
 -- Server version: 8.0.18
 -- PHP Version: 7.3.12
 
@@ -62,6 +62,38 @@ INSERT INTO `company` (`id`, `name`, `email`, `adresse`, `numtel`, `website`, `s
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `log`
+--
+
+DROP TABLE IF EXISTS `log`;
+CREATE TABLE IF NOT EXISTS `log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `action` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_8F3F68C5A76ED395` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `log`
+--
+
+INSERT INTO `log` (`id`, `user_id`, `date`, `action`, `module`, `url`) VALUES
+(1, 9, '2020-03-18', 'Add User', 'User', '/user'),
+(2, 9, '2020-03-18', 'Login', 'User', '/Login'),
+(3, 10, '2020-03-18', 'Login', 'User', '/Login'),
+(4, 9, '2020-03-18', 'Modify User', 'User', '/user'),
+(5, 9, '2020-03-18', 'Modify User', 'User', '/user'),
+(6, 10, '2020-03-18', 'Add Project', 'Project', '/project'),
+(7, 14, '2020-03-18', 'Add Project', 'Project', '/project'),
+(8, 10, '2020-03-18', 'Delete Project', 'Project', '/project');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `media`
 --
 
@@ -102,7 +134,8 @@ CREATE TABLE IF NOT EXISTS `migration_versions` (
 
 INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES
 ('20200304202348', '2020-03-04 20:24:15'),
-('20200304203058', '2020-03-04 20:31:36');
+('20200304203058', '2020-03-04 20:31:36'),
+('20200317155836', '2020-03-17 16:00:47');
 
 -- --------------------------------------------------------
 
@@ -265,7 +298,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `territories` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `project`
@@ -275,7 +308,10 @@ INSERT INTO `project` (`id`, `titre`, `logo`, `status`, `territories`) VALUES
 (1, 'Project1', 'Project1_other.png', '1', 'nabeul'),
 (3, 'Project3', 'Project3.png', '1', 'nabeul'),
 (4, 'Project4', 'Project4_other.png', '1', 'nabeul'),
-(5, 'Project5', 'Project5_other.png', '1', 'nabeul');
+(5, 'Project5', 'Project5_other.png', '1', 'nabeul'),
+(6, 'Project6', 'Project6_other.png', '1', 'nabeul'),
+(8, 'Project8', 'Project8_other.png', '1', 'nabeul'),
+(9, 'Project9', 'Project9_other.png', '1', 'nabeul');
 
 -- --------------------------------------------------------
 
@@ -323,7 +359,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `IDX_1483A5E9979B1AD6` (`company_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -331,11 +367,13 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `company_id`, `nom`, `prenom`, `email`, `adresse`, `codepostal`, `city`, `num_tel`, `sexe`, `role`, `motpass`, `date_naissance`) VALUES
 (9, 2, 'User5name', 'user5prename', 'user5@email.com', 'adrresUser5', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
-(10, 2, 'User6name', 'user6prename', 'user6@email.com', 'adrresUser6', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
+(10, 2, 'User3name', 'user3prename', 'user3@email.com', 'adrresUser3', '22', 'nabeul', '25222555', 'homme', 'admin', '11223344', '1996-02-04'),
 (11, 4, 'User7name', 'user7prename', 'user7@email.com', 'adrresUser7', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
 (12, 4, 'User8name', 'user8prename', 'user8@email.com', 'adrresUser8', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
 (13, 5, 'User9name', 'user9prename', 'user9@email.com', 'adrresUser9', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
-(14, 4, 'User10name', 'user10prename', 'user10@email.com', 'adrresUser10', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04');
+(14, 4, 'User10name', 'user10prename', 'user10@email.com', 'adrresUser10', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
+(15, 2, 'User11name', 'user11prename', 'user11@email.com', 'adrresUser11', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04'),
+(16, 4, 'User12name', 'user12prename', 'user12@email.com', 'adrresUser12', '22', 'nabeul', '25222555', 'homme', 'admin', '123', '1996-02-04');
 
 -- --------------------------------------------------------
 
@@ -358,11 +396,20 @@ CREATE TABLE IF NOT EXISTS `users_project` (
 
 INSERT INTO `users_project` (`users_id`, `project_id`) VALUES
 (9, 4),
-(9, 5);
+(9, 5),
+(9, 6),
+(14, 8),
+(14, 9);
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `log`
+--
+ALTER TABLE `log`
+  ADD CONSTRAINT `FK_8F3F68C5A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `presentation`

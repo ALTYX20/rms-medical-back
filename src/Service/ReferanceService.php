@@ -4,6 +4,7 @@
 namespace App\Service;
 
 use App\Entity\Referance;
+use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ReferanceServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,6 +85,16 @@ class ReferanceService implements ReferanceServiceInterface
         $this->entityManager->persist($referance);
         $this->entityManager->flush();
 
+        //add to Log 
+        $log = new Log();
+        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setAction("Add Referance");
+        $log->setModule("Referance");
+        $log->setUrl('/referance');
+        $this->entityManager->persist($log);
+        $this->entityManager->flush();
+
         return 'referance added successfully ';
     }
 
@@ -98,6 +109,16 @@ class ReferanceService implements ReferanceServiceInterface
 
             $referance->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
             $referance->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
+            $this->entityManager->flush();
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Add Referance");
+            $log->setModule("Referance");
+            $log->setUrl('/referance');
+            $this->entityManager->persist($log);
             $this->entityManager->flush();
 
             return ' referance '.$referance->getTitre().' Modifed successfully ';
@@ -116,6 +137,16 @@ class ReferanceService implements ReferanceServiceInterface
         $referance = $this->entityManager->getRepository(Referance::class)->find($referanceID);
         if($referance){
             $this->entityManager->remove($referance);
+            $this->entityManager->flush();
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Add Referance");
+            $log->setModule("Referance");
+            $log->setUrl('/referance');
+            $this->entityManager->persist($log);
             $this->entityManager->flush();
             return 'presentation has been Deleted' ;
         }

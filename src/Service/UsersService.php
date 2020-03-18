@@ -6,7 +6,7 @@ namespace App\Service;
 use App\Entity\Users;
 use App\Entity\Company;
 use App\Entity\Project;
-use App\Repository\UsersRepository;
+use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\UsersServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -109,9 +109,19 @@ class UsersService implements UsersServiceInterface
         $user->setSexe($this->propertyAccessor->getValue($this->ConvertToArray($request), '[sexe]'));
         $user->setRole($this->propertyAccessor->getValue($this->ConvertToArray($request), '[role]'));
         $user->setMotpass($this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]'));
-
+        
         //Prepar and inject user into database
         $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        //add to Log 
+        $log = new Log();
+        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
+        $log->setAction("Add User");
+        $log->setModule("User");
+        $log->setUrl('/user');
+        $this->entityManager->persist($log);
         $this->entityManager->flush();
 
         return 'User Created successfully ';
@@ -139,7 +149,17 @@ class UsersService implements UsersServiceInterface
         // if User exist in database check Password
         if($user){
             if($user->getMotpass() == $this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]') ){
-                 return $user;
+                
+                //add to Log 
+                $log = new Log();
+                $log->setDate(new \DateTime('@'.strtotime('now')));
+                $log->setUser($user);// after will get user id from session
+                $log->setAction("Login");
+                $log->setModule("User");
+                $log->setUrl('/Login');
+                $this->entityManager->persist($log);
+                $this->entityManager->flush(); 
+                return $user;
             }
             return 'password incorrect';
         }
@@ -161,6 +181,17 @@ class UsersService implements UsersServiceInterface
         if($user){
             $this->entityManager->remove($user);
             $this->entityManager->flush();
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
+            $log->setAction("Delete User");
+            $log->setModule("User");
+            $log->setUrl('/user');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush(); 
+
             return 'user has been Deleted' ;
         }
             return 'user dosn\'t exist';
@@ -174,7 +205,7 @@ class UsersService implements UsersServiceInterface
         $serializer = new Serializer(array(new DateTimeNormalizer()));
         $userID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
         $user = $this->entityManager->getRepository(Users::class)->find($userID);
-        $userDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[dateNaissance]'), \DateTimeInterface::class);
+        $userDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[dateNaissance]'), \DateTime::class);
         if($user){
             $user->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
             $user->setPrenom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prenom]'));
@@ -188,6 +219,16 @@ class UsersService implements UsersServiceInterface
             $user->setRole($this->propertyAccessor->getValue($this->ConvertToArray($request), '[role]'));
             $user->setMotpass($this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]'));
             $this->entityManager->flush($user);
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
+            $log->setAction("Modify User");
+            $log->setModule("User");
+            $log->setUrl('/user');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush(); 
             return $user;
         }
         return 'No product found for id '.$userID;

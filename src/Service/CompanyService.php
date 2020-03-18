@@ -4,6 +4,7 @@
 namespace App\Service;
 
 use App\Entity\Company;
+use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\CompanyServiceInterface;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -105,6 +106,16 @@ class CompanyService implements CompanyServiceInterface
         $this->entityManager->persist($company);
         $this->entityManager->flush();
 
+        //add to Log 
+        $log = new Log();
+        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setAction("Add Company");
+        $log->setModule("Company");
+        $log->setUrl('/company');
+        $this->entityManager->persist($log);
+        $this->entityManager->flush(); 
+
         return 'Comapny Created successfully ';
         
     }
@@ -119,6 +130,16 @@ class CompanyService implements CompanyServiceInterface
         $company = $this->entityManager->getRepository(Company::class)->find($companyID);
         if($company){
             $this->entityManager->remove($company);
+            $this->entityManager->flush();
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Delete Company");
+            $log->setModule("Company");
+            $log->setUrl('/company');
+            $this->entityManager->persist($log);
             $this->entityManager->flush();
             return 'company has been Deleted' ;
         }
@@ -151,6 +172,16 @@ class CompanyService implements CompanyServiceInterface
             $company->setSupporttype($this->propertyAccessor->getValue($this->ConvertToArray($request), '[supporttype]'));
             $company->setStatus($this->propertyAccessor->getValue($this->ConvertToArray($request), '[status]'));
             $this->entityManager->flush($company);
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Modify Company");
+            $log->setModule("Company");
+            $log->setUrl('/company');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush();
             return $company;
         }
         return 'No Company found for id '.$companyID;
@@ -167,6 +198,16 @@ class CompanyService implements CompanyServiceInterface
         if($company){
             $company->setStatus(false);
             $this->entityManager->flush($company);
+
+            //add to Log 
+            $log = new Log();
+            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setAction("Disabel Company");
+            $log->setModule("Company");
+            $log->setUrl('/company');
+            $this->entityManager->persist($log);
+            $this->entityManager->flush();
             return $company;
         }
         return 'No Company found for id '.$companyID;
