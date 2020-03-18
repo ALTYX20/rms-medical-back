@@ -44,8 +44,13 @@ class ProjectService implements ProjectServiceInterface
      * @return object[]
      */
     function getAllProject() {
-        $project = $this->entityManager->getRepository(Project::class)->findAll();
-        return $project;
+        return $this->entityManager->createQueryBuilder()
+            ->select('p.id , p.titre , p.logo , p.status , p.territories')
+            ->from('App:Project', 'p')
+            ->getQuery()->getResult();
+
+        //$project = $this->entityManager->getRepository(Project::class)->findAll();
+        //return $project;
     }
 
 
@@ -56,7 +61,13 @@ class ProjectService implements ProjectServiceInterface
      */
     function getProjectById(int $id)
     {
-        return $this->entityManager->getRepository(Project::class)->find($id);
+        return $this->entityManager->createQueryBuilder()
+            ->select('p.id , p.titre , p.logo , p.status , p.territories')
+            ->from('App:Project', 'p')
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()->getResult();
+        //return $this->entityManager->getRepository(Project::class)->find($id);
     }
 
 

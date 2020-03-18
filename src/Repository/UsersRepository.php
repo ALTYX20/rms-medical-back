@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * @method Users|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Users|null show($id, $lockMode = null, $lockVersion = null)
  * @method Users|null findOneBy(array $criteria, array $orderBy = null)
  * @method Users[]    findAll()
  * @method Users[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
@@ -47,14 +48,14 @@ class UsersRepository extends ServiceEntityRepository
         ;
     }
     */
-
-    public function showUser($id){
-
-        return $queryBuilder
-            ->select('id', 'name')
-            ->from('users');
-
-        
-
+    public function show($id) 
+    {
+        return $this->entityManager->createQueryBuilder()
+        ->select('u.id, u.nom, u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.role , u.motpass , u.dateNaissance')
+        ->from('App:Users', 'u')
+        ->where('u.id = :id')
+        ->setParameter('id', $id)
+        ->getQuery()->getResult();
     }
+
 }

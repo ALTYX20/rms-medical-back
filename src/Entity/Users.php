@@ -119,13 +119,19 @@ class Users
      */
     private $project;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Log", mappedBy="user", orphanRemoval=true)
+     */
+    private $logs;
+
 
 
     public function __construct()
     {
-        //$companyName=$this->company->getName();
+        $projectName=$this->project->getTitre();
         $this->presentations = new ArrayCollection();
         $this->project = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -335,12 +341,36 @@ class Users
         return $this;
     }
 
-    public function getCompanyName(): ?string
+    /**
+     * @return Collection|Log[]
+     */
+    public function getLogs(): Collection
     {
-        return $companyName;
+        return $this->logs;
     }
 
+    public function addLog(Log $log): self
+    {
+        if (!$this->logs->contains($log)) {
+            $this->logs[] = $log;
+            $log->setUser($this);
+        }
 
+        return $this;
+    }
+
+    public function removeLog(Log $log): self
+    {
+        if ($this->logs->contains($log)) {
+            $this->logs->removeElement($log);
+            // set the owning side to null (unless already changed)
+            if ($log->getUser() === $this) {
+                $log->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 
 
 }

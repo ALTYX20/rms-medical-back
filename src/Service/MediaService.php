@@ -40,8 +40,12 @@ class MediaService implements MediaServiceInterface
      * @return object[]
      */
     function getAllMedia() {
-        $media = $this->entityManager->getRepository(Media::class)->findAll();
-        return $media;
+        
+        return $this->entityManager->createQueryBuilder()
+            ->select('m.id , m.titre , m.description , m.lien , m.type')
+            ->from('App:Media', 'm')
+            ->getQuery()->getResult();
+
     }
 
 
@@ -52,7 +56,13 @@ class MediaService implements MediaServiceInterface
      */
     function getMediaById(int $id)
     {
-        return $this->entityManager->getRepository(Media::class)->find($id);
+        return $this->entityManager->createQueryBuilder()
+            ->select('m.id , m.titre , m.description , m.lien , m.type ')
+            ->from('App:Media', 'm')
+            ->where('m.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()->getResult();
+        //return $this->entityManager->getRepository(Media::class)->find($id);
     }
 
     /**

@@ -42,8 +42,11 @@ class CompanyService implements CompanyServiceInterface
      * @return object[]
      */
     function getAllCompanys() {
-        $company = $this->entityManager->getRepository(Company::class)->findAll();
-        return $company;
+        
+        return $this->entityManager->createQueryBuilder()
+            ->select('c.id , c.name , c.email , c.adresse , c.numtel , c.website , c.staffcount , c.sector , c.activity , c.description , c.periodSubscription , c.databasesize , c.slatype , c.supporttype , c.status')
+            ->from('App:Company', 'c')
+            ->getQuery()->getResult();
     }
 
 
@@ -53,7 +56,13 @@ class CompanyService implements CompanyServiceInterface
      */
     function getCompanyById(int $id)
     {
-        return $this->entityManager->getRepository(Company::class)->find($id);
+        return $this->entityManager->createQueryBuilder()
+            ->select('c.id , c.name , c.email , c.adresse , c.numtel , c.website , c.staffcount , c.sector , c.activity , c.description , c.periodSubscription , c.databasesize , c.slatype , c.supporttype , c.status')
+            ->from('App:Company', 'c')
+            ->where('c.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()->getResult();
+        //return $this->entityManager->getRepository(Company::class)->find($id);
     }
 
     /**

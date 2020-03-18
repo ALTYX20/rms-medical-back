@@ -5,6 +5,8 @@ namespace App\Service;
 
 use App\Entity\Users;
 use App\Entity\Company;
+use App\Entity\Project;
+use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\UsersServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +15,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use phpDocumentor\Reflection\Types\Boolean;
 
-class UsersService implements UsersServiceInterface
+class UsersService implements UsersServiceInterface 
 {
     private $entityManager;
     private $propertyAccessor;
@@ -44,8 +46,14 @@ class UsersService implements UsersServiceInterface
      * @return object[]
      */
     function getAllUsers() {
-        $Userss = $this->entityManager->getRepository(Users::class)->findAll();
-        return $Userss;
+
+        return $this->entityManager->createQueryBuilder()
+        ->select('u.id, u.nom, u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.role , u.motpass , u.dateNaissance')
+        ->from('App:Users', 'u')
+        ->getQuery()->getResult(); 
+
+        //$Userss = $this->entityManager->getRepository(Users::class)->findAll();
+        //return $Userss;
     }
 
 
@@ -56,17 +64,15 @@ class UsersService implements UsersServiceInterface
      */
     function getUsersById(int $id) 
     {
-        
-        $query = $this->entityManager->createQuery(
-            'select u.id,u.nom ,u.prenom,u.email,u.adresse,u.codepostal,u.city,u.numTel,u.sexe,u.role,u.motpass,u.dateNaissance ,
-            c.name,c.email 
-            from App:Company as c ,App:Users as u 
-            WHERE(u.id = :id and u.company = c.id)'
-        )->setParameter('id', $id);
-        
-        $user = $query->getResult();
-        return $user;
-        //return $this->entityManager->getRepository(Users::class)->showUser($id);
+
+         return $this->entityManager->createQueryBuilder()
+        ->select('u.id, u.nom, u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.role , u.motpass , u.dateNaissance')
+        ->from('App:Users', 'u')
+        ->where('u.id = :id')
+        ->setParameter('id', $id)
+        ->getQuery()->getResult(); 
+
+        //return $this->entityManager->getRepository(Users::class)->show($id);
     }
 
 

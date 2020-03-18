@@ -66,6 +66,7 @@ class Project
 
     public function __construct()
     {
+        
         $this->presentations = new ArrayCollection();
         $this->projectCreator = new ArrayCollection();
 

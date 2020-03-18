@@ -41,8 +41,12 @@ class ProductService implements ProductServiceInterface
      * @return object[]
      */
     function getAllProduct() {
-        $product = $this->entityManager->getRepository(Product::class)->findAll();
-        return $product;
+
+        return $this->entityManager->createQueryBuilder()
+            ->select('p.id , p.nom , p.logo , p.type , p.prix , p.description')
+            ->from('App:Product', 'p')
+            ->getQuery()->getResult();
+            
     }
 
 
@@ -53,7 +57,13 @@ class ProductService implements ProductServiceInterface
      */
     function getProductById(int $id)
     {
-        return $this->entityManager->getRepository(Product::class)->find($id);
+        return $this->entityManager->createQueryBuilder()
+            ->select('p.id , p.nom , p.logo , p.type , p.prix , p.description')
+            ->from('App:Product', 'p')
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()->getResult();
+        //return $this->entityManager->getRepository(Product::class)->find($id);
     }
 
 

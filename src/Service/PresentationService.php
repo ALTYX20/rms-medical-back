@@ -58,8 +58,13 @@ class PresentationService implements PresentationServiceInterface
      * @return object[]
      */
     function getAllPresentation() {
-        $presentation = $this->entityManager->getRepository(Presentation::class)->findAll();
-        return $presentation;
+        
+        return $this->entityManager->createQueryBuilder()
+            ->select('p.id , p.titre , p.territories , u.nom as presentationCreator , pro.titre as project ')
+            ->from('App:Presentation', 'p')
+            ->join('p.presentationCreator' , 'u')
+            ->join('p.project' , 'pro')
+            ->getQuery()->getResult();
     }
 
 
@@ -70,6 +75,15 @@ class PresentationService implements PresentationServiceInterface
      */
     function getPresentationById(int $id)
     {
+        return $this->entityManager->createQueryBuilder()
+            ->select('p.id , p.titre , p.territories , u.nom as presentationCreator , pro.titre as project ')
+            ->from('App:Presentation', 'p')
+            ->join('p.presentationCreator' , 'u')
+            ->join('p.project' , 'pro')
+            ->where('p.id = :id')
+            ->setparameter('id' , $id)
+            ->getQuery()->getResult();
+
         return $this->entityManager->getRepository(Presentation::class)->find($id);
     }
 

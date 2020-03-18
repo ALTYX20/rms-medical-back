@@ -40,8 +40,13 @@ class ReferanceService implements ReferanceServiceInterface
      * @return object[]
      */
     function getAllReferance() {
-        $referance = $this->entityManager->getRepository(Referance::class)->findAll();
-        return $referance;
+
+        return $this->entityManager->createQueryBuilder()
+            ->select('r.id , r.titre , r.description')
+            ->from('App:Referance', 'r')
+            ->getQuery()->getResult();
+        /* $referance = $this->entityManager->getRepository(Referance::class)->findAll();
+        return $referance; */
     }
 
 
@@ -52,7 +57,14 @@ class ReferanceService implements ReferanceServiceInterface
      */
     function getReferanceById(int $id)
     {
-        return $this->entityManager->getRepository(Referance::class)->find($id);
+
+        return $this->entityManager->createQueryBuilder()
+            ->select('r.id , r.titre , r.description')
+            ->from('App:Referance', 'r')
+            ->where('r.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()->getResult();
+        //return $this->entityManager->getRepository(Referance::class)->find($id);
     }
 
     /**
