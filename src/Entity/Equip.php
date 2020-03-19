@@ -28,13 +28,14 @@ class Equip
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Users", mappedBy="equip")
      */
-    private $employe;
+    private $member;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="equips")
      * @ORM\JoinColumn(nullable=false)
      */
     private $company;
+
 
     public function __construct()
     {

@@ -59,13 +59,14 @@ class Product
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Presentation", mappedBy="product")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="product")
      */
-    private $presentations;
+    private $project;
+
 
     public function __construct()
     {
-        $this->presentations = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -133,33 +134,18 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection|Presentation[]
-     */
-    public function getPresentations(): Collection
+    public function getProject(): ?Project
     {
-        return $this->presentations;
+        return $this->project;
     }
 
-    public function addPresentation(Presentation $presentation): self
+    public function setProject(?Project $project): self
     {
-        if (!$this->presentations->contains($presentation)) {
-            $this->presentations[] = $presentation;
-            $presentation->addProduct($this);
-        }
+        $this->project = $project;
 
         return $this;
     }
 
-    public function removePresentation(Presentation $presentation): self
-    {
-        if ($this->presentations->contains($presentation)) {
-            $this->presentations->removeElement($presentation);
-            $presentation->removeProduct($this);
-        }
-
-        return $this;
-    }
 
 
 }

@@ -125,7 +125,7 @@ class Users
     private $logs;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Equip", inversedBy="leader")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Equip", inversedBy="member")
      * @ORM\JoinColumn(nullable=false)
      */
     private $equip;

@@ -53,10 +53,6 @@ class Presentation
      */
     private $Media;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Product", inversedBy="presentations", fetch ="EXTRA_LAZY")
-     */
-    private $product;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Referance", inversedBy="presentations", fetch ="EXTRA_LAZY")
@@ -67,7 +63,6 @@ class Presentation
     {
         $this->project = new ArrayCollection();
         $this->Media = new ArrayCollection();
-        $this->product = new ArrayCollection();
         $this->referance = new ArrayCollection();
     }
 
@@ -164,31 +159,6 @@ class Presentation
         return $this;
     }
 
-    /**
-     * @return Collection|Product[]
-     */
-    public function getProduct(): Collection
-    {
-        return $this->product;
-    }
-
-    public function addProduct(Product $product): self
-    {
-        if (!$this->product->contains($product)) {
-            $this->product[] = $product;
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->product->contains($product)) {
-            $this->product->removeElement($product);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Referance[]

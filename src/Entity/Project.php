@@ -62,6 +62,11 @@ class Project
      */
     private $projectCreator;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="project")
+     */
+    private $product;
+
 
 
     public function __construct()
@@ -69,6 +74,7 @@ class Project
         
         $this->presentations = new ArrayCollection();
         $this->projectCreator = new ArrayCollection();
+        $this->product = new ArrayCollection();
 
     }
 
@@ -177,6 +183,37 @@ class Project
         if ($this->projectCreator->contains($projectCreator)) {
             $this->projectCreator->removeElement($projectCreator);
             $projectCreator->removeProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getProduct(): Collection
+    {
+        return $this->product;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->product->contains($product)) {
+            $this->product[] = $product;
+            $product->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->product->contains($product)) {
+            $this->product->removeElement($product);
+            // set the owning side to null (unless already changed)
+            if ($product->getProject() === $this) {
+                $product->setProject(null);
+            }
         }
 
         return $this;
