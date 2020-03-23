@@ -5,7 +5,6 @@ namespace App\Service;
 
 use App\Entity\Presentation;
 use App\Entity\Users;
-use App\Entity\Product;
 use App\Entity\Media;
 use App\Entity\Referance;
 use App\Entity\Project;
@@ -106,10 +105,6 @@ class PresentationService implements PresentationServiceInterface
             $presentation->addProject($this->entityManager->getRepository(Project::class)->find($project));
         }
 
-        $products[] = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[product]');
-            foreach ($products[0] as $product) {
-                $presentation->addProduct($this->entityManager->getRepository(Product::class)->find($product));
-            }
         
         if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[referance]')){
             $referances = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[referance]');
@@ -123,7 +118,7 @@ class PresentationService implements PresentationServiceInterface
                 $presentation->addMedia($this->entityManager->getRepository(Media::class)->find($media));
             }
         }
-        //Prepar and inject product into database
+        //Prepar and inject Presentation into database
         $this->entityManager->persist($presentation);
         $this->entityManager->flush();
         
@@ -167,12 +162,6 @@ class PresentationService implements PresentationServiceInterface
                 }
             }
 
-
-            //remove old Products must be done before adding new ones
-            $products[] = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[product]');
-            foreach ($products[0] as $product) {
-                $presentation->addProduct($this->entityManager->getRepository(Product::class)->find($product));
-            }
 
             if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[referance]')){
                 //remove all Old referances

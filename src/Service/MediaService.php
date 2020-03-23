@@ -4,6 +4,7 @@
 namespace App\Service;
 
 use App\Entity\Media;
+use App\Entity\Users;
 use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\MediaServiceInterface;

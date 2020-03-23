@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Entity\Equip;
 use App\Entity\Users;
+use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\EquipServiceInterface;
 use Symfony\Component\HttpFoundation\Request;

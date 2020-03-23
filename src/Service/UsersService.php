@@ -4,8 +4,7 @@
 namespace App\Service;
 
 use App\Entity\Users;
-use App\Entity\Company;
-use App\Entity\Project;
+use App\Entity\Company; 
 use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\UsersServiceInterface;

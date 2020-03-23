@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Entity\Referance;
 use App\Entity\Log;
+use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ReferanceServiceInterface;
 use Symfony\Component\HttpFoundation\Request;

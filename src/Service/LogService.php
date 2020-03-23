@@ -40,7 +40,7 @@ class LogService implements LogServiceInterface
     public function getAllLogs() {
         
         return $this->entityManager->createQueryBuilder()
-            ->select('l.id , l.date , u.id , l.action , l.module , l.url')
+            ->select('l.id , l.date , l.action , l.module , l.url , u.id as UserID')
             ->from('App:Log', 'l')
             ->join('l.user', 'u')
             ->getQuery()->getResult();
@@ -56,7 +56,7 @@ class LogService implements LogServiceInterface
     public function getUserLog(int $id)
     {
         return $this->entityManager->createQueryBuilder()
-            ->select('l.id , l.date , u.id , l.action , l.module , l.url')
+            ->select('l.id , l.date , l.action , l.module , l.url , u.id as UserID')
             ->from('App:Log', 'l')
             ->join('l.user','u')
             ->where('u.id = :id')

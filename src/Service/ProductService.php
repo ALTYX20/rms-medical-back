@@ -4,7 +4,9 @@
 namespace App\Service;
 
 use App\Entity\Product;
-use App\Entity\log;
+use App\Entity\Project;
+use App\Entity\Log;
+use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ProductServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,7 +85,7 @@ class ProductService implements ProductServiceInterface
         $product->setPrix($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prix]'));
         $product->setType($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]'));
         $product->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
-        
+        $product->setProject($this->entityManager->getRepository(Project::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project]')));
         //Prepar and inject product into database
         $this->entityManager->persist($product);
         $this->entityManager->flush();

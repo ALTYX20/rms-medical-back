@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Entity\Company;
 use App\Entity\Log;
+use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\CompanyServiceInterface;
 use phpDocumentor\Reflection\Types\Boolean;

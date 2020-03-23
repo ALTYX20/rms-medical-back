@@ -122,7 +122,6 @@ class ProjectService implements ProjectServiceInterface
             if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')){
                 $project->addPresentation($this->entityManager->getRepository(Presentation::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')));
             }
-            $project->addProjectCreator($this->entityManager->getRepository(Users::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project_creator]')));
             
             $this->entityManager->flush();
 
