@@ -41,6 +41,7 @@ class Equip
     {
         $this->leader = new ArrayCollection();
         $this->employe = new ArrayCollection();
+        $this->member = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,28 +83,28 @@ class Equip
     /**
      * @return Collection|Users[]
      */
-    public function getEmploye(): Collection
+    public function getMember(): Collection
     {
-        return $this->employe;
+        return $this->member;
     }
 
-    public function addEmploye(Users $employe): self
+    public function addMember(Users $member): self
     {
-        if (!$this->employe->contains($employe)) {
-            $this->employe[] = $employe;
-            $employe->setEquip($this);
+        if (!$this->member->contains($member)) {
+            $this->member[] = $member;
+            $member->setEquip($this);
         }
 
         return $this;
     }
 
-    public function removeEmploye(Users $employe): self
+    public function removeMember(Users $member): self
     {
-        if ($this->employe->contains($employe)) {
-            $this->employe->removeElement($employe);
+        if ($this->member->contains($member)) {
+            $this->member->removeElement($member);
             // set the owning side to null (unless already changed)
-            if ($employe->getEquip() === $this) {
-                $employe->setEquip(null);
+            if ($member->getEquip() === $this) {
+                $member->setEquip(null);
             }
         }
 

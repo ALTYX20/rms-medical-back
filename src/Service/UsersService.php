@@ -115,7 +115,7 @@ class UsersService implements UsersServiceInterface
 
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setDate(new \DateTime('now'));
         $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
         $log->setAction("Add User");
         $log->setModule("User");
@@ -151,7 +151,7 @@ class UsersService implements UsersServiceInterface
                 
                 //add to Log 
                 $log = new Log();
-                $log->setDate(new \DateTime('@'.strtotime('now')));
+                $log->setDate(new \DateTime('now'));
                 $log->setUser($user);// after will get user id from session
                 $log->setAction("Login");
                 $log->setModule("User");
@@ -183,7 +183,7 @@ class UsersService implements UsersServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setDate(new \DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
             $log->setAction("Delete User");
             $log->setModule("User");
@@ -221,7 +221,7 @@ class UsersService implements UsersServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setDate(new \DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
             $log->setAction("Modify User");
             $log->setModule("User");

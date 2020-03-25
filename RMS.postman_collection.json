@@ -21,7 +21,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://127.0.0.1:8000/api/company/2",
+							"raw": "https://127.0.0.1:8000/api/companys",
 							"protocol": "https",
 							"host": [
 								"127",
@@ -32,8 +32,7 @@
 							"port": "8000",
 							"path": [
 								"api",
-								"company",
-								"2"
+								"companys"
 							]
 						},
 						"description": "get ALL Companys\nhttps://127.0.0.1:8000/api/companys /Get"
@@ -54,7 +53,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n    \t\"name\": \"Company3\",\r\n        \"email\": \"Company3@mail.com\",\r\n        \"adresse\": \"adressCompany3\",\r\n        \"numtel\": \"22555555\",\r\n        \"website\": \"www.Company3.com\",\r\n        \"staffcount\": 25,\r\n        \"sector\": \"informatique\",\r\n        \"file\": \"hdhhdhhdskksllc.zip\",\r\n        \"activity\": \"produceCompany3\",\r\n        \"description\": \"looooooooooooooooong texxxxxxxxxxxxte\",\r\n        \"period_subscription\": \"2020-04-01T00:00:00+00:00\",\r\n        \"databasesize\": 255,\r\n        \"slatype\": \"type3\",\r\n        \"supporttype\": \"support3\",\r\n        \"status\": true\r\n    }",
+							"raw": "    {\r\n    \t\"name\": \"Company7\",\r\n        \"email\": \"Company7@mail.com\",\r\n        \"adresse\": \"adressCompany7\",\r\n        \"numtel\": \"22555555\",\r\n        \"website\": \"www.Company7.com\",\r\n        \"staffcount\": 25,\r\n        \"sector\": \"informatique\",\r\n        \"file\": \"hdhhdhhdskksllc.zip\",\r\n        \"activity\": \"produceCompany7\",\r\n        \"description\": \"looooooooooooooooong texxxxxxxxxxxxte\",\r\n        \"period_subscription\": \"2020-04-01T00:00:00+00:00\",\r\n        \"databasesize\": 255,\r\n        \"slatype\": \"type3\",\r\n        \"supporttype\": \"support3\",\r\n        \"status\": true\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -94,7 +93,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\":\"1\"\n}",
+							"raw": "{\n\t\"id\":\"7\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -134,7 +133,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"id\": 2,\r\n        \"name\": \"Company2\",\r\n        \"email\": \"Company2@mail.com\",\r\n        \"adresse\": \"Company2Adresse\",\r\n        \"numtel\": \"22333333\",\r\n        \"website\": \"www.secondCompany2.com\",\r\n        \"staffcount\": 11,\r\n        \"sector\": \"medicine\",\r\n        \"file\": \"hhfhfffff.pdf\",\r\n        \"activity\": \"produceeer\",\r\n        \"description\": \"lonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnge texxxxxxxxxxxxxxt\",\r\n        \"period_subscription\": \"2020-05-01T00:00:00+00:00\",\r\n        \"databasesize\": 1024,\r\n        \"slatype\": \"type2\",\r\n        \"supporttype\": \"support3\",\r\n        \"status\": true\r\n    }",
+							"raw": "    {\r\n        \"id\": 6,\r\n        \"name\": \"Company4\",\r\n        \"email\": \"Company4@mail.com\",\r\n        \"adresse\": \"Company4Adresse\",\r\n        \"numtel\": \"22333333\",\r\n        \"website\": \"www.secondCompany4.com\",\r\n        \"staffcount\": 11,\r\n        \"sector\": \"medicine\",\r\n        \"file\": \"hhfhfffff.pdf\",\r\n        \"activity\": \"produceeer\",\r\n        \"description\": \"lonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnge texxxxxxxxxxxxxxt\",\r\n        \"period_subscription\": \"2020-05-01T00:00:00+00:00\",\r\n        \"databasesize\": 1024,\r\n        \"slatype\": \"type2\",\r\n        \"supporttype\": \"support3\",\r\n        \"status\": true\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -180,7 +179,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n    \t\"id\": \"10\",\r\n        \"nom\": \"User3name\",\r\n        \"prenom\": \"user3prename\",\r\n        \"dateNaissance\": \"1996-02-04\",\r\n        \"email\": \"user3@email.com\",\r\n        \"adresse\": \"adrresUser3\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"admin\",\r\n        \"motpass\": \"11223344\"\r\n    }",
+							"raw": "    {\r\n    \t\"id\": 10,\r\n        \"nom\": \"User3name\",\r\n        \"prenom\": \"user3prename\",\r\n        \"dateNaissance\": \"1996-02-04\",\r\n        \"email\": \"user3@email.com\",\r\n        \"adresse\": \"adrresUser3\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"admin\",\r\n        \"motpass\": \"12345\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -244,7 +243,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"email\": \"user6@email.com\",\r\n        \"motpass\": \"123\"\r\n    }",
+							"raw": "    {\r\n        \"email\": \"user3@email.com\",\r\n        \"motpass\": \"12345\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -394,7 +393,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"titre\": \"Project5\",\r\n        \"logo\": \"Project5_other.png\",\r\n        \"status\": \"1\",\r\n        \"territories\": \"nabeul\",\r\n        \"project_creator\": \"9\"\r\n        \r\n    }",
+							"raw": "{\r\n        \"titre\": \"Project10\",\r\n        \"logo\": \"Project10.png\",\r\n        \"status\": \"1\",\r\n        \"territories\": \"nabeul\",\r\n        \"project_creator\": \"10\"\r\n        \r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -434,7 +433,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\" :\"2\"\n}",
+							"raw": "{\n\t\"id\" :\"7\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -474,7 +473,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"id\": 1,\r\n        \"titre\": \"Project1\",\r\n        \"logo\": \"Project1_other.png\",\r\n        \"status\": \"1\",\r\n        \"territories\": \"nabeul\"\r\n\t\r\n}",
+							"raw": "{\r\n        \"id\": 10,\r\n        \"titre\": \"Project10\",\r\n        \"logo\": \"Project1_other.png\",\r\n        \"status\": \"0\",\r\n        \"territories\": \"nabeul\"\r\n\t\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -544,7 +543,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\r\n    \"nom\": \"product5\",\r\n    \"logo\": \"product5.png\",\r\n    \"type\": \"for something\",\r\n    \"prix\": 20.0,\r\n    \"description\": \"loooooong texxxxxxxte\"\r\n    \r\n}",
+							"raw": "{\r\n\t\r\n    \"nom\": \"product8\",\r\n    \"logo\": \"product8.png\",\r\n    \"type\": \"for something\",\r\n    \"prix\": 20.0,\r\n    \"description\": \"loooooong texxxxxxxte\",\r\n    \"project\" : \"10\"\r\n    \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -584,7 +583,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"nom\": \"Product1\",\r\n    \"logo\": \"product1.png\",\r\n    \"type\": \"for something else\",\r\n    \"prix\": 25.0,\r\n    \"description\": \"loooooong texxxxxxxte\",\r\n    \"presentations\": []\r\n}",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"nom\": \"Product1\",\r\n    \"logo\": \"product11111.png\",\r\n    \"type\": \"for something else\",\r\n    \"prix\": 25.0,\r\n    \"description\": \"loooooong texxxxxxxte\",\r\n    \"presentations\": []\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -694,7 +693,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"titre\": \"Logo3\",\r\n        \"description\": \"logo Of company \",\r\n        \"lien\": \"www.jjhfhhf.tn/logo3.png\",\r\n        \"type\": \"image\"\r\n\r\n    }",
+							"raw": "{\r\n        \"titre\": \"video3\",\r\n        \"description\": \"video Of company \",\r\n        \"lien\": \"www.jjhfhhf.tn/video3.png\",\r\n        \"type\": \"video\"\r\n\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -844,7 +843,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"titre\": \"referance3\",\r\n        \"description\": \"lonnnnnng text to referance 3\"\r\n\r\n    }",
+							"raw": "{\r\n        \"titre\": \"referance4\",\r\n        \"description\": \"lonnnnnng text tooooooooooooooooooooooooooooooo referance 4\"\r\n\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -884,7 +883,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"id\": 1,\r\n        \"titre\": \"referance1\",\r\n        \"description\": \"lon_________________________ger text to referance 1\"\r\n    }",
+							"raw": "    {\r\n        \"id\": 1,\r\n        \"titre\": \"referance1\",\r\n        \"description\": \"lon____--------------------_____________________ger text to referance 1\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -962,7 +961,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://127.0.0.1:8000/api/presentation/2",
+							"raw": "https://127.0.0.1:8000/api/presentation",
 							"protocol": "https",
 							"host": [
 								"127",
@@ -973,8 +972,7 @@
 							"port": "8000",
 							"path": [
 								"api",
-								"presentation",
-								"2"
+								"presentation"
 							]
 						},
 						"description": "https://127.0.0.1:8000/api/presentation"
@@ -995,7 +993,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"titre\": \"Presentation5\",\r\n        \"territories\": \"Nabeul\",\r\n        \"presentation_creator\":\"12\",\r\n        \"project\" : [\"3\"],\r\n        \"product\" : [\"1\",\"4\"],\r\n        \"media\" : [\"2\",\"3\"]\r\n}\r\n        \r\n        ",
+							"raw": "{\r\n        \"titre\": \"Presentation6\",\r\n        \"territories\": \"Nabeul\",\r\n        \"presentation_creator\":\"12\",\r\n        \"project\" : [\"3\"],\r\n        \"media\" : [\"2\",\"3\"]\r\n}\r\n        \r\n        ",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1018,6 +1016,272 @@
 							]
 						},
 						"description": "https://127.0.0.1:8000/api/presentation /post"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "LogFunctions",
+			"item": [
+				{
+					"name": "GetAllLogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\t\"id\" : \"1\",\r\n        \"titre\": \"Presentation3\",\r\n        \"territories\": \"Nabeul\",\r\n        \"presentation_creator\":\"11\",\r\n        \"project\" : \"3\",\r\n        \"product\" : [\"1\"],\r\n        \"media\" : \"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://127.0.0.1:8000/api/logs",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"logs"
+							]
+						},
+						"description": "https://127.0.0.1:8000/api/logs /Get\n"
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserLog",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://127.0.0.1:8000/api/log/9",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"log",
+								"9"
+							]
+						},
+						"description": "https://127.0.0.1:8000/api/log/{id} /Get\n"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "EquipFunction",
+			"item": [
+				{
+					"name": "AddEquip",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"leader\" : 11,\n    \"company\" : 4,\n    \"members\" : [12,14,16]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://127.0.0.1:8000/api/equip",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"equip"
+							]
+						},
+						"description": "https://127.0.0.1:8000/api/equip /Get\nadd script to control added mebers check if they are in other team or not"
+					},
+					"response": []
+				},
+				{
+					"name": "getEquipMember",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://127.0.0.1:8000/api/equip/1/members",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"equip",
+								"1",
+								"members"
+							]
+						},
+						"description": "https://127.0.0.1:8000/api/equip/{EquipId}/members"
+					},
+					"response": []
+				},
+				{
+					"name": "getAllEquips",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://127.0.0.1:8000/api/equips",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"equips"
+							]
+						},
+						"description": "https://127.0.0.1:8000/api/equips /get\nsugesst add Equip name"
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteEquip",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\" : 12\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://127.0.0.1:8000/api/equip",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"equip"
+							]
+						},
+						"description": "https://127.0.0.1:8000/api/equip /Delete\nmembers of equip will not be removed"
+					},
+					"response": []
+				},
+				{
+					"name": "AddMembers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"members\" : [12]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://127.0.0.1:8000/api/equip/13/addMembers",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"equip",
+								"13",
+								"addMembers"
+							]
+						},
+						"description": "https://127.0.0.1:8000/api/equip/{EquipId}/addMembers /Post"
+					},
+					"response": []
+				},
+				{
+					"name": "removeMembers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"members\" : [12]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://127.0.0.1:8000/api/equip/13/removeMembers",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"equip",
+								"13",
+								"removeMembers"
+							]
+						},
+						"description": "https://127.0.0.1:8000/api/equip/{EquipID}/removeMembers /Post"
 					},
 					"response": []
 				}

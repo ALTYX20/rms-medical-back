@@ -126,7 +126,6 @@ class Users
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Equip", inversedBy="member")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $equip;
 

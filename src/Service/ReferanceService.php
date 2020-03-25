@@ -88,7 +88,7 @@ class ReferanceService implements ReferanceServiceInterface
 
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setDate(new \DateTime('now'));
         $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
         $log->setAction("Add Referance");
         $log->setModule("Referance");
@@ -114,7 +114,7 @@ class ReferanceService implements ReferanceServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setDate(new \DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Add Referance");
             $log->setModule("Referance");
@@ -142,7 +142,7 @@ class ReferanceService implements ReferanceServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setDate(new \DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Add Referance");
             $log->setModule("Referance");

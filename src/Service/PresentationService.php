@@ -4,7 +4,7 @@
 namespace App\Service;
 
 use App\Entity\Presentation;
-use App\Entity\Users;
+use App\Entity\Users; 
 use App\Entity\Media;
 use App\Entity\Referance;
 use App\Entity\Project;
@@ -124,7 +124,7 @@ class PresentationService implements PresentationServiceInterface
         
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setDate(new \DateTime('now'));
         $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
         $log->setAction("Add Presentation");
         $log->setModule("Presentation");
@@ -195,7 +195,7 @@ class PresentationService implements PresentationServiceInterface
             
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setDate(new \DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Presentation");
             $log->setModule("Presentation");
@@ -222,7 +222,7 @@ class PresentationService implements PresentationServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setDate(new \DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Presentation");
             $log->setModule("Presentation");

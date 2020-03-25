@@ -186,5 +186,23 @@ class Presentation
         return $this;
     }
 
+    public function addMedium(Media $medium): self
+    {
+        if (!$this->Media->contains($medium)) {
+            $this->Media[] = $medium;
+        }
+
+        return $this;
+    }
+
+    public function removeMedium(Media $medium): self
+    {
+        if ($this->Media->contains($medium)) {
+            $this->Media->removeElement($medium);
+        }
+
+        return $this;
+    }
+
 
 }

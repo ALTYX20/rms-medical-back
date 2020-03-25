@@ -92,7 +92,7 @@ class ProductService implements ProductServiceInterface
 
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('@'.strtotime('now')));
+        $log->setDate(new \DateTime('now'));
         $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
         $log->setAction("Add Product");
         $log->setModule("Product");
@@ -123,7 +123,7 @@ class ProductService implements ProductServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setDate(new \DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Product");
             $log->setModule("Product");
@@ -151,7 +151,7 @@ class ProductService implements ProductServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('@'.strtotime('now')));
+            $log->setDate(new \DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Product");
             $log->setModule("Product");

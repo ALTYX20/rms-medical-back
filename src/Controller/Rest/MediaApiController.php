@@ -91,7 +91,7 @@ class MediaApiController  extends AbstractFOSRestController
      * @param Request $request
      * @return View
      */
-    public function DeleteProject(Request $request): View
+    public function DeleteMedia(Request $request): View
     {
         $media = $this->MediaService->DeleteMedia($request);
         return View::create($media, Response::HTTP_OK);

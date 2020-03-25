@@ -51,4 +51,67 @@ class EquipApiController  extends AbstractFOSRestController
         }
         return View::create(null, Response::HTTP_NOT_FOUND);
     }
+
+    /**
+     * Add Equip.
+     *
+     * This call post modes data.
+     *
+     * @Rest\Post("/equip", name="add_equip")
+     * @param Request $request
+     * @return View
+     */
+    public function AddEquip(Request $request): View
+    {
+        $equip = $this->EquipService->setEquip($request);
+        return View::create($equip, Response::HTTP_OK);
+
+    }
+
+    /**
+     * Delete equip 
+     * @Rest\Delete("/equip")
+     * @param Request $request
+     * @return View
+     */
+    public function DeleteEquip(Request $request): View
+    {
+        $equip = $this->EquipService->DeleteEquip($request);
+        return View::create($equip, Response::HTTP_OK);
+    }
+
+    /**
+     * Retrieves an equip resource
+     * @Rest\Get("/equip/{id}/members")
+     * @return View
+     */
+    public function showMembers(int $id): View
+    {
+        $members = $this->EquipService->ShowMembers($id);
+        return View::create($members, Response::HTTP_OK);
+    }
+
+    /**
+     * Retrieves an equip resource
+     * @Rest\Post("/equip/{id}/addMembers")
+     * @return View
+     */
+    public function addMembers(Request $request, int $id): View
+    {
+        $members = $this->EquipService->AddMembers($request , $id);
+        return View::create($members, Response::HTTP_OK);
+    }
+
+    /**
+     * Retrieves an equip resource
+     * @Rest\Post("/equip/{id}/removeMembers")
+     * @return View
+     */
+    public function removeMembers(Request $request, int $id): View
+    {
+        $members = $this->EquipService->RemoveMembers($request , $id);
+        return View::create($members, Response::HTTP_OK);
+    }
+
+
 }
