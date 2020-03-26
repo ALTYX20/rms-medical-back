@@ -109,6 +109,19 @@ class UserApiController  extends AbstractFOSRestController
     }
 
     /**
+     * Delete user byID
+     * @Rest\Delete("/delete/{id}")
+     * @param Request $request
+     * @param int $id
+     * @return View
+     */
+    public function DeleteUserwithId(Request $request , int $id): View
+    {
+        $user = $this->UsersService->DeleteUser($request ,$id);
+        return View::create($user, Response::HTTP_OK);
+    }
+
+    /**
      * Modify user byID 
      * @Rest\Put("/modify")
      * @param Request $request

@@ -83,17 +83,31 @@ class PresentationApiController  extends AbstractFOSRestController
         $presentation = $this->PresentationService->ModifyPresentation($request);
         return View::create($presentation, Response::HTTP_OK);
     }
-    
+
 
     /**
-     * Delete presentation byID 
+     * Delete presentation byID
      * @Rest\Delete("/presentation")
+     * @param Request $request
+     * @param $id
+     * @return View
+     */
+    public function DeletePresentation(Request $request, int $id= 0): View
+    {
+        $presentation = $this->PresentationService->DeletePresentation($request , $id);
+        return View::create($presentation, Response::HTTP_OK);
+    }
+
+    /**
+     * Delete presentation byID
+     * @Rest\Delete("/presentation/{id}")
+     * @param int $id
      * @param Request $request
      * @return View
      */
-    public function DeletePresentation(Request $request): View
+    public function DeletePresentationWithId(Request $request ,int $id): View
     {
-        $presentation = $this->PresentationService->DeletePresentation($request);
+        $presentation = $this->PresentationService->DeletePresentation($request , $id);
         return View::create($presentation, Response::HTTP_OK);
     }
 }

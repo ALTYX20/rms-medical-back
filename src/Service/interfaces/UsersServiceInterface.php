@@ -12,6 +12,6 @@ interface UsersServiceInterface
     function getUsersById(int $id);
     function SetUser(Request $request);
     function UserExist(Request $request);
-    function DeleteUser(Request $request);
+    function DeleteUser(Request $request, int $id);
     function ModifyUser(Request $request);
 }

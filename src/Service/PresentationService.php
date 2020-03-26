@@ -11,6 +11,7 @@ use App\Entity\Project;
 use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\PresentationServiceInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Serializer;
@@ -59,10 +60,9 @@ class PresentationService implements PresentationServiceInterface
     function getAllPresentation() {
         
         return $this->entityManager->createQueryBuilder()
-            ->select('p.id , p.titre , p.territories , u.nom as presentationCreator , pro.titre as project ')
+            ->select('p.id , p.titre , p.territories , u.nom as presentationCreator  ')
             ->from('App:Presentation', 'p')
             ->join('p.presentationCreator' , 'u')
-            ->join('p.project' , 'pro')
             ->getQuery()->getResult();
     }
 
@@ -82,12 +82,12 @@ class PresentationService implements PresentationServiceInterface
             ->where('p.id = :id')
             ->setparameter('id' , $id)
             ->getQuery()->getResult();
-
-        return $this->entityManager->getRepository(Presentation::class)->find($id);
     }
 
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
     public function SetPresentation(Request $request){
 
@@ -118,7 +118,7 @@ class PresentationService implements PresentationServiceInterface
                 $presentation->addMedia($this->entityManager->getRepository(Media::class)->find($media));
             }
         }
-        //Prepar and inject Presentation into database
+        //Prepare and inject Presentation into database
         $this->entityManager->persist($presentation);
         $this->entityManager->flush();
         
@@ -138,10 +138,12 @@ class PresentationService implements PresentationServiceInterface
 
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
     public function ModifyPresentation(Request $request){
 
-        $presentation = $this->entityManager->getRepository(Presentation::class)->findOneBy(['titre' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')]);
+        $presentation = $this->entityManager->getRepository(Presentation::class)->findOneBy(['id' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[id]')]);
         if($presentation){
 
             $presentation->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
@@ -151,23 +153,24 @@ class PresentationService implements PresentationServiceInterface
 
                 //remove all old related Project
                 $projects[] = $presentation->getProject();
-                foreach($projects as $project){
+                foreach($projects[0] as $project){
                     $presentation->removeProject($project);
                 }
 
                 //adding new project
+                /** @var Project $projects */
                 $projects[] = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[project]');
-                foreach($project[0] as $project){
+                foreach($projects[0] as $project){
                     $presentation->addProject($this->entityManager->getRepository(Project::class)->find($project));
                 }
             }
 
 
             if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[referance]')){
-                //remove all Old referances
-                $referances[] = $this->getReferance();
-                foreach($referance as $referance){
-                    $this->removeReferance($referance);
+                //remove all Old references
+                $referances[] = $presentation->getReferance();
+                foreach($referances[0] as $referance){
+                    $presentation->removeReferance($referance);
                 }
                 //adding new referances
                 $referances[] = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[referance]');
@@ -179,9 +182,9 @@ class PresentationService implements PresentationServiceInterface
 
             if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[media]')){
                 //remove all old Media
-                $medias[] = $this->getMedia();
-                foreach($medias as $media){
-                    $this->removeMedia($media);
+                $medias[] = $presentation->getMedia();
+                foreach($medias[0] as $media){
+                    $presentation->removeMedia($media);
                 }
                 //adding new media
                 $medias[] = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[media]');
@@ -191,7 +194,7 @@ class PresentationService implements PresentationServiceInterface
 
             }
 
-            $this->entityManager->flush();
+            $this->entityManager->flush($presentation);
             
             //add to Log 
             $log = new Log();
@@ -208,14 +211,20 @@ class PresentationService implements PresentationServiceInterface
         return 'presentation was not found ';
     }
 
-    
+
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
-    public function DeletePresentation(Request $request){
+    public function DeletePresentation(Request $request, int $id){
 
-        $presentationID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $presentation = $this->entityManager->getRepository(presentation::class)->find($presentationID);
+        if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[id]')) {
+            $presentationID = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[id]');
+            $presentation = $this->entityManager->getRepository(presentation::class)->find($presentationID);
+        } else {
+            $presentation = $this->entityManager->getRepository(presentation::class)->find($id);
+        }
         if($presentation){
             $this->entityManager->remove($presentation);
             $this->entityManager->flush();
@@ -232,7 +241,7 @@ class PresentationService implements PresentationServiceInterface
 
             return 'presentation has been Deleted' ;
         }
-            return 'presentation dosn\'t exist';
+            return 'presentation doesnt exist';
     }
     
 }

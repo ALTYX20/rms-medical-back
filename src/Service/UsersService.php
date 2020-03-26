@@ -6,10 +6,13 @@ namespace App\Service;
 use App\Entity\Users;
 use App\Entity\Company; 
 use App\Entity\Log;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\UsersServiceInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Serializer\Exception\ExceptionInterface as ExceptionInterfaceSerializer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -75,9 +78,10 @@ class UsersService implements UsersServiceInterface
     }
 
 
-
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
     public function SetUser(Request $request)
     {
@@ -92,13 +96,17 @@ class UsersService implements UsersServiceInterface
         }
 
         //convert Date from String to DateTimeInterface object
-        $userDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[dateNaissance]'), \DateTimeInterface::class);
-        
+        try {
+            $userDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[dateNaissance]'), \DateTimeInterface::class);
+        } catch (ExceptionInterfaceSerializer $e) {
+        }
+
         //Creat User 
         $user = new Users();
         $user->setCompany($this->entityManager->getRepository(Company::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[company]')));
         $user->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
         $user->setPrenom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prenom]'));
+        /** @var DateTime $userDate */
         $user->setDateNaissance($userDate);
         $user->setEmail($this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]'));
         $user->setAdresse($this->propertyAccessor->getValue($this->ConvertToArray($request), '[adresse]'));
@@ -115,7 +123,7 @@ class UsersService implements UsersServiceInterface
 
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('now'));
+        $log->setDate(new DateTime('now'));
         $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
         $log->setAction("Add User");
         $log->setModule("User");
@@ -128,9 +136,10 @@ class UsersService implements UsersServiceInterface
     }
 
 
-
     /**
      * @param Request $request
+     * @return object|string|null
+     * @throws Exception
      */
     public function UserExist(Request $request)
     {
@@ -138,7 +147,7 @@ class UsersService implements UsersServiceInterface
         //getting User from database
         $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]')]);
         
-        /*  will use it to configer Sessions after 
+        /*  will use it to config Sessions after
 
             $request->getSession()->set(
             Security::LAST_USERNAME,
@@ -151,7 +160,7 @@ class UsersService implements UsersServiceInterface
                 
                 //add to Log 
                 $log = new Log();
-                $log->setDate(new \DateTime('now'));
+                $log->setDate(new DateTime('now'));
                 $log->setUser($user);// after will get user id from session
                 $log->setAction("Login");
                 $log->setModule("User");
@@ -168,13 +177,14 @@ class UsersService implements UsersServiceInterface
     }
 
 
-
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
-    public function DeleteUser(Request $request)
+    public function DeleteUser(Request $request, int $id)
     {
-
+        if
         $userID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
         $user = $this->entityManager->getRepository(Users::class)->find($userID);
         if($user){
@@ -183,7 +193,7 @@ class UsersService implements UsersServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
             $log->setAction("Delete User");
             $log->setModule("User");
@@ -198,13 +208,18 @@ class UsersService implements UsersServiceInterface
 
     /**
      * @param Request $request
+     * @return object|string|null
+     * @throws Exception
      */
     public function ModifyUser(Request $request)
     {
         $serializer = new Serializer(array(new DateTimeNormalizer()));
         $userID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
         $user = $this->entityManager->getRepository(Users::class)->find($userID);
-        $userDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[dateNaissance]'), \DateTime::class);
+        try {
+            $userDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[dateNaissance]'), DateTime::class);
+        } catch (ExceptionInterfaceSerializer $e) {
+        }
         if($user){
             $user->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
             $user->setPrenom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prenom]'));
@@ -221,7 +236,7 @@ class UsersService implements UsersServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
             $log->setAction("Modify User");
             $log->setModule("User");
