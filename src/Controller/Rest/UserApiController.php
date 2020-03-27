@@ -102,9 +102,9 @@ class UserApiController  extends AbstractFOSRestController
      * @param Request $request
      * @return View
      */
-    public function DeleteUser(Request $request): View
+    public function DeleteUser(Request $request , $id = 0): View
     {
-        $user = $this->UsersService->DeleteUser($request);
+        $user = $this->UsersService->DeleteUser($request , $id);
         return View::create($user, Response::HTTP_OK);
     }
 
@@ -115,7 +115,7 @@ class UserApiController  extends AbstractFOSRestController
      * @param int $id
      * @return View
      */
-    public function DeleteUserwithId(Request $request , int $id): View
+    public function DeleteUserWithId(Request $request , int $id): View
     {
         $user = $this->UsersService->DeleteUser($request ,$id);
         return View::create($user, Response::HTTP_OK);

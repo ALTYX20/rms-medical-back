@@ -184,9 +184,12 @@ class UsersService implements UsersServiceInterface
      */
     public function DeleteUser(Request $request, int $id)
     {
-        if
-        $userID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $user = $this->entityManager->getRepository(Users::class)->find($userID);
+        if($this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]')){
+            $userID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
+            $user = $this->entityManager->getRepository(Users::class)->find($userID); 
+        }else{
+            $user = $this->entityManager->getRepository(Users::class)->find($id);
+        }
         if($user){
             $this->entityManager->remove($user);
             $this->entityManager->flush();
