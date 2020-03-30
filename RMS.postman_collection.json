@@ -283,7 +283,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n    \t\"company\": \"4\",\r\n        \"nom\": \"User12name\",\r\n        \"prenom\": \"user12prename\",\r\n        \"dateNaissance\": \"1996-02-04T00:00:00+00:00\",\r\n        \"email\": \"user12@email.com\",\r\n        \"adresse\": \"adrresUser12\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"admin\",\r\n        \"motpass\": \"123\"\r\n    }",
+							"raw": "    {\r\n    \t\"company\": \"4\",\r\n        \"nom\": \"User13name\",\r\n        \"prenom\": \"user13prename\",\r\n        \"dateNaissance\": \"1996-02-04T00:00:00+00:00\",\r\n        \"email\": \"user13@email.com\",\r\n        \"adresse\": \"adrresUser13\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"admin\",\r\n        \"motpass\": \"123\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1018,6 +1018,64 @@
 						"description": "https://127.0.0.1:8000/api/presentation /post"
 					},
 					"response": []
+				},
+				{
+					"name": "ModifyPresentation",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\t\"id\": \"4\",\r\n        \"titre\": \"Presentation4\",\r\n        \"territories\": \"Tunis\",\r\n        \"project\" : [\"5\"],\r\n        \"media\" : [\"3\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://127.0.0.1:8000/api/presentation",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"presentation"
+							]
+						},
+						"description": "https://127.0.0.1:8000/api/presentation /put\nyou could add referance[]"
+					},
+					"response": []
+				},
+				{
+					"name": "DeletePresentation",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://127.0.0.1:8000/api/presentation/2",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"presentation",
+								"2"
+							]
+						},
+						"description": "https://127.0.0.1:8000/api/presentation/{id} /Delete\nor \nhttps://127.0.0.1:8000/api/presentation with \"id\":value in body"
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -1106,7 +1164,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"leader\" : 11,\n    \"company\" : 4,\n    \"members\" : [12,14,16]\n}",
+							"raw": "{\n\t\"leader\" : 11,\n    \"company\" : 4,\n    \"members\" : [14,16]\n}",
 							"options": {
 								"raw": {
 									"language": "json"

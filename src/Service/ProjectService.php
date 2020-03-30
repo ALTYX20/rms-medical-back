@@ -49,8 +49,6 @@ class ProjectService implements ProjectServiceInterface
             ->from('App:Project', 'p')
             ->getQuery()->getResult();
 
-        //$project = $this->entityManager->getRepository(Project::class)->findAll();
-        //return $project;
     }
 
 
@@ -135,7 +133,7 @@ class ProjectService implements ProjectServiceInterface
             $this->entityManager->persist($log);
             $this->entityManager->flush(); 
 
-            return 'project '.$project->getTitre().' Modifed successfully ';
+            return 'project '.$project->getTitre().' Modified successfully ';
         }
 
         return 'project was not found ';
@@ -165,7 +163,7 @@ class ProjectService implements ProjectServiceInterface
 
             return 'project has been Deleted' ;
         }
-            return 'project dosn\'t exist';
+            return 'project doesn\'t exist';
     }
     
 }

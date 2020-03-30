@@ -66,7 +66,7 @@ class ProductService implements ProductServiceInterface
             ->where('p.id = :id')
             ->setParameter('id', $id)
             ->getQuery()->getResult();
-        //return $this->entityManager->getRepository(Product::class)->find($id);
+
     }
 
 
@@ -86,7 +86,7 @@ class ProductService implements ProductServiceInterface
         $product->setType($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]'));
         $product->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
         $product->setProject($this->entityManager->getRepository(Project::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project]')));
-        //Prepar and inject product into database
+        //Prepare and inject product into database
         $this->entityManager->persist($product);
         $this->entityManager->flush();
 
@@ -131,7 +131,7 @@ class ProductService implements ProductServiceInterface
             $this->entityManager->persist($log);
             $this->entityManager->flush(); 
 
-            return 'Product '.$product->getNom().' Modifed successfully ';
+            return 'Product '.$product->getNom().' Modified successfully ';
         }
 
         return 'Product was not found ';
@@ -160,7 +160,7 @@ class ProductService implements ProductServiceInterface
             $this->entityManager->flush(); 
             return 'product has been Deleted' ;
         }
-            return 'product dosn\'t exist';
+            return 'product doesn\'t exist';
     }
     
 }

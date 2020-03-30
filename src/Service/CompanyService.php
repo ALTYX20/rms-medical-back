@@ -64,7 +64,7 @@ class CompanyService implements CompanyServiceInterface
             ->where('c.id = :id')
             ->setParameter('id', $id)
             ->getQuery()->getResult();
-        //return $this->entityManager->getRepository(Company::class)->find($id);
+
     }
 
     /**
@@ -79,13 +79,13 @@ class CompanyService implements CompanyServiceInterface
         $company = $this->entityManager->getRepository(Company::class)->findOneBy(['email' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]')]);
         
         if($company){
-            return 'comapny alredy exist';
+            return 'company already exist';
         }
 
         //convert Date from String to DateTimeInterface object
         $companyPeriodSubscription = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[period_subscription]'), \DateTimeInterface::class);
         
-        //Creat comapny 
+        //Create company 
         $company = new Company();
         $company->setName($this->propertyAccessor->getValue($this->ConvertToArray($request), '[name]'));
         $company->setEmail($this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]'));
@@ -103,7 +103,10 @@ class CompanyService implements CompanyServiceInterface
         $company->setSupporttype($this->propertyAccessor->getValue($this->ConvertToArray($request), '[supporttype]'));
         $company->setStatus($this->propertyAccessor->getValue($this->ConvertToArray($request), '[status]'));
 
-        //Prepar and inject comapny into database
+        if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[employee]')){
+            $this->InviteEmployee($this->propertyAccessor->getValue($this->ConvertToArray($request), '[employee]'));
+        }
+        //Prepare and inject company into database
         $this->entityManager->persist($company);
         $this->entityManager->flush();
 
@@ -117,9 +120,41 @@ class CompanyService implements CompanyServiceInterface
         $this->entityManager->persist($log);
         $this->entityManager->flush(); 
 
-        return 'Comapny Created successfully ';
+        return 'Company Created successfully ';
         
     }
+
+    /**
+     * Function that Send emails contains inscription link with company id and user role 
+     * @param array employees
+     */
+    public function InviteEmployee(array $employees)
+    {
+        $admins[] = $employees[0];
+        $managers[] = $employees[1];
+        $editors[] = $employees[2];
+        $viewers[] = $employees[3];
+
+        foreach ($admins as $admin) {
+                //send invitation Email
+                echo('msg admin send');
+            }
+        foreach ($managers as $manager) {
+                //send invitation Email
+                echo'msg manager send';
+            }
+        foreach ($editors as $editor) {
+                //send invitation Email
+                echo'msg editor send';
+            }
+        foreach ($viewers as $viewer) {
+                //send invitation Email
+                echo'msg viewer send';
+        }
+        
+        
+    }
+
 
     /**
      * @param Request $request
@@ -144,7 +179,7 @@ class CompanyService implements CompanyServiceInterface
             $this->entityManager->flush();
             return 'company has been Deleted' ;
         }
-            return 'company dosn\'t exist';
+            return 'company doesn\'t exist';
     }
 
     /**
@@ -183,7 +218,7 @@ class CompanyService implements CompanyServiceInterface
             $log->setUrl('/company');
             $this->entityManager->persist($log);
             $this->entityManager->flush();
-            return $company;
+            return 'Company Modified successfully ';
         }
         return 'No Company found for id '.$companyID;
     }
@@ -204,12 +239,12 @@ class CompanyService implements CompanyServiceInterface
             $log = new Log();
             $log->setDate(new \DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
-            $log->setAction("Disabel Company");
+            $log->setAction("Disable Company");
             $log->setModule("Company");
             $log->setUrl('/company');
             $this->entityManager->persist($log);
             $this->entityManager->flush();
-            return $company;
+            return 'Company has been Disabled';
         }
         return 'No Company found for id '.$companyID;
     }

@@ -47,8 +47,7 @@ class ReferanceService implements ReferanceServiceInterface
             ->select('r.id , r.titre , r.description')
             ->from('App:Referance', 'r')
             ->getQuery()->getResult();
-        /* $referance = $this->entityManager->getRepository(Referance::class)->findAll();
-        return $referance; */
+
     }
 
 
@@ -66,7 +65,7 @@ class ReferanceService implements ReferanceServiceInterface
             ->where('r.id = :id')
             ->setParameter('id', $id)
             ->getQuery()->getResult();
-        //return $this->entityManager->getRepository(Referance::class)->find($id);
+
     }
 
     /**
@@ -122,7 +121,7 @@ class ReferanceService implements ReferanceServiceInterface
             $this->entityManager->persist($log);
             $this->entityManager->flush();
 
-            return ' referance '.$referance->getTitre().' Modifed successfully ';
+            return ' referance '.$referance->getTitre().' Modified successfully ';
         }
 
         return 'referance was not found ';
@@ -132,7 +131,7 @@ class ReferanceService implements ReferanceServiceInterface
     /**
      * @param Request $request
      */
-    public function Deletereferance(Request $request){
+    public function DeleteReferance(Request $request){
 
         $referanceID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
         $referance = $this->entityManager->getRepository(Referance::class)->find($referanceID);
@@ -151,7 +150,7 @@ class ReferanceService implements ReferanceServiceInterface
             $this->entityManager->flush();
             return 'presentation has been Deleted' ;
         }
-            return 'presentation dosn\'t exist';
+            return 'presentation doesn\'t exist';
     }
 
 }

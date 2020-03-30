@@ -80,11 +80,11 @@ class Users
     private $sexe;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="role", type="string", length=255, nullable=false)
+     * @ORM\Column(name="role", type="json", nullable=false)
      */
-    private $role;
+    private $role = [];
 
     /**
      * @var string
@@ -239,16 +239,34 @@ class Users
         return $this;
     }
 
-    public function getRole(): ?string
+    public function getRole(): array
     {
-        return $this->role;
+        $role = $this->role;
+        // guarantee every user at least has ROLE_USER
+        $role[] = 'ROLE_USER';
+    
+        return array_unique($role);
     }
 
     public function setRole(string $role): self
     {
-        $this->role = $role;
+        switch(\strtoupper($role)){
 
-        return $this;
+            case 'VIEWER':
+                $this->role = 'ROLE_USER';
+                break;
+            case 'EDITOR':
+                $this->role = 'ROLE_EDITOR';
+                break;
+            case 'MANAGER':
+                $this->role = 'ROLE_MANAGER';
+                break;
+            case 'ADMIN':
+                $this->role = 'ROLE_ADMIN';
+                break;
+
+        }
+    return $this;
     }
 
     public function getMotpass(): ?string

@@ -33,7 +33,8 @@ class UsersService implements UsersServiceInterface
      * @param Request $request
      * @return object[]
      */
-    public function ConvertToArray(Request $request){
+    public function ConvertToArray(Request $request)
+    {
 
         // Getting Parameters from Json Request
         $parameters = [];
@@ -50,17 +51,16 @@ class UsersService implements UsersServiceInterface
     function getAllUsers() {
 
         return $this->entityManager->createQueryBuilder()
-        ->select('u.id, u.nom, u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.role , u.motpass , u.dateNaissance')
+        ->select('u.id , u.nom, u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.role , u.motpass , u.dateNaissance')
         ->from('App:Users', 'u')
         ->getQuery()->getResult(); 
 
-        //$Userss = $this->entityManager->getRepository(Users::class)->findAll();
-        //return $Userss;
     }
 
 
 
     /**
+     * Get user with id
      * @param int $id
      * @return object|null
      */
@@ -68,13 +68,12 @@ class UsersService implements UsersServiceInterface
     {
 
          return $this->entityManager->createQueryBuilder()
-        ->select('u.id, u.nom, u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.role , u.motpass , u.dateNaissance')
+        ->select('u.id , u.nom , u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.role , u.motpass , u.dateNaissance')
         ->from('App:Users', 'u')
         ->where('u.id = :id')
         ->setParameter('id', $id)
         ->getQuery()->getResult(); 
 
-        //return $this->entityManager->getRepository(Users::class)->show($id);
     }
 
 
@@ -83,7 +82,7 @@ class UsersService implements UsersServiceInterface
      * @return string
      * @throws Exception
      */
-    public function SetUser(Request $request)
+    public Function SetUser(Request $request)
     {
 
         $serializer = new Serializer(array(new DateTimeNormalizer()));
@@ -91,8 +90,8 @@ class UsersService implements UsersServiceInterface
         //if user exist then cancel
         $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]')]);
         
-        if($user){
-            return 'User alredy exist';
+        if ($user ) { 
+            return 'User already exist';
         }
 
         //convert Date from String to DateTimeInterface object
@@ -101,7 +100,7 @@ class UsersService implements UsersServiceInterface
         } catch (ExceptionInterfaceSerializer $e) {
         }
 
-        //Creat User 
+        //Create User 
         $user = new Users();
         $user->setCompany($this->entityManager->getRepository(Company::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[company]')));
         $user->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
@@ -117,7 +116,7 @@ class UsersService implements UsersServiceInterface
         $user->setRole($this->propertyAccessor->getValue($this->ConvertToArray($request), '[role]'));
         $user->setMotpass($this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]'));
         
-        //Prepar and inject user into database
+        //Prepare and inject user into database
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
@@ -141,7 +140,7 @@ class UsersService implements UsersServiceInterface
      * @return object|string|null
      * @throws Exception
      */
-    public function UserExist(Request $request)
+    public Function UserExist(Request $request)
     {
 
         //getting User from database
@@ -155,8 +154,9 @@ class UsersService implements UsersServiceInterface
         ); */
 
         // if User exist in database check Password
-        if($user){
-            if($user->getMotpass() == $this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]') ){
+        if ($user ) {
+
+            if ($user->getMotpass() == $this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]') ) {
                 
                 //add to Log 
                 $log = new Log();
@@ -167,12 +167,13 @@ class UsersService implements UsersServiceInterface
                 $log->setUrl('/Login');
                 $this->entityManager->persist($log);
                 $this->entityManager->flush(); 
-                return $user;
+                return [$user->getId(),$user->getNom(),$user->getRole()];
             }
             return 'password incorrect';
+
         }
 
-        return 'user dosent exist';
+        return 'user doesn\'t exist';
 
     }
 
@@ -206,7 +207,7 @@ class UsersService implements UsersServiceInterface
 
             return 'user has been Deleted' ;
         }
-            return 'user dosn\'t exist';
+            return 'user doesn\'t exist';
     }
 
     /**
@@ -246,8 +247,21 @@ class UsersService implements UsersServiceInterface
             $log->setUrl('/user');
             $this->entityManager->persist($log);
             $this->entityManager->flush(); 
-            return $user;
+            //return $user;
+            return [$user->getId(),$user->getNom(),$user->getRole()];
         }
-        return 'No product found for id '.$userID;
+        return 'No user found with id '.$userID;
+    }
+
+    /**
+     * @param string $role
+     * @param int $id
+     */
+    public Function ChangeRole(int $id , string $role){
+
+        $user = $this->entityManager->getRepository(Users::class)->find($id);
+        $user->setRole($role);
+
     }
 }
+

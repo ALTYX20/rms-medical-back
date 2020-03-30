@@ -14,4 +14,5 @@ interface UsersServiceInterface
     function UserExist(Request $request);
     function DeleteUser(Request $request, int $id);
     function ModifyUser(Request $request);
+    function ChangeRole(int $id , String $role);
 }

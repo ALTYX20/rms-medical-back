@@ -205,7 +205,7 @@ class PresentationService implements PresentationServiceInterface
             $log->setUrl('/presentation');
             $this->entityManager->persist($log);
             $this->entityManager->flush();
-            return ' presentation '.$presentation->getTitre().' Modifed successfully ';
+            return ' presentation '.$presentation->getTitre().' Modified successfully ';
         }
 
         return 'presentation was not found ';
@@ -241,7 +241,7 @@ class PresentationService implements PresentationServiceInterface
 
             return 'presentation has been Deleted' ;
         }
-            return 'presentation doesnt exist';
+            return 'presentation doesn\'t exist';
     }
     
 }

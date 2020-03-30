@@ -72,10 +72,10 @@ class EquipService implements EquipServiceInterface
      */
     public function SetEquip(Request $request){
 
-        /* $equip = $this->entityManager->getRepository(Equip::class)->findOneBy(['leader' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[leader]')]);
+         $equip = $this->entityManager->getRepository(Equip::class)->findOneBy(['leader' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[leader]')]);
         if($equip){
             return 'this equip already exist';
-        } */
+        } 
         $equip = new Equip();
 
         $equip->setCompany($this->entityManager->getRepository(Company::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[company]')));

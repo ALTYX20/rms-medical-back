@@ -64,7 +64,7 @@ class MediaService implements MediaServiceInterface
             ->where('m.id = :id')
             ->setParameter('id', $id)
             ->getQuery()->getResult();
-        //return $this->entityManager->getRepository(Media::class)->find($id);
+
     }
 
     /**
@@ -82,7 +82,7 @@ class MediaService implements MediaServiceInterface
         $media->setLien($this->propertyAccessor->getValue($this->ConvertToArray($request), '[lien]'));
         $media->setType($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]'));
         
-        //Prepar and inject media into database
+        //Prepare and inject media into database
         $this->entityManager->persist($media);
         $this->entityManager->flush();
 
@@ -124,7 +124,7 @@ class MediaService implements MediaServiceInterface
             $this->entityManager->persist($log);
             $this->entityManager->flush(); 
 
-            return 'Media Modifed successfully ';
+            return 'Media Modified successfully ';
         }
 
         return 'Media was not found ';
@@ -153,7 +153,7 @@ class MediaService implements MediaServiceInterface
             $this->entityManager->flush(); 
             return 'media has been Deleted' ;
         }
-            return 'media dosn\'t exist';
+            return 'media doesn\'t exist';
 
     }
     

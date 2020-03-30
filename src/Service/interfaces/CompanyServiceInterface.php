@@ -14,4 +14,5 @@ interface CompanyServiceInterface
     function DeleteCompany(Request $request);
     function ModifyCompany(Request $request);
     function DisableCompany(Request $request);
+    function InviteEmployee(array $employees);
 }
