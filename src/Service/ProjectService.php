@@ -12,16 +12,19 @@ use App\Service\interfaces\ProjectServiceInterface;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ProjectService implements ProjectServiceInterface
 {
     private $entityManager;
     private $propertyAccessor;
+    private $session;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, SessionInterface $session)
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->session = $session;
     }
 
     
@@ -85,7 +88,7 @@ class ProjectService implements ProjectServiceInterface
         if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')){
             $project->addPresentation($this->entityManager->getRepository(Presentation::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')));
         }
-        $project->addProjectCreator($this->entityManager->getRepository(Users::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project_creator]')));
+        $project->addProjectCreator($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));
         
         //Prepar and inject product into database
         $this->entityManager->persist($project);
@@ -94,7 +97,7 @@ class ProjectService implements ProjectServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project_creator]')));// after will get user id from session
+        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));
         $log->setAction("Add Project");
         $log->setModule("Project");
         $log->setUrl('/project');
@@ -126,7 +129,7 @@ class ProjectService implements ProjectServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
             $log->setAction("Modify Project");
             $log->setModule("Project");
             $log->setUrl('/project');
@@ -154,7 +157,7 @@ class ProjectService implements ProjectServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
             $log->setAction("Delete Project");
             $log->setModule("Project");
             $log->setUrl('/project');

@@ -66,10 +66,10 @@ class Company extends \App\Entity\Company implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'numtel', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'website', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'staffcount', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'sector', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'file', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'activity', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'periodSubscription', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'databasesize', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'slatype', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'supporttype', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'status'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'numtel', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'website', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'staffcount', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'sector', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'file', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'activity', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'periodSubscription', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'databasesize', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'slatype', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'supporttype', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'status', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'employes', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'equips'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'numtel', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'website', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'staffcount', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'sector', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'file', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'activity', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'periodSubscription', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'databasesize', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'slatype', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'supporttype', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'status'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'numtel', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'website', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'staffcount', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'sector', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'file', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'activity', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'periodSubscription', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'databasesize', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'slatype', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'supporttype', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'status', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'employes', '' . "\0" . 'App\\Entity\\Company' . "\0" . 'equips'];
     }
 
     /**
@@ -519,6 +519,50 @@ class Company extends \App\Entity\Company implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStatus', [$status]);
 
         return parent::setStatus($status);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeEmploye(\App\Entity\Users $employe): \App\Entity\Company
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeEmploye', [$employe]);
+
+        return parent::removeEmploye($employe);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEquips(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEquips', []);
+
+        return parent::getEquips();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addEquip(\App\Entity\Equip $equip): \App\Entity\Company
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addEquip', [$equip]);
+
+        return parent::addEquip($equip);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeEquip(\App\Entity\Equip $equip): \App\Entity\Company
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeEquip', [$equip]);
+
+        return parent::removeEquip($equip);
     }
 
 }

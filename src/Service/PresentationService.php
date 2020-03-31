@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 
@@ -26,11 +27,13 @@ class PresentationService implements PresentationServiceInterface
     private $entityManager;
     private $propertyAccessor;
     private $serializer;
+    private $session;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager , SessionInterface $session)
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->session = $session;
 
         $this->serializer = new Serializer(
             [new GetSetMethodNormalizer(), new ArrayDenormalizer()],
@@ -98,7 +101,7 @@ class PresentationService implements PresentationServiceInterface
         $presentation = new Presentation();
         $presentation->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
         $presentation->setTerritories($this->propertyAccessor->getValue($this->ConvertToArray($request), '[territories]'));
-        $presentation->setPresentationCreator($this->entityManager->getRepository(Users::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation_creator]')));
+        $presentation->setPresentationCreator($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));
 
         $projects[] = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[project]');
         foreach($projects[0] as $project){
@@ -125,7 +128,7 @@ class PresentationService implements PresentationServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
         $log->setAction("Add Presentation");
         $log->setModule("Presentation");
         $log->setUrl('/presentation');
@@ -199,7 +202,7 @@ class PresentationService implements PresentationServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
             $log->setAction("Modify Presentation");
             $log->setModule("Presentation");
             $log->setUrl('/presentation');
@@ -232,7 +235,7 @@ class PresentationService implements PresentationServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
             $log->setAction("Delete Presentation");
             $log->setModule("Presentation");
             $log->setUrl('/presentation');

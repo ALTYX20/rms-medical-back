@@ -16,16 +16,21 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface as ExceptionInterf
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use phpDocumentor\Reflection\Types\Boolean;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 class UsersService implements UsersServiceInterface 
 {
     private $entityManager;
     private $propertyAccessor;
+    private $session;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->session = new Session(new NativeSessionStorage(),new AttributeBag());
     }
 
     
@@ -123,7 +128,7 @@ class UsersService implements UsersServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
+        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
         $log->setAction("Add User");
         $log->setModule("User");
         $log->setUrl('/user');
@@ -145,28 +150,26 @@ class UsersService implements UsersServiceInterface
 
         //getting User from database
         $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]')]);
-        
-        /*  will use it to config Sessions after
-
-            $request->getSession()->set(
-            Security::LAST_USERNAME,
-            $propertyAccessor->getValue($this->ConvertToArray($request), '[email]')
-        ); */
 
         // if User exist in database check Password
         if ($user ) {
 
             if ($user->getMotpass() == $this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]') ) {
                 
+                //set Session values 
+                $this->session->set("CurrentUser",$user->getId());
+                $this->session->set("CurrentUserRole",$user->getRole());
+
                 //add to Log 
                 $log = new Log();
                 $log->setDate(new DateTime('now'));
-                $log->setUser($user);// after will get user id from session
+                $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
                 $log->setAction("Login");
                 $log->setModule("User");
                 $log->setUrl('/Login');
                 $this->entityManager->persist($log);
-                $this->entityManager->flush(); 
+                $this->entityManager->flush();
+                
                 return [$user->getId(),$user->getNom(),$user->getRole()];
             }
             return 'password incorrect';
@@ -198,7 +201,7 @@ class UsersService implements UsersServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
             $log->setAction("Delete User");
             $log->setModule("User");
             $log->setUrl('/user');
@@ -241,7 +244,7 @@ class UsersService implements UsersServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("9"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
             $log->setAction("Modify User");
             $log->setModule("User");
             $log->setUrl('/user');

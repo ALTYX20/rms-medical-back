@@ -10,16 +10,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\MediaServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class MediaService implements MediaServiceInterface
 {
     private $entityManager;
     private $propertyAccessor;
+    private $session;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager , SessionInterface $session)
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->session = $session;
     }
 
     
@@ -89,7 +92,7 @@ class MediaService implements MediaServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
         $log->setAction("Add Media");
         $log->setModule("Media");
         $log->setUrl('/media');
@@ -117,7 +120,7 @@ class MediaService implements MediaServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
             $log->setAction("Modify Media");
             $log->setModule("Media");
             $log->setUrl('/media');
@@ -145,7 +148,7 @@ class MediaService implements MediaServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
             $log->setAction("Delete Media");
             $log->setModule("Media");
             $log->setUrl('/media');

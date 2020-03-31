@@ -53,7 +53,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n    \t\"name\": \"Company7\",\r\n        \"email\": \"Company7@mail.com\",\r\n        \"adresse\": \"adressCompany7\",\r\n        \"numtel\": \"22555555\",\r\n        \"website\": \"www.Company7.com\",\r\n        \"staffcount\": 25,\r\n        \"sector\": \"informatique\",\r\n        \"file\": \"hdhhdhhdskksllc.zip\",\r\n        \"activity\": \"produceCompany7\",\r\n        \"description\": \"looooooooooooooooong texxxxxxxxxxxxte\",\r\n        \"period_subscription\": \"2020-04-01T00:00:00+00:00\",\r\n        \"databasesize\": 255,\r\n        \"slatype\": \"type3\",\r\n        \"supporttype\": \"support3\",\r\n        \"status\": true\r\n    }",
+							"raw": "    {\r\n    \t\"name\": \"Company14\",\r\n        \"email\": \"Company14@mail.com\",\r\n        \"motpass\": \"123\",\r\n        \"adresse\": \"adressCompany13\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numtel\": \"22555555\",\r\n        \"website\": \"www.Company13.com\",\r\n        \"staffcount\": 25,\r\n        \"sector\": \"informatique\",\r\n        \"file\": \"hdhhdhhdskksllc.zip\",\r\n        \"activity\": \"produceCompany13\",\r\n        \"description\": \"looooooooooooooooong texxxxxxxxxxxxte\",\r\n        \"period_subscription\": \"2020-04-01T00:00:00+00:00\",\r\n        \"databasesize\": 255,\r\n        \"slatype\": \"type3\",\r\n        \"supporttype\": \"support3\",\r\n        \"status\": true,\r\n        \"employee\":[[\"saifeddin1996@gmail.com\",\"omarsaifeddingorrab@gmail.com\"],[\"manager@mail.com\"],[\"editor@mail.com\",\"editor2@email.com\"],[\"viewer@mail.com\"]]\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -93,7 +93,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\":\"7\"\n}",
+							"raw": "{\n\t\"id\":\"14\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -133,7 +133,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"id\": 6,\r\n        \"name\": \"Company4\",\r\n        \"email\": \"Company4@mail.com\",\r\n        \"adresse\": \"Company4Adresse\",\r\n        \"numtel\": \"22333333\",\r\n        \"website\": \"www.secondCompany4.com\",\r\n        \"staffcount\": 11,\r\n        \"sector\": \"medicine\",\r\n        \"file\": \"hhfhfffff.pdf\",\r\n        \"activity\": \"produceeer\",\r\n        \"description\": \"lonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnge texxxxxxxxxxxxxxt\",\r\n        \"period_subscription\": \"2020-05-01T00:00:00+00:00\",\r\n        \"databasesize\": 1024,\r\n        \"slatype\": \"type2\",\r\n        \"supporttype\": \"support3\",\r\n        \"status\": true\r\n    }",
+							"raw": "    {\r\n        \"id\": 6,\r\n        \"name\": \"Company4\",\r\n        \"email\": \"Company4@mail.com\",\r\n        \"adresse\": \"Company4Adresse\",\r\n        \"numtel\": \"22333333\",\r\n        \"website\": \"www.secondCompany4.com\",\r\n        \"staffcount\": 11,\r\n        \"sector\": \"medicine\",\r\n        \"file\": \"jjjjjjj4.pdf\",\r\n        \"activity\": \"produceeer\",\r\n        \"description\": \"lonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnge texxxxxxxxxxxxxxt\",\r\n        \"period_subscription\": \"2020-05-01T00:00:00+00:00\",\r\n        \"databasesize\": 1024,\r\n        \"slatype\": \"type2\",\r\n        \"supporttype\": \"support3\",\r\n        \"status\": true\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -179,7 +179,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n    \t\"id\": 10,\r\n        \"nom\": \"User3name\",\r\n        \"prenom\": \"user3prename\",\r\n        \"dateNaissance\": \"1996-02-04\",\r\n        \"email\": \"user3@email.com\",\r\n        \"adresse\": \"adrresUser3\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"admin\",\r\n        \"motpass\": \"12345\"\r\n    }",
+							"raw": "    {\r\n    \t\"id\": 10,\r\n        \"nom\": \"User3name\",\r\n        \"prenom\": \"user3prename\",\r\n        \"dateNaissance\": \"1996-03-04\",\r\n        \"email\": \"user3@email.com\",\r\n        \"adresse\": \"adrresUser3\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"admin\",\r\n        \"motpass\": \"12345\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -243,7 +243,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"email\": \"user3@email.com\",\r\n        \"motpass\": \"12345\"\r\n    }",
+							"raw": "    {\r\n        \"email\": \"user11@email.com\",\r\n        \"motpass\": \"123\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -693,7 +693,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"titre\": \"video3\",\r\n        \"description\": \"video Of company \",\r\n        \"lien\": \"www.jjhfhhf.tn/video3.png\",\r\n        \"type\": \"video\"\r\n\r\n    }",
+							"raw": "{\r\n        \"titre\": \"video4\",\r\n        \"description\": \"video Of company \",\r\n        \"lien\": \"www.jjhfhhf.tn/video5.png\",\r\n        \"type\": \"video\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

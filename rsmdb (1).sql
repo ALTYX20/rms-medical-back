@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Mar 30, 2020 at 05:27 PM
+-- Generation Time: Mar 31, 2020 at 08:57 PM
 -- Server version: 8.0.18
 -- PHP Version: 7.3.12
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `company` (
   `supporttype` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `company`
@@ -57,9 +57,13 @@ INSERT INTO `company` (`id`, `name`, `email`, `adresse`, `numtel`, `website`, `s
 (2, 'Company2', 'Company2@mail.com', 'Company2Adresse', '22333333', 'www.secondCompany2.com', 11, 'medicine', 'hhfhfffff.pdf', 'produceeer', 'lonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnge texxxxxxxxxxxxxxt', '2020-05-01', 1024, 'type2', 'support3', 1),
 (4, 'Company1', 'Company1@mail.com', 'adressCompany1', '22555555', 'www.Company1.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany1', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type1', 'support3', 1),
 (5, 'Company5', 'Company5@mail.com', 'adressCompany5', '22555555', 'www.Company5.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany5', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type1', 'support3', 1),
-(6, 'Company4', 'Company4@mail.com', 'Company4Adresse', '22333333', 'www.secondCompany4.com', 11, 'medicine', 'hhfhfffff.pdf', 'produceeer', 'lonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnge texxxxxxxxxxxxxxt', '2020-05-01', 1024, 'type2', 'support3', 1),
+(6, 'Company4', 'Company4@mail.com', 'Company4Adresse', '22333333', 'www.secondCompany4.com', 11, 'medicine', 'jjjjjjj4.pdf', 'produceeer', 'lonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnge texxxxxxxxxxxxxxt', '2020-05-01', 1024, 'type2', 'support3', 1),
 (8, 'Company9', 'Company9@mail.com', 'adressCompany9', '22555555', 'www.Company9.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany9', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type3', 'support3', 1),
-(9, 'Company10', 'Company10@mail.com', 'adressCompany10', '22555555', 'www.Company10.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany10', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type3', 'support3', 1);
+(9, 'Company10', 'Company10@mail.com', 'adressCompany10', '22555555', 'www.Company10.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany10', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type3', 'support3', 1),
+(15, 'Company11', 'Company11@mail.com', 'adressCompany11', '22555555', 'www.Company11.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany11', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type3', 'support3', 1),
+(17, 'Company12', 'Company12@mail.com', 'adressCompany12', '22555555', 'www.Company12.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany12', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type3', 'support3', 1),
+(18, 'Company13', 'Company13@mail.com', 'adressCompany13', '22555555', 'www.Company13.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany13', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type3', 'support3', 1),
+(19, 'Company14', 'Company14@mail.com', 'adressCompany13', '22555555', 'www.Company13.com', 25, 'informatique', 'hdhhdhhdskksllc.zip', 'produceCompany13', 'looooooooooooooooong texxxxxxxxxxxxte', '2020-04-01', 255, 'type3', 'support3', 1);
 
 -- --------------------------------------------------------
 
@@ -99,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `url` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_8F3F68C5A76ED395` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `log`
@@ -161,7 +165,40 @@ INSERT INTO `log` (`id`, `user_id`, `date`, `action`, `module`, `url`) VALUES
 (53, 10, '2020-03-28 19:10:01', 'Login', 'User', '/Login'),
 (54, 10, '2020-03-30 16:44:53', 'Login', 'User', '/Login'),
 (55, 10, '2020-03-30 16:46:59', 'Add Company', 'Company', '/company'),
-(56, 10, '2020-03-30 17:05:12', 'Add Company', 'Company', '/company');
+(56, 10, '2020-03-30 17:05:12', 'Add Company', 'Company', '/company'),
+(57, 10, '2020-03-31 13:50:25', 'Delete Company', 'Company', '/company'),
+(58, 10, '2020-03-31 13:52:46', 'Delete Company', 'Company', '/company'),
+(59, 10, '2020-03-31 13:59:14', 'Delete Company', 'Company', '/company'),
+(60, 10, '2020-03-31 13:59:33', 'Add Company', 'Company', '/company'),
+(61, 10, '2020-03-31 14:02:55', 'Delete Company', 'Company', '/company'),
+(62, 10, '2020-03-31 14:03:36', 'Add Company', 'Company', '/company'),
+(63, 10, '2020-03-31 14:04:54', 'Login', 'User', '/Login'),
+(64, 10, '2020-03-31 14:05:08', 'Login', 'User', '/Login'),
+(65, 10, '2020-03-31 14:14:09', 'Login', 'User', '/Login'),
+(66, 10, '2020-03-31 14:15:26', 'Login', 'User', '/Login'),
+(67, 10, '2020-03-31 14:16:57', 'Login', 'User', '/Login'),
+(68, 10, '2020-03-31 14:18:09', 'Login', 'User', '/Login'),
+(69, 10, '2020-03-31 14:19:35', 'Login', 'User', '/Login'),
+(70, 10, '2020-03-31 14:19:46', 'Login', 'User', '/Login'),
+(71, 10, '2020-03-31 14:22:24', 'Login', 'User', '/Login'),
+(72, 10, '2020-03-31 14:22:28', 'Login', 'User', '/Login'),
+(73, 10, '2020-03-31 14:24:11', 'Login', 'User', '/Login'),
+(74, 10, '2020-03-31 14:26:32', 'Login', 'User', '/Login'),
+(75, 10, '2020-03-31 14:27:09', 'Delete Company', 'Company', '/company'),
+(76, 10, '2020-03-31 14:27:43', 'Add Company', 'Company', '/company'),
+(77, 10, '2020-03-31 15:53:17', 'Login', 'User', '/Login'),
+(78, 11, '2020-03-31 15:59:18', 'Login', 'User', '/Login'),
+(79, 12, '2020-03-31 16:22:44', 'Login', 'User', '/Login'),
+(80, 12, '2020-03-31 16:22:47', 'Login', 'User', '/Login'),
+(81, 12, '2020-03-31 16:49:54', 'Modify Company', 'Company', '/company'),
+(82, 12, '2020-03-31 17:06:45', 'Modify User', 'User', '/user'),
+(83, 15, '2020-03-31 17:08:08', 'Login', 'User', '/Login'),
+(84, 15, '2020-03-31 17:10:20', 'Add Media', 'Media', '/media'),
+(85, 15, '2020-03-31 18:45:38', 'Add Company', 'Company', '/company'),
+(86, 15, '2020-03-31 19:08:28', 'Delete Company', 'Company', '/company'),
+(87, 15, '2020-03-31 19:11:53', 'Add Company', 'Company', '/company'),
+(88, 15, '2020-03-31 19:19:40', 'Add Company', 'Company', '/company'),
+(89, 15, '2020-03-31 19:25:00', 'Add Company', 'Company', '/company');
 
 -- --------------------------------------------------------
 
@@ -177,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `media` (
   `lien` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `media`
@@ -187,7 +224,8 @@ INSERT INTO `media` (`id`, `titre`, `description`, `lien`, `type`) VALUES
 (2, 'Logo2', 'logo Of company ', 'www.jjhfhhf.tn/logo2.png', 'image'),
 (3, 'notLogo3', 'logo Of company ', 'www.jjhfhhf.tn/logo3.png', 'image'),
 (4, 'video1', 'video Of company ', 'www.jjhfhhf.tn/video1.png', 'video'),
-(5, 'video3', 'video Of company ', 'www.jjhfhhf.tn/video3.png', 'video');
+(5, 'video3', 'video Of company ', 'www.jjhfhhf.tn/video3.png', 'video'),
+(6, 'video4', 'video Of company ', 'www.jjhfhhf.tn/video5.png', 'video');
 
 -- --------------------------------------------------------
 
@@ -417,22 +455,26 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   KEY `IDX_1483A5E9979B1AD6` (`company_id`),
   KEY `IDX_1483A5E98AC49FD9` (`equip_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `company_id`, `nom`, `prenom`, `email`, `adresse`, `codepostal`, `city`, `num_tel`, `sexe`, `role`, `motpass`, `date_naissance`, `equip_id`) VALUES
-(9, 2, 'User5name', 'user5prename', 'user5@email.com', 'adrresUser5', '22', 'nabeul', '25222555', 'homme', '{}', '123', '1996-02-04', 1),
-(10, 2, 'User3name', 'user3prename', 'user3@email.com', 'adrresUser3', '22', 'nabeul', '25222555', 'homme', '{}', '12345', '1996-02-04', 1),
-(11, 4, 'User7name', 'user7prename', 'user7@email.com', 'adrresUser7', '22', 'nabeul', '25222555', 'homme', '{}', '123', '1996-02-04', 13),
-(12, 4, 'User8name', 'user8prename', 'user8@email.com', 'adrresUser8', '22', 'nabeul', '25222555', 'homme', '{}', '123', '1996-02-04', NULL),
-(13, 5, 'User9name', 'user9prename', 'user9@email.com', 'adrresUser9', '22', 'nabeul', '25222555', 'homme', '{}', '123', '1996-02-04', 1),
-(14, 4, 'User10name', 'user10prename', 'user10@email.com', 'adrresUser10', '22', 'nabeul', '25222555', 'homme', '{}', '123', '1996-02-04', 13),
-(15, 2, 'User11name', 'user11prename', 'user11@email.com', 'adrresUser11', '22', 'nabeul', '25222555', 'homme', '{}', '123', '1996-02-04', 1),
-(16, 4, 'User12name', 'user12prename', 'user12@email.com', 'adrresUser12', '22', 'nabeul', '25222555', 'homme', '{}', '123', '1996-02-04', 13),
-(17, 4, 'saif eddin', 'go', 'username14@mail.com', 'farhat hached,', '8023', 'somaa', '23249201', 'homme', '\"\"', '123456', '1996-09-16', NULL);
+(9, 2, 'User5name', 'user5prename', 'user5@email.com', 'adrresUser5', '22', 'nabeul', '25222555', 'homme', '\"ROLE_VIEWER\"', '123', '1996-02-04', 1),
+(10, 2, 'User3name', 'user3prename', 'user3@email.com', 'adrresUser3', '22', 'nabeul', '25222555', 'homme', '\"ROLE_ADMIN\"', '12345', '1996-03-04', 1),
+(11, 4, 'User7name', 'user7prename', 'user7@email.com', 'adrresUser7', '22', 'nabeul', '25222555', 'homme', '\"ROLE_MANAGER\"', '123', '1996-02-04', 13),
+(12, 4, 'User8name', 'user8prename', 'user8@email.com', 'adrresUser8', '22', 'nabeul', '25222555', 'homme', '\"ROLE_MANAGER\"', '123', '1996-02-04', NULL),
+(13, 5, 'User9name', 'user9prename', 'user9@email.com', 'adrresUser9', '22', 'nabeul', '25222555', 'homme', '\"ROLE_VIEWER\"', '123', '1996-02-04', 1),
+(14, 4, 'User10name', 'user10prename', 'user10@email.com', 'adrresUser10', '22', 'nabeul', '25222555', 'homme', '\"ROLE_EDITOR\"', '123', '1996-02-04', 13),
+(15, 2, 'User11name', 'user11prename', 'user11@email.com', 'adrresUser11', '22', 'nabeul', '25222555', 'homme', '\"ROLE_MANAGER\"', '123', '1996-02-04', 1),
+(16, 4, 'User12name', 'user12prename', 'user12@email.com', 'adrresUser12', '22', 'nabeul', '25222555', 'homme', '\"ROLE_EDITOR\"', '123', '1996-02-04', 13),
+(17, 4, 'saif eddin', 'go', 'username14@mail.com', 'farhat hached,', '8023', 'somaa', '23249201', 'homme', '\"ROLE_EDITOR\"', '123456', '1996-09-16', NULL),
+(20, 15, 'Company11', 'Company', 'Company11@mail.com', 'adressCompany11', '0000', '--', '22555555', 'Homme', '\"ROLE_ADMIN\"', 'admin', '2020-03-31', NULL),
+(22, 17, 'Company12', 'Company', 'Company12@mail.com', 'adressCompany12', '0000', '--', '22555555', 'Homme', '\"ROLE_ADMIN\"', 'admin', '2020-03-31', NULL),
+(23, 18, 'Company13', 'Company', 'Company13@mail.com', 'adressCompany13', '0000', '--', '22555555', 'Homme', '\"ROLE_ADMIN\"', 'admin', '2020-03-31', NULL),
+(24, 19, 'Company14', 'Company', 'Company14@mail.com', 'adressCompany13', '0000', '--', '22555555', 'Homme', '\"ROLE_ADMIN\"', 'admin', '2020-03-31', NULL);
 
 -- --------------------------------------------------------
 

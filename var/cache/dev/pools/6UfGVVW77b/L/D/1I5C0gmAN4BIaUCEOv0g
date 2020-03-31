@@ -8,8 +8,8 @@
             'name' => [
                 'role',
             ],
-            'length' => [
-                255,
+            'type' => [
+                'json',
             ],
         ],
     ],

@@ -86,6 +86,7 @@ class ProductService implements ProductServiceInterface
         $product->setType($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]'));
         $product->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
         $product->setProject($this->entityManager->getRepository(Project::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project]')));
+        
         //Prepare and inject product into database
         $this->entityManager->persist($product);
         $this->entityManager->flush();
@@ -93,7 +94,7 @@ class ProductService implements ProductServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
         $log->setAction("Add Product");
         $log->setModule("Product");
         $log->setUrl('/product');
@@ -124,7 +125,7 @@ class ProductService implements ProductServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
             $log->setAction("Modify Product");
             $log->setModule("Product");
             $log->setUrl('/product');
@@ -152,7 +153,7 @@ class ProductService implements ProductServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
             $log->setAction("Delete Product");
             $log->setModule("Product");
             $log->setUrl('/product');

@@ -80,11 +80,15 @@ class Users
     private $sexe;
 
     /**
-     * @var array
-     *
+     * @var string
+     * 
+     * It suppose to be Array but i couldn't make it
+     * to show so convert it to string :p
+     * maybe later 
+     * 
      * @ORM\Column(name="role", type="json", nullable=false)
      */
-    private $role = [];
+    private $role ;
 
     /**
      * @var string
@@ -239,13 +243,14 @@ class Users
         return $this;
     }
 
-    public function getRole(): array
+    public function getRole(): string
     {
         $role = $this->role;
         // guarantee every user at least has ROLE_USER
-        $role[] = 'ROLE_USER';
+        //$role[] = "ROLE_USER";
+        
     
-        return array_unique($role);
+        return ($role);
     }
 
     public function setRole(string $role): self
