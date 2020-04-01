@@ -108,7 +108,7 @@ class EquipService implements EquipServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
         $log->setAction("Add Equip");
         $log->setModule("Equip");
         $log->setUrl('/Equip');
@@ -166,7 +166,7 @@ class EquipService implements EquipServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Equip");
             $log->setModule("Equip");
             $log->setUrl('/equip');

@@ -101,7 +101,7 @@ class PresentationService implements PresentationServiceInterface
         $presentation = new Presentation();
         $presentation->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
         $presentation->setTerritories($this->propertyAccessor->getValue($this->ConvertToArray($request), '[territories]'));
-        $presentation->setPresentationCreator($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));
+        $presentation->setPresentationCreator($this->entityManager->getRepository(Users::class)->find("10"));
 
         $projects[] = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[project]');
         foreach($projects[0] as $project){
@@ -128,7 +128,7 @@ class PresentationService implements PresentationServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
         $log->setAction("Add Presentation");
         $log->setModule("Presentation");
         $log->setUrl('/presentation');
@@ -202,7 +202,7 @@ class PresentationService implements PresentationServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Presentation");
             $log->setModule("Presentation");
             $log->setUrl('/presentation');
@@ -235,7 +235,7 @@ class PresentationService implements PresentationServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Presentation");
             $log->setModule("Presentation");
             $log->setUrl('/presentation');

@@ -92,7 +92,7 @@ class MediaService implements MediaServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
         $log->setAction("Add Media");
         $log->setModule("Media");
         $log->setUrl('/media');
@@ -120,7 +120,7 @@ class MediaService implements MediaServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Media");
             $log->setModule("Media");
             $log->setUrl('/media');
@@ -148,7 +148,7 @@ class MediaService implements MediaServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Media");
             $log->setModule("Media");
             $log->setUrl('/media');

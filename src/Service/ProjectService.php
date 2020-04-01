@@ -88,7 +88,7 @@ class ProjectService implements ProjectServiceInterface
         if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')){
             $project->addPresentation($this->entityManager->getRepository(Presentation::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')));
         }
-        $project->addProjectCreator($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));
+        $project->addProjectCreator($this->entityManager->getRepository(Users::class)->find("10"));
         
         //Prepar and inject product into database
         $this->entityManager->persist($project);
@@ -97,7 +97,7 @@ class ProjectService implements ProjectServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));
         $log->setAction("Add Project");
         $log->setModule("Project");
         $log->setUrl('/project');
@@ -129,7 +129,7 @@ class ProjectService implements ProjectServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Project");
             $log->setModule("Project");
             $log->setUrl('/project');
@@ -157,7 +157,7 @@ class ProjectService implements ProjectServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Project");
             $log->setModule("Project");
             $log->setUrl('/project');

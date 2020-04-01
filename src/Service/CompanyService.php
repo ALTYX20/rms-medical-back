@@ -16,6 +16,9 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 class CompanyService implements CompanyServiceInterface
 {
@@ -139,10 +142,15 @@ class CompanyService implements CompanyServiceInterface
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
+        $this->session = new Session(new NativeSessionStorage(),new AttributeBag());
+        $this->session->start();
+        $this->session->set("CurrentUser",$user->getId());
+        $this->session->set("CurrentUserRole",$user->getRole());
+
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+        $log->setUser($user);
         $log->setAction("Add Company");
         $log->setModule("Company");
         $log->setUrl('/company');
@@ -157,14 +165,16 @@ class CompanyService implements CompanyServiceInterface
      * Function that Send emails contains inscription link with company id and user role 
      * @param array employees
      */
-    public function InviteEmployee(array $employees, int $companyId, string $companyName)
+    public function InviteEmployee(array $employee, int $companyId, string $companyName)
     {
+        $employees[] = $employee[0];
         $admins[] = $employees[0];
         $managers[] = $employees[1];
         $editors[] = $employees[2];
         $viewers[] = $employees[3];
         foreach ($admins[0] as $admin) {
-            $email = (new Email())
+            //Mailer
+/*             $email = (new Email())
                 ->from('hello@example.com')
                 ->to($admin)
                 //->cc('cc@example.com')
@@ -172,18 +182,18 @@ class CompanyService implements CompanyServiceInterface
                 //->replyTo('fabien@example.com')
                 ->priority(Email::PRIORITY_HIGH)
                 ->subject($companyName.' want to add you in RMS platform')
-/*                 ->text('Sending emails is fun again!
+                 ->text('Sending emails is fun again!
                         Register yourself in RMS platform whit the Link Below:
                         https://www.site.tn/'.$companyId.'/add/admin
-                        ') */
+                        ') 
                 ->html('<p>Sending emails is fun again!</p>
                         <p>Register yourself in RMS platform whit the Link Below:</p>
                         <a href = "www.altyx.io">https://www.RMSsite.tn/'.$companyId.'/add/admin</a>
                         <p>and add your credentials </p>
-                        ');
+                        '); */
 
             /** @var Symfony\Component\Mailer\SentMessage $sentEmail */
-            $sentEmail = $this->mailer->send($email);
+            //$sentEmail = $this->mailer->send($email);
         }
         foreach ($managers as $manager) {
                 //send invitation Email
@@ -217,7 +227,7 @@ class CompanyService implements CompanyServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Company");
             $log->setModule("Company");
             $log->setUrl('/company');
@@ -258,7 +268,7 @@ class CompanyService implements CompanyServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Company");
             $log->setModule("Company");
             $log->setUrl('/company');
@@ -284,7 +294,7 @@ class CompanyService implements CompanyServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Disable Company");
             $log->setModule("Company");
             $log->setUrl('/company');

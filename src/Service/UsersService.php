@@ -16,9 +16,8 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface as ExceptionInterf
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use phpDocumentor\Reflection\Types\Boolean;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class UsersService implements UsersServiceInterface 
 {
@@ -26,11 +25,11 @@ class UsersService implements UsersServiceInterface
     private $propertyAccessor;
     private $session;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager , SessionInterface $session)
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $this->session = new Session(new NativeSessionStorage(),new AttributeBag());
+        $this->session = new Session();
     }
 
     
@@ -124,11 +123,15 @@ class UsersService implements UsersServiceInterface
         //Prepare and inject user into database
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+        $this->session->start();
+        $this->session->set("CurrentUser",$user->getId());
+        $this->session->set("CurrentUserRole",$user->getRole());
+        $this->session->save();
 
         //add to Log 
         $log = new Log();
         $log->setDate(new DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+        $log->setUser($user);
         $log->setAction("Add User");
         $log->setModule("User");
         $log->setUrl('/user');
@@ -157,6 +160,7 @@ class UsersService implements UsersServiceInterface
             if ($user->getMotpass() == $this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]') ) {
                 
                 //set Session values 
+                $this->session->start();
                 $this->session->set("CurrentUser",$user->getId());
                 $this->session->set("CurrentUserRole",$user->getRole());
 

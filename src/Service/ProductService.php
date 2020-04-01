@@ -12,16 +12,23 @@ use App\Service\interfaces\ProductServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+
+
+
 
 class ProductService implements ProductServiceInterface
 {
     private $entityManager;
     private $propertyAccessor;
+    private $session;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager , SessionInterface $session)
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->session = $session;
     }
 
     
@@ -94,7 +101,7 @@ class ProductService implements ProductServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));//$this->session->get("CurrentUser")));// after will get user id from session
         $log->setAction("Add Product");
         $log->setModule("Product");
         $log->setUrl('/product');
@@ -125,7 +132,7 @@ class ProductService implements ProductServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Product");
             $log->setModule("Product");
             $log->setUrl('/product');
@@ -153,7 +160,7 @@ class ProductService implements ProductServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new \DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Product");
             $log->setModule("Product");
             $log->setUrl('/product');
