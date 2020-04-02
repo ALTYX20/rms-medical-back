@@ -167,33 +167,33 @@ class CompanyService implements CompanyServiceInterface
      */
     public function InviteEmployee(array $employee, int $companyId, string $companyName)
     {
-        $employees[] = $employee[0];
-        $admins[] = $employees[0];
-        $managers[] = $employees[1];
-        $editors[] = $employees[2];
-        $viewers[] = $employees[3];
-        foreach ($admins[0] as $admin) {
+        
+        $admins[] = $employee[0];
+        $managers[] = $employee[1];
+        $editors[] = $employee[2];
+        $viewers[] = $employee[3];
+        foreach ($admins as $admin) {
             //Mailer
-/*             $email = (new Email())
-                ->from('hello@example.com')
-                ->to($admin)
+            $email = (new Email())
+                ->from('altyx@example.com')
+                ->to($this->propertyAccessor->getValue($admin[0] , '[email]'))
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
                 //->replyTo('fabien@example.com')
                 ->priority(Email::PRIORITY_HIGH)
                 ->subject($companyName.' want to add you in RMS platform')
-                 ->text('Sending emails is fun again!
+                 /* ->text('Sending emails is fun again!
                         Register yourself in RMS platform whit the Link Below:
                         https://www.site.tn/'.$companyId.'/add/admin
-                        ') 
+                        ')  */
                 ->html('<p>Sending emails is fun again!</p>
                         <p>Register yourself in RMS platform whit the Link Below:</p>
                         <a href = "www.altyx.io">https://www.RMSsite.tn/'.$companyId.'/add/admin</a>
                         <p>and add your credentials </p>
-                        '); */
+                        '); 
 
             /** @var Symfony\Component\Mailer\SentMessage $sentEmail */
-            //$sentEmail = $this->mailer->send($email);
+            $sentEmail = $this->mailer->send($email);
         }
         foreach ($managers as $manager) {
                 //send invitation Email
