@@ -176,7 +176,7 @@ class CompanyService implements CompanyServiceInterface
             //Mailer
             $email = (new Email())
                 ->from('altyx@example.com')
-                ->to($this->propertyAccessor->getValue($admin[0] , '[email]'))
+                ->to($admin[0])
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
                 //->replyTo('fabien@example.com')
