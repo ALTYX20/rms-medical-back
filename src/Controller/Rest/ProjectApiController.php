@@ -55,7 +55,7 @@ class ProjectApiController  extends AbstractFOSRestController
 
     /**
      * Creates a Project resource
-     * @Rest\Post("/project")
+     * @Rest\Post("/project", name="add_project")
      * @param Request $request
      * @return View
      */
@@ -73,11 +73,12 @@ class ProjectApiController  extends AbstractFOSRestController
 
     /**
      * Modify Project byID 
-     * @Rest\Put("/project")
+     * @Rest\Put("/project/{id}", name="modify_project")
      * @param Request $request
+     * @param int $id
      * @return View
      */
-    public function ModifyProject(Request $request): View
+    public function ModifyProject(int $id, Request $request): View
     {
         $project = $this->ProjectService->ModifyProject($request);
         return View::create($project, Response::HTTP_OK);
@@ -87,13 +88,12 @@ class ProjectApiController  extends AbstractFOSRestController
 
     /**
      * Delete project byID 
-     * @Rest\Delete("/project")
-     * @param Request $request
+     * @Rest\Delete("/project/{id}", name="Delete_project")
      * @return View
      */
-    public function DeleteProject(Request $request): View
+    public function DeleteProject(int $id): View
     {
-        $project = $this->ProjectService->DeleteProject($request);
+        $project = $this->ProjectService->DeleteProject($id);
         return View::create($project, Response::HTTP_OK);
     }
 

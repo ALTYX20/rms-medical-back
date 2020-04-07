@@ -11,7 +11,7 @@ interface MediaServiceInterface
     function getAllMedia();
     function getMediaById(int $id);
     function SetMedia(Request $request);
-    function DeleteMedia(Request $request);
-    function ModifyMedia(Request $request);
+    function DeleteMedia(int $id);
+    function ModifyMedia(int $id ,Request $request);
     
 }

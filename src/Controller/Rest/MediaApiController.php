@@ -40,7 +40,7 @@ class MediaApiController  extends AbstractFOSRestController
 
     /**
      * Retrieves an media resource
-     * @Rest\Get("/media/{id}")
+     * @Rest\Get("/media/{id}" , name="Get_Media_byId")
      * @param int $id
      * @return View
      */
@@ -56,7 +56,7 @@ class MediaApiController  extends AbstractFOSRestController
 
     /**
      * Creates a Media resource
-     * @Rest\Post("/media")
+     * @Rest\Post("/media" , name="add_Media")
      * @param Request $request
      * @return View
      */
@@ -74,26 +74,27 @@ class MediaApiController  extends AbstractFOSRestController
 
     /**
      * Modify Media byID 
-     * @Rest\Put("/media")
+     * @Rest\Put("/media/{id}" , name ="Modify_media")
      * @param Request $request
+     * @param int $id
      * @return View
      */
-    public function ModifyMedia(Request $request): View
+    public function ModifyMedia(int $id ,Request $request): View
     {
-        $media = $this->MediaService->ModifyMedia($request);
+        $media = $this->MediaService->ModifyMedia($id ,$request);
         return View::create($media, Response::HTTP_OK);
     }
 
 
     /**
      * Delete media byID 
-     * @Rest\Delete("/media")
-     * @param Request $request
+     * @Rest\Delete("/media/{id}" ,name="Delete_media")
+     * @param int $id
      * @return View
      */
-    public function DeleteMedia(Request $request): View
+    public function DeleteMedia(int $id): View
     {
-        $media = $this->MediaService->DeleteMedia($request);
+        $media = $this->MediaService->DeleteMedia($id);
         return View::create($media, Response::HTTP_OK);
     }
 

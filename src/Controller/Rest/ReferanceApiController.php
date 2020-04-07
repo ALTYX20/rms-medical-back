@@ -56,7 +56,7 @@ class ReferanceApiController  extends AbstractFOSRestController
 
     /**
      * Creates a referance resource
-     * @Rest\Post("/referance")
+     * @Rest\Post("/referance", name="add_referenc")
      * @param Request $request
      * @return View
      */
@@ -74,13 +74,14 @@ class ReferanceApiController  extends AbstractFOSRestController
 
     /**
      * Modify referance byID 
-     * @Rest\Put("/referance")
+     * @Rest\Put("/referance/{id}", name="Modify_reference")
      * @param Request $request
+     * @param int $id
      * @return View
      */
-    public function ModifyReferance(Request $request): View
+    public function ModifyReferance(int $id ,Request $request): View
     {
-        $referance = $this->ReferanceService->ModifyReferance($request);
+        $referance = $this->ReferanceService->ModifyReferance($id,$request);
         return View::create($referance, Response::HTTP_OK);
     }
 
@@ -88,13 +89,13 @@ class ReferanceApiController  extends AbstractFOSRestController
 
     /**
      * Delete referance byID 
-     * @Rest\Delete("/referance")
-     * @param Request $request
+     * @Rest\Delete("/referance/{id}" , name="Delete_Reference")
+     * @param int $id
      * @return View
      */
-    public function DeleteReferance(Request $request): View
+    public function DeleteReferance(int $id): View
     {
-        $referance = $this->ReferanceService->DeleteReferance($request);
+        $referance = $this->ReferanceService->DeleteReferance($id);
         return View::create($referance, Response::HTTP_OK);
     }
 

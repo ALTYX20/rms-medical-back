@@ -12,7 +12,7 @@ interface EquipServiceInterface
     function getEquipById(int $id);
     function SetEquip(Request $request);
     function ShowMembers(int $id);
-    function DeleteEquip(Request $request);
+    function DeleteEquip(int $id);
     function AddMembers(Request $request, int $id);
     function RemoveMembers(Request $request, int $id);
 

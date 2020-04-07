@@ -60,7 +60,7 @@ class UserApiController  extends AbstractFOSRestController
 
     /**
      * Creates a User resource
-     * @Rest\Post("/signup")
+     * @Rest\Post("/signup", name="add_user")
      * @param Request $request
      * @return View
      */
@@ -78,7 +78,7 @@ class UserApiController  extends AbstractFOSRestController
 
     /**
      * Check if User Exist 
-     * @Rest\Post("/login")
+     * @Rest\Post("/login" , name = "user_login")
      * @param Request $request
      * @return View
      */
@@ -97,39 +97,27 @@ class UserApiController  extends AbstractFOSRestController
 
 
     /**
-     * Delete user byID 
-     * @Rest\Delete("/delete")
-     * @param Request $request
-     * @return View
-     */
-    public function DeleteUser(Request $request , $id = 0): View
-    {
-        $user = $this->UsersService->DeleteUser($request , $id);
-        return View::create($user, Response::HTTP_OK);
-    }
-
-    /**
      * Delete user byID
-     * @Rest\Delete("/delete/{id}")
-     * @param Request $request
+     * @Rest\Delete("/delete/{id}", name="Delete_user")
      * @param int $id
      * @return View
      */
-    public function DeleteUserWithId(Request $request , int $id): View
+    public function DeleteUserWithId(int $id): View
     {
-        $user = $this->UsersService->DeleteUser($request ,$id);
+        $user = $this->UsersService->DeleteUser($id);
         return View::create($user, Response::HTTP_OK);
     }
 
     /**
      * Modify user byID 
-     * @Rest\Put("/modify")
+     * @Rest\Put("/user/{id}", name="Modify_user")
      * @param Request $request
+     * @param int $id
      * @return View
      */
-    public function ModifyUser(Request $request): View
+    public function ModifyUser(int $id ,Request $request): View
     {
-        $user = $this->UsersService->ModifyUser($request);
+        $user = $this->UsersService->ModifyUser($id,$request);
         return View::create($user, Response::HTTP_OK);
     }
 

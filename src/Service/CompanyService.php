@@ -8,30 +8,27 @@ use App\Entity\Log;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\CompanyServiceInterface;
-use phpDocumentor\Reflection\Types\Boolean;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+
 
 class CompanyService implements CompanyServiceInterface
 {
     private $entityManager;
     private $propertyAccessor;
-    private $session;
     private $mailer;
 
-    public function __construct(EntityManagerInterface $entityManager,SessionInterface $session , MailerInterface $mailer)
+    public function __construct(EntityManagerInterface $entityManager, MailerInterface $mailer)
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $this->session = $session;
         $this->mailer = $mailer;
     }
 
@@ -79,6 +76,9 @@ class CompanyService implements CompanyServiceInterface
 
     /**
      * @param Request $request
+     * @return array|string
+     * @throws ExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function SetCompany(Request $request)
     {
@@ -142,11 +142,6 @@ class CompanyService implements CompanyServiceInterface
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $this->session = new Session(new NativeSessionStorage(),new AttributeBag());
-        $this->session->start();
-        $this->session->set("CurrentUser",$user->getId());
-        $this->session->set("CurrentUserRole",$user->getRole());
-
         //add to Log 
         $log = new Log();
         $log->setDate(new \DateTime('now'));
@@ -162,8 +157,9 @@ class CompanyService implements CompanyServiceInterface
     }
 
     /**
-     * Function that Send emails contains inscription link with company id and user role 
+     * Function that Send emails contains inscription link with company id and user role
      * @param array employees
+     * @throws TransportExceptionInterface
      */
     public function InviteEmployee(array $employee, int $companyId, string $companyName)
     {
@@ -213,13 +209,14 @@ class CompanyService implements CompanyServiceInterface
 
 
     /**
-     * @param Request $request
+     * @param int $id
+     * @return string
+     * @throws Exception
      */
-    public function DeleteCompany(Request $request)
+    public function DeleteCompany(int $id)
     {   
-        
-        $companyID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $company = $this->entityManager->getRepository(Company::class)->find($companyID);
+
+        $company = $this->entityManager->getRepository(Company::class)->find($id);
         if($company){
             $this->entityManager->remove($company);
             $this->entityManager->flush();
@@ -239,13 +236,15 @@ class CompanyService implements CompanyServiceInterface
     }
 
     /**
+     * @param int $id
      * @param Request $request
+     * @return string
+     * @throws ExceptionInterface
      */
-    public function ModifyCompany(Request $request)
+    public function ModifyCompany(int $id, Request $request)
     {
         $serializer = new Serializer(array(new DateTimeNormalizer()));
-        $companyID =  $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $company = $this->entityManager->getRepository(Company::class)->find($companyID);
+        $company = $this->entityManager->getRepository(Company::class)->find($id);
         if($company){
             $periodsubscriptionDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[period_subscription]'), \DateTime::class);
             $company->setName($this->propertyAccessor->getValue($this->ConvertToArray($request), '[name]'));
@@ -276,12 +275,14 @@ class CompanyService implements CompanyServiceInterface
             $this->entityManager->flush();
             return 'Company Modified successfully ';
         }
-        return 'No Company found for id '.$companyID;
+        return 'No Company found for id '.$id;
     }
 
 
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
     public function DisableCompany(Request $request){
 

@@ -27,7 +27,7 @@ class EquipApiController  extends AbstractFOSRestController
      *
      * This call post modes data.
      *
-     * @Rest\Get("/equips", name="get_all_equips")
+     * @Rest\Get("/equip", name="get_all_equips")
      * @return View
      */
     public function findAllEquips(): View
@@ -39,7 +39,7 @@ class EquipApiController  extends AbstractFOSRestController
 
     /**
      * Retrieves an equip resource
-     * @Rest\Get("/equip/{id}")
+     * @Rest\Get("/equip/{id}" , name = "get_equip_byId")
      * @param int $id
      * @return View
      */
@@ -70,13 +70,13 @@ class EquipApiController  extends AbstractFOSRestController
 
     /**
      * Delete equip 
-     * @Rest\Delete("/equip")
-     * @param Request $request
+     * @Rest\Delete("/equip/{id}" ,name="Delete_equip")
+     * @param int $id
      * @return View
      */
-    public function DeleteEquip(Request $request): View
+    public function DeleteEquip(int $id): View
     {
-        $equip = $this->EquipService->DeleteEquip($request);
+        $equip = $this->EquipService->DeleteEquip($id);
         return View::create($equip, Response::HTTP_OK);
     }
 

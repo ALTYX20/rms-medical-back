@@ -9,6 +9,7 @@ use App\Entity\Log;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ProductServiceInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Serializer;
@@ -112,13 +113,15 @@ class ProductService implements ProductServiceInterface
     }
 
 
-
     /**
      * @param Request $request
+     * @param int $id
+     * @return string
+     * @throws Exception
      */
-    public function ModifyProduct(Request $request){
+    public function ModifyProduct(int $id,Request $request){
 
-        $product = $this->entityManager->getRepository(Product::class)->findOneBy(['nom' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]')]);
+        $product = $this->entityManager->getRepository(Product::class)->find($id);
         if($product){
 
             $product->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
@@ -145,14 +148,15 @@ class ProductService implements ProductServiceInterface
         return 'Product was not found ';
     }
 
-    
-    /**
-     * @param Request $request
-     */
-    public function DeleteProduct(Request $request){
 
-        $productID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $product = $this->entityManager->getRepository(Product::class)->find($productID);
+    /**
+     * @param int $id
+     * @return string
+     * @throws Exception
+     */
+    public function DeleteProduct(int $id)
+    {
+        $product = $this->entityManager->getRepository(Product::class)->find($id);
         if($product){
             $this->entityManager->remove($product);
             $this->entityManager->flush();

@@ -11,7 +11,7 @@ interface ProductServiceInterface
     function getAllProduct();
     function getProductById(int $id);
     function SetProduct(Request $request);
-    function DeleteProduct(Request $request);
-    function ModifyProduct(Request $request);
+    function DeleteProduct(int $id);
+    function ModifyProduct(int $id,Request $request);
     
 }

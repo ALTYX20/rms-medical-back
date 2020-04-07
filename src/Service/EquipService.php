@@ -9,23 +9,21 @@ use App\Entity\Company;
 use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\EquipServiceInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class EquipService implements EquipServiceInterface
 {
     private $entityManager;
     private $propertyAccessor;
-    private $session;
 
-    public function __construct(EntityManagerInterface $entityManager , SessionInterface $session)
+    public function __construct(EntityManagerInterface $entityManager )
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $this->session = $session;
     }
 
     public function ConvertToArray(Request $request){
@@ -72,6 +70,8 @@ class EquipService implements EquipServiceInterface
 
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
     public function SetEquip(Request $request){
 
@@ -120,6 +120,7 @@ class EquipService implements EquipServiceInterface
 
     /**
      * @param Request $request
+     * @return string
      */
     public function AddMembers(Request $request , int $id)
     {
@@ -140,6 +141,7 @@ class EquipService implements EquipServiceInterface
 
     /**
      * @param Request $request
+     * @return string
      */
     public function RemoveMembers(Request $request , int $id)
     {
@@ -153,12 +155,13 @@ class EquipService implements EquipServiceInterface
     }
 
     /**
-     * @param Request $request
+     * @param int $id
+     * @return string
+     * @throws Exception
      */
-    public function DeleteEquip(Request $request){
-
-        $equipID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $equip = $this->entityManager->getRepository(Equip::class)->find($equipID);
+    public function DeleteEquip(int $id)
+    {
+        $equip = $this->entityManager->getRepository(Equip::class)->find($id);
         if($equip){
             $this->entityManager->remove($equip);
             $this->entityManager->flush();
@@ -179,9 +182,9 @@ class EquipService implements EquipServiceInterface
     }
 
 
-
     /**
      * @param int $id
+     * @return mixed
      */
     public function ShowMembers(int $id){
 

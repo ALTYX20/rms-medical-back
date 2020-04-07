@@ -9,7 +9,6 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 
@@ -41,7 +40,7 @@ class PresentationApiController  extends AbstractFOSRestController
 
     /**
      * Retrieves an presentation resource
-     * @Rest\Get("/presentation/{id}")
+     * @Rest\Get("/presentation/{id}", name="Get_Presentation_byId")
      * @param int $id
      * @return View
      */
@@ -56,7 +55,7 @@ class PresentationApiController  extends AbstractFOSRestController
 
     /**
      * Creates a presentation resource
-     * @Rest\Post("/presentation")
+     * @Rest\Post("/presentation" , name ="add_Presentation")
      * @param Request $request
      * @return View
      */
@@ -74,40 +73,27 @@ class PresentationApiController  extends AbstractFOSRestController
 
     /**
      * Modify presentation byID 
-     * @Rest\Put("/presentation")
+     * @Rest\Put("/presentation/{id}",name="Modify_Presentation")
      * @param Request $request
-     * @return View
-     */
-    public function ModifyProject(Request $request): View
-    {
-        $presentation = $this->PresentationService->ModifyPresentation($request);
-        return View::create($presentation, Response::HTTP_OK);
-    }
-
-
-    /**
-     * Delete presentation byID
-     * @Rest\Delete("/presentation")
-     * @param Request $request
-     * @param $id
-     * @return View
-     */
-    public function DeletePresentation(Request $request, int $id= 0): View
-    {
-        $presentation = $this->PresentationService->DeletePresentation($request , $id);
-        return View::create($presentation, Response::HTTP_OK);
-    }
-
-    /**
-     * Delete presentation byID
-     * @Rest\Delete("/presentation/{id}")
      * @param int $id
-     * @param Request $request
      * @return View
      */
-    public function DeletePresentationWithId(Request $request ,int $id): View
+    public function ModifyPresentation(int $id ,Request $request): View
     {
-        $presentation = $this->PresentationService->DeletePresentation($request , $id);
+        $presentation = $this->PresentationService->ModifyPresentation($id ,$request);
+        return View::create($presentation, Response::HTTP_OK);
+    }
+
+
+    /**
+     * Delete presentation byID
+     * @Rest\Delete("/presentation/{id}" ,name="delete_presentatio")
+     * @param int $id
+     * @return View
+     */
+    public function DeletePresentationWithId(int $id): View
+    {
+        $presentation = $this->PresentationService->DeletePresentation($id);
         return View::create($presentation, Response::HTTP_OK);
     }
 }

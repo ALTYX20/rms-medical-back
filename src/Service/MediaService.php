@@ -8,6 +8,7 @@ use App\Entity\Users;
 use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\MediaServiceInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -72,6 +73,8 @@ class MediaService implements MediaServiceInterface
 
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
     public function SetMedia(Request $request){
 
@@ -105,8 +108,11 @@ class MediaService implements MediaServiceInterface
 
     /**
      * @param Request $request
+     * @param int $id
+     * @return string
+     * @throws Exception
      */
-    public function ModifyMedia(Request $request){
+    public function ModifyMedia(int $id,Request $request){
 
         $media = $this->entityManager->getRepository(Media::class)->findOneBy(['id' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[id]')]);
         if($media){
@@ -133,15 +139,17 @@ class MediaService implements MediaServiceInterface
         return 'Media was not found ';
     }
 
-    
-    /**
-     * @param Request $request
-     */
-    public function DeleteMedia(Request $request){
 
-        $mediaID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $media = $this->entityManager->getRepository(Media::class)->find($mediaID);
-        if($media){
+    /**
+     * @param int $id
+     * @return string
+     * @throws Exception
+     */
+ public function DeleteMedia(int $id)
+ {
+
+            $media = $this->entityManager->getRepository(Media::class)->find($id);
+            if($media){
             $this->entityManager->remove($media);
             $this->entityManager->flush();
 

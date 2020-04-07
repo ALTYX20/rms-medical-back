@@ -8,6 +8,7 @@ use App\Entity\Log;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ReferanceServiceInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -101,10 +102,13 @@ class ReferanceService implements ReferanceServiceInterface
 
     /**
      * @param Request $request
+     * @param int $id
+     * @return string
+     * @throws Exception
      */
-    public function ModifyReferance(Request $request){
+    public function ModifyReferance(int $id,Request $request){
 
-        $referance = $this->entityManager->getRepository(Referance::class)->findOneBy(['titre' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')]);
+        $referance = $this->entityManager->getRepository(Referance::class)->find($id);
         if($referance){
 
             $referance->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
@@ -127,14 +131,15 @@ class ReferanceService implements ReferanceServiceInterface
         return 'referance was not found ';
     }
 
-    
-    /**
-     * @param Request $request
-     */
-    public function DeleteReferance(Request $request){
 
-        $referanceID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $referance = $this->entityManager->getRepository(Referance::class)->find($referanceID);
+    /**
+     * @param int $id
+     * @return string
+     * @throws Exception
+     */
+    public function DeleteReferance(int $id)
+    {
+        $referance = $this->entityManager->getRepository(Referance::class)->find($id);
         if($referance){
             $this->entityManager->remove($referance);
             $this->entityManager->flush();
@@ -148,9 +153,9 @@ class ReferanceService implements ReferanceServiceInterface
             $log->setUrl('/referance');
             $this->entityManager->persist($log);
             $this->entityManager->flush();
-            return 'presentation has been Deleted' ;
+            return 'reference has been Deleted' ;
         }
-            return 'presentation doesn\'t exist';
+            return 'reference doesn\'t exist';
     }
 
 }

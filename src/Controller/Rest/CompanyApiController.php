@@ -9,7 +9,6 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 
@@ -32,7 +31,7 @@ class CompanyApiController  extends AbstractFOSRestController
      *
      * This call post modes data.
      *
-     * @Rest\Get("/companys", name="get_all_companys")
+     * @Rest\Get("/company", name="get_all_companys")
      * @return View
      */
     public function findAllCompanys(): View
@@ -44,7 +43,7 @@ class CompanyApiController  extends AbstractFOSRestController
 
     /**
      * Retrieves an user resource
-     * @Rest\Get("/company/{id}")
+     * @Rest\Get("/company/{id}" , name ="Get_company_byId")
      * @param int $id
      * @return View
      */
@@ -76,30 +75,27 @@ class CompanyApiController  extends AbstractFOSRestController
     }
 
     /**
-     * Creates a Company resource
-     * @Rest\Delete("/company")
-     * @param Request $request
+     * Delete a Company resource
+     * @Rest\Delete("/company/{id}" , name ="Delete_Company")
+     * @param int $id
      * @return View
      */
-    public function DeleteCompany(Request $request): View
+    public function DeleteCompany(int $id): View
     {
-        if($request){
-
-            $company = $this->CompanyService->DeleteCompany($request);
-            return View::create($company, Response::HTTP_OK);
-
-        }
+        $company = $this->CompanyService->DeleteCompany($id);
+        return View::create($company, Response::HTTP_OK);
     }
 
     /**
      * Modify company byID 
-     * @Rest\Put("/company")
+     * @Rest\Put("/company/{id}" , name = "Modify_Company")
+     * @param int $id
      * @param Request $request
      * @return View
      */
-    public function ModifyCompany(Request $request): View
+    public function ModifyCompany(int $id , Request $request): View
     {
-        $user = $this->CompanyService->ModifyCompany($request);
+        $user = $this->CompanyService->ModifyCompany($id , $request);
         return View::create($user, Response::HTTP_OK);
     }
 }                                                                                            

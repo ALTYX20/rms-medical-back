@@ -9,6 +9,7 @@ use App\Entity\Users;
 use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ProjectServiceInterface;
+use Exception;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -110,10 +111,13 @@ class ProjectService implements ProjectServiceInterface
 
     /**
      * @param Request $request
+     * @param int $id
+     * @return string
+     * @throws Exception
      */
-    public function ModifyProject(Request $request){
+    public function ModifyProject(int $id, Request $request){
 
-        $project = $this->entityManager->getRepository(Project::class)->findOneBy(['titre' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')]);
+        $project = $this->entityManager->getRepository(Project::class)->find($id);
         if($project){
 
             $project->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
@@ -142,14 +146,15 @@ class ProjectService implements ProjectServiceInterface
         return 'project was not found ';
     }
 
-    
-    /**
-     * @param Request $request
-     */
-    public function DeleteProject(Request $request){
 
-        $projectID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $project = $this->entityManager->getRepository(Project::class)->find($projectID);
+    /**
+     * @param int $id
+     * @return string
+     * @throws Exception
+     */
+    public function DeleteProject(int $id)
+    {
+        $project = $this->entityManager->getRepository(Project::class)->find($id);
         if($project){
             $this->entityManager->remove($project);
             $this->entityManager->flush();

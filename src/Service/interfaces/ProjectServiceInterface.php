@@ -11,7 +11,7 @@ interface ProjectServiceInterface
     function getAllProject();
     function getProjectById(int $id);
     function SetProject(Request $request);
-    function DeleteProject(Request $request);
-    function ModifyProject(Request $request);
+    function DeleteProject(int $id);
+    function ModifyProject(int $id, Request $request);
     
 }

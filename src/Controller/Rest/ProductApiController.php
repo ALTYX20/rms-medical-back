@@ -74,26 +74,27 @@ class ProductApiController  extends AbstractFOSRestController
 
     /**
      * Modify product byID 
-     * @Rest\Put("/product")
+     * @Rest\Put("/product/{id}" , name="Modify_product")
      * @param Request $request
+     * @param int $id
      * @return View
      */
-    public function ModifyUser(Request $request): View
+    public function ModifyUser(int $id,Request $request): View
     {
-        $product = $this->ProductService->ModifyProduct($request);
+        $product = $this->ProductService->ModifyProduct($id,$request);
         return View::create($product, Response::HTTP_OK);
     }
 
 
     /**
      * Delete product byID 
-     * @Rest\Delete("/product")
-     * @param Request $request
+     * @Rest\Delete("/product/{id}", name="Delete_product")
+     * @param int $id
      * @return View
      */
-    public function DeleteProduct(Request $request): View
+    public function DeleteProduct(int $id): View
     {
-        $product = $this->ProductService->DeleteProduct($request);
+        $product = $this->ProductService->DeleteProduct($id);
         return View::create($product, Response::HTTP_OK);
     }
 

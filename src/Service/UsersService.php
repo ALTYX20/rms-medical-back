@@ -15,21 +15,17 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as ExceptionInterfaceSerializer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use phpDocumentor\Reflection\Types\Boolean;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 class UsersService implements UsersServiceInterface 
 {
     private $entityManager;
     private $propertyAccessor;
-    private $session;
 
-    public function __construct(EntityManagerInterface $entityManager , SessionInterface $session)
+    public function __construct(EntityManagerInterface $entityManager )
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $this->session = new Session();
     }
 
     
@@ -123,10 +119,7 @@ class UsersService implements UsersServiceInterface
         //Prepare and inject user into database
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-        $this->session->start();
-        $this->session->set("CurrentUser",$user->getId());
-        $this->session->set("CurrentUserRole",$user->getRole());
-        $this->session->save();
+
 
         //add to Log 
         $log = new Log();
@@ -159,15 +152,12 @@ class UsersService implements UsersServiceInterface
 
             if ($user->getMotpass() == $this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]') ) {
                 
-                //set Session values 
-                $this->session->start();
-                $this->session->set("CurrentUser",$user->getId());
-                $this->session->set("CurrentUserRole",$user->getRole());
+
 
                 //add to Log 
                 $log = new Log();
                 $log->setDate(new DateTime('now'));
-                $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+                $log->setUser($user);// after will get user id from session
                 $log->setAction("Login");
                 $log->setModule("User");
                 $log->setUrl('/Login');
@@ -190,14 +180,9 @@ class UsersService implements UsersServiceInterface
      * @return string
      * @throws Exception
      */
-    public function DeleteUser(Request $request, int $id)
+    public function DeleteUser( int $id)
     {
-        if($this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]')){
-            $userID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-            $user = $this->entityManager->getRepository(Users::class)->find($userID); 
-        }else{
-            $user = $this->entityManager->getRepository(Users::class)->find($id);
-        }
+        $user = $this->entityManager->getRepository(Users::class)->find($id);
         if($user){
             $this->entityManager->remove($user);
             $this->entityManager->flush();
@@ -205,7 +190,7 @@ class UsersService implements UsersServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete User");
             $log->setModule("User");
             $log->setUrl('/user');
@@ -219,14 +204,14 @@ class UsersService implements UsersServiceInterface
 
     /**
      * @param Request $request
+     * @param int $id
      * @return object|string|null
      * @throws Exception
      */
-    public function ModifyUser(Request $request)
+    public function ModifyUser(int $id,Request $request)
     {
         $serializer = new Serializer(array(new DateTimeNormalizer()));
-        $userID = $this->propertyAccessor->getValue($this->ConvertToArray($request),'[id]');
-        $user = $this->entityManager->getRepository(Users::class)->find($userID);
+        $user = $this->entityManager->getRepository(Users::class)->find($id);
         try {
             $userDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[dateNaissance]'), DateTime::class);
         } catch (ExceptionInterfaceSerializer $e) {
@@ -248,7 +233,7 @@ class UsersService implements UsersServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find($this->session->get("CurrentUser")));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify User");
             $log->setModule("User");
             $log->setUrl('/user');
@@ -257,7 +242,7 @@ class UsersService implements UsersServiceInterface
             //return $user;
             return [$user->getId(),$user->getNom(),$user->getRole()];
         }
-        return 'No user found with id '.$userID;
+        return 'No user found with id '.$id;
     }
 
     /**

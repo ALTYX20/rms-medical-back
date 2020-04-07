@@ -141,12 +141,13 @@ class PresentationService implements PresentationServiceInterface
 
     /**
      * @param Request $request
+     * @param int $id
      * @return string
      * @throws Exception
      */
-    public function ModifyPresentation(Request $request){
+    public function ModifyPresentation(int $id,Request $request){
 
-        $presentation = $this->entityManager->getRepository(Presentation::class)->findOneBy(['id' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[id]')]);
+        $presentation = $this->entityManager->getRepository(Presentation::class)->find($id);
         if($presentation){
 
             $presentation->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
@@ -216,18 +217,15 @@ class PresentationService implements PresentationServiceInterface
 
 
     /**
-     * @param Request $request
+     * @param int $id
      * @return string
      * @throws Exception
      */
-    public function DeletePresentation(Request $request, int $id){
+    public function DeletePresentation(int $id)
+    {
 
-        if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[id]')) {
-            $presentationID = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[id]');
-            $presentation = $this->entityManager->getRepository(presentation::class)->find($presentationID);
-        } else {
-            $presentation = $this->entityManager->getRepository(presentation::class)->find($id);
-        }
+        $presentation = $this->entityManager->getRepository(presentation::class)->find($id);
+
         if($presentation){
             $this->entityManager->remove($presentation);
             $this->entityManager->flush();
