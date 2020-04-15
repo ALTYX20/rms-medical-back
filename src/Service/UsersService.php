@@ -11,39 +11,27 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\UsersServiceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as ExceptionInterfaceSerializer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
-class UsersService implements UsersServiceInterface 
+
+class UsersService implements UsersServiceInterface
 {
     private $entityManager;
-    private $propertyAccessor;
+    private $Encoder;
 
-    public function __construct(EntityManagerInterface $entityManager )
+    public function __construct(
+        EntityManagerInterface $entityManager ,
+        UserPasswordEncoderInterface $Encoder)
     {
         $this->entityManager = $entityManager;
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->Encoder = $Encoder;
     }
 
-    
-    /**
-     * @param Request $request
-     * @return object[]
-     */
-    public function ConvertToArray(Request $request)
-    {
 
-        // Getting Parameters from Json Request
-        $parameters = [];
-        if ($content = $request->getContent()) {
-            $parameters = json_decode($content, true);
-        }
-        return $parameters;
-
-    }
 
     /**
      * @return object[]
@@ -51,7 +39,7 @@ class UsersService implements UsersServiceInterface
     function getAllUsers() {
 
         return $this->entityManager->createQueryBuilder()
-        ->select('u.id , u.nom, u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.role , u.motpass , u.dateNaissance')
+        ->select('u.id , u.nom, u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.roles , u.motpass , u.dateNaissance')
         ->from('App:Users', 'u')
         ->getQuery()->getResult(); 
 
@@ -68,7 +56,7 @@ class UsersService implements UsersServiceInterface
     {
 
          return $this->entityManager->createQueryBuilder()
-        ->select('u.id , u.nom , u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.role , u.motpass , u.dateNaissance')
+        ->select('u.id , u.nom , u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.roles , u.motpass , u.dateNaissance')
         ->from('App:Users', 'u')
         ->where('u.id = :id')
         ->setParameter('id', $id)
@@ -88,7 +76,7 @@ class UsersService implements UsersServiceInterface
         $serializer = new Serializer(array(new DateTimeNormalizer()));
 
         //if user exist then cancel
-        $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]')]);
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $request->get('email')]);
         
         if ($user ) { 
             return 'User already exist';
@@ -96,26 +84,30 @@ class UsersService implements UsersServiceInterface
 
         //convert Date from String to DateTimeInterface object
         try {
-            $userDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[dateNaissance]'), \DateTimeInterface::class);
+            $userDate = $serializer->denormalize($request->get('dateNaissance'), \DateTimeInterface::class);
         } catch (ExceptionInterfaceSerializer $e) {
         }
 
         //Create User 
-        $user = new Users();
-        $user->setCompany($this->entityManager->getRepository(Company::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[company]')));
-        $user->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
-        $user->setPrenom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prenom]'));
-        /** @var DateTime $userDate */
-        $user->setDateNaissance($userDate);
-        $user->setEmail($this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]'));
-        $user->setAdresse($this->propertyAccessor->getValue($this->ConvertToArray($request), '[adresse]'));
-        $user->setCodepostal($this->propertyAccessor->getValue($this->ConvertToArray($request), '[codepostal]'));
-        $user->setCity($this->propertyAccessor->getValue($this->ConvertToArray($request), '[city]'));
-        $user->setNumTel($this->propertyAccessor->getValue($this->ConvertToArray($request), '[numTel]'));
-        $user->setSexe($this->propertyAccessor->getValue($this->ConvertToArray($request), '[sexe]'));
-        $user->setRole($this->propertyAccessor->getValue($this->ConvertToArray($request), '[role]'));
-        $user->setMotpass($this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]'));
-        
+        $user = new Users(
+            $request->get('email]'),
+            [$request->get('role')]
+        );
+        $user->setCompany($this->entityManager->getRepository(Company::class)->find($request->get('company')));
+        $user->setNom($request->get('nom'));
+            $user->setPrenom($request->get('prenom'));
+            $user->setDateNaissance($userDate);
+            $user->setEmail($request->get('email'));
+            $user->setAdresse($request->get('adresse'));
+            $user->setCodepostal($request->get('codepostal'));
+            $user->setCity($request->get('city'));
+            $user->setNumTel($request->get('numTel'));
+            $user->setSexe($request->get('sexe'));
+            $user->setRoles($request->get('role'));
+            $user->setMotpass(
+                $this->Encoder->encodePassword($user, $request->get('motpass')) 
+            );
+            
         //Prepare and inject user into database
         $this->entityManager->persist($user);
         $this->entityManager->flush();
@@ -138,20 +130,19 @@ class UsersService implements UsersServiceInterface
 
     /**
      * @param Request $request
-     * @return object|string|null
+     * @return array|string
      * @throws Exception
      */
     public Function UserExist(Request $request)
     {
 
         //getting User from database
-        $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]')]);
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $request->get('email')]);
 
         // if User exist in database check Password
         if ($user ) {
 
-            if ($user->getMotpass() == $this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]') ) {
-                
+            if ($user->getMotpass() == $request->get('motpass') ) {
 
 
                 //add to Log 
@@ -163,8 +154,10 @@ class UsersService implements UsersServiceInterface
                 $log->setUrl('/Login');
                 $this->entityManager->persist($log);
                 $this->entityManager->flush();
-                
-                return [$user->getId(),$user->getNom(),$user->getRole()];
+                /* return ['token' => $this->JWTManager->create($user->createFromPayload($user->getEmail(), ['roles' => $user->getRoles()])),
+                        'RefreshToken' => $this->RefreshToken($user) 
+            ];*/
+                return [$user->getId(),$user->getNom(),$user->getRoles()];
             }
             return 'password incorrect';
 
@@ -175,8 +168,9 @@ class UsersService implements UsersServiceInterface
     }
 
 
+
     /**
-     * @param Request $request
+     * @param int $id
      * @return string
      * @throws Exception
      */
@@ -190,7 +184,7 @@ class UsersService implements UsersServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->entityManager->getRepository(Users::class)->find("10")); // after will get user id from session
             $log->setAction("Delete User");
             $log->setModule("User");
             $log->setUrl('/user');
@@ -213,22 +207,26 @@ class UsersService implements UsersServiceInterface
         $serializer = new Serializer(array(new DateTimeNormalizer()));
         $user = $this->entityManager->getRepository(Users::class)->find($id);
         try {
-            $userDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[dateNaissance]'), DateTime::class);
+            $userDate = $serializer->denormalize($request->get('dateNaissance'), DateTime::class);
         } catch (ExceptionInterfaceSerializer $e) {
         }
         if($user){
-            $user->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
-            $user->setPrenom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prenom]'));
+
+            $user->setNom($request->get('nom'));
+            $user->setPrenom($request->get('prenom'));
             $user->setDateNaissance($userDate);
-            $user->setEmail($this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]'));
-            $user->setAdresse($this->propertyAccessor->getValue($this->ConvertToArray($request), '[adresse]'));
-            $user->setCodepostal($this->propertyAccessor->getValue($this->ConvertToArray($request), '[codepostal]'));
-            $user->setCity($this->propertyAccessor->getValue($this->ConvertToArray($request), '[city]'));
-            $user->setNumTel($this->propertyAccessor->getValue($this->ConvertToArray($request), '[numTel]'));
-            $user->setSexe($this->propertyAccessor->getValue($this->ConvertToArray($request), '[sexe]'));
-            $user->setRole($this->propertyAccessor->getValue($this->ConvertToArray($request), '[role]'));
-            $user->setMotpass($this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]'));
-            $this->entityManager->flush($user);
+            $user->setEmail($request->get('email'));
+            $user->setAdresse($request->get('adresse'));
+            $user->setCodepostal($request->get('codepostal'));
+            $user->setCity($request->get('city'));
+            $user->setNumTel($request->get('numTel'));
+            $user->setSexe($request->get('sexe'));
+            $user->setRoles($request->get('role'));
+            $user->setMotpass(
+                $this->Encoder->encodePassword($user, $request->get('motpass')) 
+            );
+            
+            $this->entityManager->flush();
 
             //add to Log 
             $log = new Log();
@@ -240,7 +238,7 @@ class UsersService implements UsersServiceInterface
             $this->entityManager->persist($log);
             $this->entityManager->flush(); 
             //return $user;
-            return [$user->getId(),$user->getNom(),$user->getRole()];
+            return 'User Modified successfully';
         }
         return 'No user found with id '.$id;
     }
@@ -255,5 +253,6 @@ class UsersService implements UsersServiceInterface
         $user->setRole($role);
 
     }
+
 }
 

@@ -6,6 +6,7 @@ namespace App\Service;
 use App\Entity\Company;
 use App\Entity\Log;
 use App\Entity\Users;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\CompanyServiceInterface;
 use Exception;
@@ -17,6 +18,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class CompanyService implements CompanyServiceInterface
@@ -24,12 +26,17 @@ class CompanyService implements CompanyServiceInterface
     private $entityManager;
     private $propertyAccessor;
     private $mailer;
+    private $Encoder;
 
-    public function __construct(EntityManagerInterface $entityManager, MailerInterface $mailer)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+         MailerInterface $mailer ,
+         UserPasswordEncoderInterface $Encoder )
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
         $this->mailer = $mailer;
+        $this->Encoder = $Encoder;
     }
 
 
@@ -86,32 +93,32 @@ class CompanyService implements CompanyServiceInterface
         $serializer = new Serializer(array(new DateTimeNormalizer()));
 
         //if Company exist then cancel
-        $company = $this->entityManager->getRepository(Company::class)->findOneBy(['email' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]')]);
+        $company = $this->entityManager->getRepository(Company::class)->findOneBy(['email' => $request->get('email')]);
         
         if($company){
             return 'company already exist';
         }
 
         //convert Date from String to DateTimeInterface object
-        $companyPeriodSubscription = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[period_subscription]'), \DateTimeInterface::class);
+        $companyPeriodSubscription = $serializer->denormalize($request->get('period_subscription'), \DateTimeInterface::class);
         
         //Create company 
         $company = new Company();
-        $company->setName($this->propertyAccessor->getValue($this->ConvertToArray($request), '[name]'));
-        $company->setEmail($this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]'));
-        $company->setAdresse($this->propertyAccessor->getValue($this->ConvertToArray($request), '[adresse]'));
-        $company->setNumtel($this->propertyAccessor->getValue($this->ConvertToArray($request), '[numtel]'));
-        $company->setWebsite($this->propertyAccessor->getValue($this->ConvertToArray($request), '[website]'));
-        $company->setStaffcount($this->propertyAccessor->getValue($this->ConvertToArray($request), '[staffcount]'));
-        $company->setSector($this->propertyAccessor->getValue($this->ConvertToArray($request), '[sector]'));
-        $company->setFile($this->propertyAccessor->getValue($this->ConvertToArray($request), '[file]'));
-        $company->setActivity($this->propertyAccessor->getValue($this->ConvertToArray($request), '[activity]'));
-        $company->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
+        $company->setName($request->get('name'));
+        $company->setEmail($request->get('email'));
+        $company->setAdresse($request->get('adresse'));
+        $company->setNumtel($request->get('numtel'));
+        $company->setWebsite($request->get('website'));
+        $company->setStaffcount($request->get('staffcount'));
+        $company->setSector($request->get('sector'));
+        $company->setFile($request->get('file'));
+        $company->setActivity($request->get('activity'));
+        $company->setDescription($request->get('description'));
         $company->setPeriodSubscription($companyPeriodSubscription);
-        $company->setDatabasesize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[databasesize]'));
-        $company->setSlatype($this->propertyAccessor->getValue($this->ConvertToArray($request), '[slatype]'));
-        $company->setSupporttype($this->propertyAccessor->getValue($this->ConvertToArray($request), '[supporttype]'));
-        $company->setStatus($this->propertyAccessor->getValue($this->ConvertToArray($request), '[status]'));
+        $company->setDatabasesize($request->get('databasesize'));
+        $company->setSlatype($request->get('slatype'));
+        $company->setSupporttype($request->get('supporttype'));
+        $company->setStatus($request->get('status'));
 
 
         
@@ -120,31 +127,34 @@ class CompanyService implements CompanyServiceInterface
         $this->entityManager->persist($company);
         $this->entityManager->flush();
 
-        if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[employee]')){
-            $this->InviteEmployee($this->propertyAccessor->getValue($this->ConvertToArray($request), '[employee]'), $company->getId(), $company->getName());
+        if($request->get('employee')){
+            $this->InviteEmployee($request->get('employee'), $company->getId(), $company->getName());
         }
 
         //Create User 
-        $user = new Users();
+        $user = new Users(
+            $request->get('email'),
+            ["ROLE_ADMIN"]
+        );
         $user->setCompany($company);
-        $user->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[name]'));
+        $user->setNom($request->get('name'));
         $user->setPrenom('Company');
-        $user->setDateNaissance(new \DateTime('now'));
-        $user->setEmail($this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]'));
-        $user->setAdresse($this->propertyAccessor->getValue($this->ConvertToArray($request), '[adresse]'));
-        $user->setCodepostal($this->propertyAccessor->getValue($this->ConvertToArray($request), '[codepostal]'));
-        $user->setCity($this->propertyAccessor->getValue($this->ConvertToArray($request), '[city]')); 
+        $user->setDateNaissance(new DateTime('now'));
+        $user->setAdresse($request->get('adresse'));
+        $user->setCodepostal($request->get('codepostal'));
+        $user->setCity($request->get('city')); 
         $user->setSexe('Homme');
-        $user->setNumTel($this->propertyAccessor->getValue($this->ConvertToArray($request), '[numtel]'));
-        $user->setRole("admin");
-        $user->setMotpass($this->propertyAccessor->getValue($this->ConvertToArray($request), '[motpass]'));
+        $user->setNumTel($request->get('numtel'));
+        $user->setMotpass(
+            $this->Encoder->encodePassword($user, $request->get('motpass')) 
+        );
         //Prepare and inject user into database
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('now'));
+        $log->setDate(new DateTime('now'));
         $log->setUser($user);
         $log->setAction("Add Company");
         $log->setModule("Company");
@@ -152,13 +162,15 @@ class CompanyService implements CompanyServiceInterface
         $this->entityManager->persist($log);
         $this->entityManager->flush(); 
 
-        return [$user->getId(),$user->getNom(),$user->getRole()];
+        return [$user->getId(),$user->getNom(),$user->getRoles()];
         
     }
 
     /**
      * Function that Send emails contains inscription link with company id and user role
      * @param array employees
+     * @param int $companyId
+     * @param string $companyName
      * @throws TransportExceptionInterface
      */
     public function InviteEmployee(array $employee, int $companyId, string $companyName)
@@ -188,20 +200,70 @@ class CompanyService implements CompanyServiceInterface
                         <p>and add your credentials </p>
                         '); 
 
-            /** @var Symfony\Component\Mailer\SentMessage $sentEmail */
             $sentEmail = $this->mailer->send($email);
         }
         foreach ($managers as $manager) {
-                //send invitation Email
-                //echo'msg manager send';
+            $email = (new Email())
+                ->from('altyx@example.com')
+                ->to($manager[0])
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                ->priority(Email::PRIORITY_HIGH)
+                ->subject($companyName.' want to add you in RMS platform')
+                /* ->text('Sending emails is fun again!
+                       Register yourself in RMS platform whit the Link Below:
+                       https://www.site.tn/'.$companyId.'/add/admin
+                       ')  */
+                ->html('<p>Sending emails is fun again!</p>
+                        <p>Register yourself in RMS platform whit the Link Below:</p>
+                        <a href = "www.altyx.io">https://www.RMSsite.tn/'.$companyId.'/add/manager</a>
+                        <p>and add your credentials </p>
+                        ');
+
+            $sentEmail = $this->mailer->send($email);
             }
         foreach ($editors as $editor) {
-                //send invitation Email
-               // echo'msg editor send';
+            $email = (new Email())
+                ->from('altyx@example.com')
+                ->to($editor[0])
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                ->priority(Email::PRIORITY_HIGH)
+                ->subject($companyName.' want to add you in RMS platform')
+                /* ->text('Sending emails is fun again!
+                       Register yourself in RMS platform whit the Link Below:
+                       https://www.site.tn/'.$companyId.'/add/admin
+                       ')  */
+                ->html('<p>Sending emails is fun again!</p>
+                        <p>Register yourself in RMS platform whit the Link Below:</p>
+                        <a href = "www.altyx.io">https://www.RMSsite.tn/'.$companyId.'/add/editor</a>
+                        <p>and add your credentials </p>
+                        ');
+
+            $sentEmail = $this->mailer->send($email);
             }
         foreach ($viewers as $viewer) {
-                //send invitation Email
-                //echo'msg viewer send';
+            $email = (new Email())
+                ->from('altyx@example.com')
+                ->to($viewer[0])
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                ->priority(Email::PRIORITY_HIGH)
+                ->subject($companyName.' want to add you in RMS platform')
+                /* ->text('Sending emails is fun again!
+                       Register yourself in RMS platform whit the Link Below:
+                       https://www.site.tn/'.$companyId.'/add/admin
+                       ')  */
+                ->html('<p>Sending emails is fun again!</p>
+                        <p>Register yourself in RMS platform whit the Link Below:</p>
+                        <a href = "www.altyx.io">https://www.RMSsite.tn/'.$companyId.'/add/viewer</a>
+                        <p>and add your credentials </p>
+                        ');
+
+            $sentEmail = $this->mailer->send($email);
         }
         
         
@@ -223,7 +285,7 @@ class CompanyService implements CompanyServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Company");
             $log->setModule("Company");
@@ -246,27 +308,27 @@ class CompanyService implements CompanyServiceInterface
         $serializer = new Serializer(array(new DateTimeNormalizer()));
         $company = $this->entityManager->getRepository(Company::class)->find($id);
         if($company){
-            $periodsubscriptionDate = $serializer->denormalize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[period_subscription]'), \DateTime::class);
-            $company->setName($this->propertyAccessor->getValue($this->ConvertToArray($request), '[name]'));
-            $company->setEmail($this->propertyAccessor->getValue($this->ConvertToArray($request), '[email]'));
-            $company->setAdresse($this->propertyAccessor->getValue($this->ConvertToArray($request), '[adresse]'));
-            $company->setNumtel($this->propertyAccessor->getValue($this->ConvertToArray($request), '[numtel]'));
-            $company->setWebsite($this->propertyAccessor->getValue($this->ConvertToArray($request), '[website]'));
-            $company->setStaffcount($this->propertyAccessor->getValue($this->ConvertToArray($request), '[staffcount]'));
-            $company->setSector($this->propertyAccessor->getValue($this->ConvertToArray($request), '[sector]'));
-            $company->setFile($this->propertyAccessor->getValue($this->ConvertToArray($request), '[file]'));
-            $company->setActivity($this->propertyAccessor->getValue($this->ConvertToArray($request), '[activity]'));
-            $company->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
+            $periodsubscriptionDate = $serializer->denormalize($request->get('period_subscription'), DateTime::class);
+            $company->setName($request->get('name'));
+            $company->setEmail($request->get('email'));
+            $company->setAdresse($request->get('adresse'));
+            $company->setNumtel($request->get('numtel'));
+            $company->setWebsite($request->get('website'));
+            $company->setStaffcount($request->get('staffcount'));
+            $company->setSector($request->get('sector'));
+            $company->setFile($request->get('file'));
+            $company->setActivity($request->get('activity'));
+            $company->setDescription($request->get('description'));
             $company->setPeriodSubscription($periodsubscriptionDate);
-            $company->setDatabasesize($this->propertyAccessor->getValue($this->ConvertToArray($request), '[databasesize]'));
-            $company->setSlatype($this->propertyAccessor->getValue($this->ConvertToArray($request), '[slatype]'));
-            $company->setSupporttype($this->propertyAccessor->getValue($this->ConvertToArray($request), '[supporttype]'));
-            $company->setStatus($this->propertyAccessor->getValue($this->ConvertToArray($request), '[status]'));
-            $this->entityManager->flush($company);
+            $company->setDatabasesize($request->get('databasesize'));
+            $company->setSlatype($request->get('slatype'));
+            $company->setSupporttype($request->get('supporttype'));
+            $company->setStatus($request->get('status'));
+            $this->entityManager->flush();
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Company");
             $log->setModule("Company");
@@ -290,11 +352,11 @@ class CompanyService implements CompanyServiceInterface
         $company = $this->entityManager->getRepository(Company::class)->find($companyID);
         if($company){
             $company->setStatus(false);
-            $this->entityManager->flush($company);
+            $this->entityManager->flush();
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Disable Company");
             $log->setModule("Company");

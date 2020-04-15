@@ -3,7 +3,7 @@
 
 namespace App\Service\interfaces;
 
-use App\Entity\Media;
+
 use Symfony\Component\HttpFoundation\Request;
 
 interface MediaServiceInterface
@@ -13,5 +13,6 @@ interface MediaServiceInterface
     function SetMedia(Request $request);
     function DeleteMedia(int $id);
     function ModifyMedia(int $id ,Request $request);
+    function UploadFile(Request $request,int $id , string $uploadDir);
     
 }

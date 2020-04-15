@@ -2,14 +2,12 @@
 
 namespace App\Controller\Rest;
 
-use App\Entity\Project;
-use App\Repository\ProjectRepository;
+
 use App\Service\interfaces\ProjectServiceInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 
@@ -80,7 +78,7 @@ class ProjectApiController  extends AbstractFOSRestController
      */
     public function ModifyProject(int $id, Request $request): View
     {
-        $project = $this->ProjectService->ModifyProject($request);
+        $project = $this->ProjectService->ModifyProject($id,$request);
         return View::create($project, Response::HTTP_OK);
     }
 

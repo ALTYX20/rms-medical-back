@@ -32,7 +32,6 @@ class Equip
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="equips")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $company;
 

@@ -2,15 +2,14 @@
 
 namespace App\Controller\Rest;
 
-use App\Entity\Users;
-use App\Repository\UsersRepository;
+
 use App\Service\interfaces\UsersServiceInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
+
 
 
 
@@ -18,13 +17,9 @@ class UserApiController  extends AbstractFOSRestController
 {
     private $UsersService;
 
-    public function __construct(UsersServiceInterface $UsersService)
+    public function __construct(UsersServiceInterface $UsersService )
     {
         $this->UsersService = $UsersService;
-
-      /* $em = $this->getDoctrine()->getManager();
-        $em->getConnection()->connect();
-        $connected = $em->getConnection()->isConnected(); */
     }
 
 

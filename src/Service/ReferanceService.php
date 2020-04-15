@@ -6,38 +6,24 @@ namespace App\Service;
 use App\Entity\Referance;
 use App\Entity\Log;
 use App\Entity\Users;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ReferanceServiceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+
 
 class ReferanceService implements ReferanceServiceInterface
 {
     private $entityManager;
-    private $propertyAccessor;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
 
     
-    /**
-     * @param Request $request
-     * @return object[]
-     */
-    public function ConvertToArray(Request $request){
 
-        // Getting Parameters from Json Request
-        $parameters = [];
-        if ($content = $request->getContent()) {
-            $parameters = json_decode($content, true);
-        }
-        return $parameters;
-
-    }
 
     /**
      * @return object[]
@@ -71,16 +57,18 @@ class ReferanceService implements ReferanceServiceInterface
 
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
     public function SetReferance(Request $request){
 
-        $referance = $this->entityManager->getRepository(Referance::class)->findOneBy(['titre' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')]);
+        $referance = $this->entityManager->getRepository(Referance::class)->findOneBy(['titre' => $request->get('titre')]);
         if($referance){
             return 'this referance already exist';
         }
         $referance = new Referance();
-        $referance->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
-        $referance->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
+        $referance->setTitre($request->get('titre'));
+        $referance->setDescription($request->get('description'));
         
         //Prepar and inject product into database
         $this->entityManager->persist($referance);
@@ -88,7 +76,7 @@ class ReferanceService implements ReferanceServiceInterface
 
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('now'));
+        $log->setDate(new DateTime('now'));
         $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
         $log->setAction("Add Referance");
         $log->setModule("Referance");
@@ -111,13 +99,13 @@ class ReferanceService implements ReferanceServiceInterface
         $referance = $this->entityManager->getRepository(Referance::class)->find($id);
         if($referance){
 
-            $referance->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
-            $referance->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
+            $referance->setTitre($request->get('titre'));
+            $referance->setDescription($request->get('description'));
             $this->entityManager->flush();
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Add Referance");
             $log->setModule("Referance");
@@ -146,7 +134,7 @@ class ReferanceService implements ReferanceServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Add Referance");
             $log->setModule("Referance");

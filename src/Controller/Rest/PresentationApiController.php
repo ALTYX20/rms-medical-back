@@ -2,8 +2,7 @@
 
 namespace App\Controller\Rest;
 
-use App\Entity\Presentation;
-use App\Repository\PresentationRepository;
+
 use App\Service\interfaces\PresentationServiceInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;

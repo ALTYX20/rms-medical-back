@@ -3,7 +3,7 @@
 
 namespace App\Service\interfaces;
 
-use App\Entity\Users;
+
 use Symfony\Component\HttpFoundation\Request;
 
 interface UsersServiceInterface

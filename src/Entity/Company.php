@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -269,12 +270,12 @@ class Company
         return $this;
     }
 
-    public function getPeriodSubscription(): ?\DateTimeInterface
+    public function getPeriodSubscription(): ?DateTimeInterface
     {
         return $this->periodSubscription;
     }
 
-    public function setPeriodSubscription(?\DateTimeInterface $periodSubscription): self
+    public function setPeriodSubscription(?DateTimeInterface $periodSubscription): self
     {
         $this->periodSubscription = $periodSubscription;
 

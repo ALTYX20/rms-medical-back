@@ -3,7 +3,6 @@
 
 namespace App\Service\interfaces;
 
-use App\Entity\Equip;
 use Symfony\Component\HttpFoundation\Request;
 
 interface EquipServiceInterface

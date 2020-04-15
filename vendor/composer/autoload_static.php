@@ -76,9 +76,11 @@ class ComposerStaticInitefdb1c11f820de90540425be679223c1
             'Symfony\\Component\\Asset\\' => 24,
             'Symfony\\Bundle\\TwigBundle\\' => 26,
             'Symfony\\Bundle\\SecurityBundle\\' => 30,
+            'Symfony\\Bundle\\MonologBundle\\' => 29,
             'Symfony\\Bundle\\MakerBundle\\' => 27,
             'Symfony\\Bundle\\FrameworkBundle\\' => 31,
             'Symfony\\Bridge\\Twig\\' => 20,
+            'Symfony\\Bridge\\Monolog\\' => 23,
             'Symfony\\Bridge\\Doctrine\\' => 24,
             'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
         ),
@@ -95,10 +97,17 @@ class ComposerStaticInitefdb1c11f820de90540425be679223c1
         array (
             'Nelmio\\CorsBundle\\' => 18,
             'Negotiation\\' => 12,
+            'Namshi\\JOSE\\' => 12,
         ),
         'M' => 
         array (
+            'Monolog\\' => 8,
             'Metadata\\' => 9,
+        ),
+        'L' => 
+        array (
+            'Lexik\\Bundle\\JWTAuthenticationBundle\\' => 37,
+            'Lcobucci\\JWT\\' => 13,
         ),
         'J' => 
         array (
@@ -120,6 +129,10 @@ class ComposerStaticInitefdb1c11f820de90540425be679223c1
             'Hoa\\Event\\' => 10,
             'Hoa\\Consistency\\' => 16,
             'Hoa\\Compiler\\' => 13,
+        ),
+        'G' => 
+        array (
+            'Gesdinet\\JWTRefreshTokenBundle\\' => 31,
         ),
         'F' => 
         array (
@@ -341,6 +354,10 @@ class ComposerStaticInitefdb1c11f820de90540425be679223c1
         array (
             0 => __DIR__ . '/..' . '/symfony/security-bundle',
         ),
+        'Symfony\\Bundle\\MonologBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/monolog-bundle',
+        ),
         'Symfony\\Bundle\\MakerBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/maker-bundle/src',
@@ -352,6 +369,10 @@ class ComposerStaticInitefdb1c11f820de90540425be679223c1
         'Symfony\\Bridge\\Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/twig-bridge',
+        ),
+        'Symfony\\Bridge\\Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/monolog-bridge',
         ),
         'Symfony\\Bridge\\Doctrine\\' => 
         array (
@@ -393,9 +414,25 @@ class ComposerStaticInitefdb1c11f820de90540425be679223c1
         array (
             0 => __DIR__ . '/..' . '/willdurand/negotiation/src/Negotiation',
         ),
+        'Namshi\\JOSE\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/namshi/jose/src/Namshi/JOSE',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
         'Metadata\\' => 
         array (
             0 => __DIR__ . '/..' . '/jms/metadata/src',
+        ),
+        'Lexik\\Bundle\\JWTAuthenticationBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lexik/jwt-authentication-bundle',
+        ),
+        'Lcobucci\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lcobucci/jwt/src',
         ),
         'JMS\\Serializer\\' => 
         array (
@@ -456,6 +493,10 @@ class ComposerStaticInitefdb1c11f820de90540425be679223c1
         'Hoa\\Compiler\\' => 
         array (
             0 => __DIR__ . '/..' . '/hoa/compiler',
+        ),
+        'Gesdinet\\JWTRefreshTokenBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gesdinet/jwt-refresh-token-bundle',
         ),
         'Fig\\Link\\' => 
         array (

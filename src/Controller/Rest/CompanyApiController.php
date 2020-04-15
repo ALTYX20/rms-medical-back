@@ -2,8 +2,7 @@
 
 namespace App\Controller\Rest;
 
-use App\Entity\Company;
-use App\Repository\CompanyRepository;
+
 use App\Service\interfaces\CompanyServiceInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
@@ -21,9 +20,6 @@ class CompanyApiController  extends AbstractFOSRestController
     {
         $this->CompanyService = $CompanyService;
 
-      /* $em = $this->getDoctrine()->getManager();
-        $em->getConnection()->connect();
-        $connected = $em->getConnection()->isConnected(); */
     }
 
     /**

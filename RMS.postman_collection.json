@@ -172,7 +172,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"nom\": \"User3name\",\r\n        \"prenom\": \"user3prename\",\r\n        \"dateNaissance\": \"1996-03-04\",\r\n        \"email\": \"user3@email.com\",\r\n        \"adresse\": \"adrresUser3\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"admin\",\r\n        \"motpass\": \"12345\"\r\n    }",
+							"raw": "    {\r\n        \"nom\": \"User3name\",\r\n        \"prenom\": \"user3prename\",\r\n        \"dateNaissance\": \"1996-03-04\",\r\n        \"email\": \"user3@email.com\",\r\n        \"adresse\": \"adrresUser3\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"ROLE_ADMIN\",\r\n        \"motpass\": \"12345\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -220,86 +220,6 @@
 							]
 						},
 						"description": "https://127.0.0.1:8000/api/users"
-					},
-					"response": []
-				},
-				{
-					"name": "UserExist(login)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "    {\r\n        \"email\": \"user11@email.com\",\r\n        \"motpass\": \"123\"\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/login",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"login"
-							]
-						},
-						"description": "https://127.0.0.1:8000/api/login"
-					},
-					"response": []
-				},
-				{
-					"name": "SetUser(Signup)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "    {\r\n    \t\"company\": \"4\",\r\n        \"nom\": \"User13name\",\r\n        \"prenom\": \"user13prename\",\r\n        \"dateNaissance\": \"1996-02-04T00:00:00+00:00\",\r\n        \"email\": \"user13@email.com\",\r\n        \"adresse\": \"adrresUser13\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"admin\",\r\n        \"motpass\": \"123\"\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/signup",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"signup"
-							]
-						},
-						"description": "http://127.0.0.1:8000/api/signup"
 					},
 					"response": []
 				},
@@ -460,7 +380,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"id\": 10,\r\n        \"titre\": \"Project10\",\r\n        \"logo\": \"Project1_other.png\",\r\n        \"status\": \"0\",\r\n        \"territories\": \"nabeul\"\r\n\t\r\n}",
+							"raw": "{\r\n        \"titre\": \"Project10\",\r\n        \"logo\": \"Project1_other.png\",\r\n        \"status\": \"0\",\r\n        \"territories\": \"nabeul\"\r\n\t\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -468,7 +388,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/project",
+							"raw": "http://127.0.0.1:8000/api/project/10",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -479,7 +399,8 @@
 							"port": "8000",
 							"path": [
 								"api",
-								"project"
+								"project",
+								"10"
 							]
 						},
 						"description": "http://127.0.0.1:8000/api/project /put"
@@ -670,6 +591,18 @@
 				},
 				{
 					"name": "AddMedia",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "603eed2b-65b7-44d6-bf5c-9e17b60a42c1",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -682,7 +615,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"titre\": \"video4\",\r\n        \"description\": \"video Of company \",\r\n        \"lien\": \"www.jjhfhhf.tn/video5.png\",\r\n        \"type\": \"video\"\r\n\r\n}",
+							"raw": "{\r\n        \"titre\": \"video56\",\r\n        \"description\": \"video Of company \",\r\n        \"type\": \"video\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -690,8 +623,8 @@
 							}
 						},
 						"url": {
-							"raw": "https://127.0.0.1:8000/api/media",
-							"protocol": "https",
+							"raw": "http://127.0.0.1:8000/api/media",
+							"protocol": "http",
 							"host": [
 								"127",
 								"0",
@@ -778,6 +711,42 @@
 							]
 						},
 						"description": "https://127.0.0.1:8000/api/media"
+					},
+					"response": []
+				},
+				{
+					"name": "UploadFileMedia",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image\n",
+									"type": "file",
+									"src": "/C:/Users/sqifgo/Downloads/background.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/media/3/upload",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"media",
+								"3",
+								"upload"
+							]
+						},
+						"description": "http://127.0.0.1:8000/api/media/4/upload"
 					},
 					"response": []
 				}
@@ -1108,7 +1077,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/log/9",
+							"raw": "http://127.0.0.1:8000/api/log/10",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1120,7 +1089,7 @@
 							"path": [
 								"api",
 								"log",
-								"9"
+								"10"
 							]
 						},
 						"description": "https://127.0.0.1:8000/api/log/{id} /Get\n"
@@ -1140,7 +1109,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"leader\" : 11,\n    \"company\" : 4,\n    \"members\" : [14,16]\n}",
+							"raw": "{\n\t\"leader\" : 9,\n    \"company\" : 4,\n    \"members\" : [10,11]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1148,8 +1117,8 @@
 							}
 						},
 						"url": {
-							"raw": "https://127.0.0.1:8000/api/equip",
-							"protocol": "https",
+							"raw": "http://127.0.0.1:8000/api/equip",
+							"protocol": "http",
 							"host": [
 								"127",
 								"0",
@@ -1172,8 +1141,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://127.0.0.1:8000/api/equip/1/members",
-							"protocol": "https",
+							"raw": "http://127.0.0.1:8000/api/equip/1/members",
+							"protocol": "http",
 							"host": [
 								"127",
 								"0",
@@ -1198,8 +1167,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://127.0.0.1:8000/api/equips",
-							"protocol": "https",
+							"raw": "http://127.0.0.1:8000/api/equip",
+							"protocol": "http",
 							"host": [
 								"127",
 								"0",
@@ -1209,7 +1178,7 @@
 							"port": "8000",
 							"path": [
 								"api",
-								"equips"
+								"equip"
 							]
 						},
 						"description": "https://127.0.0.1:8000/api/equips /get\nsugesst add Equip name"
@@ -1321,6 +1290,155 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "UserSignUp",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n    \t\"company\": \"4\",\r\n        \"nom\": \"User21name\",\r\n        \"prenom\": \"user21prename\",\r\n        \"dateNaissance\": \"1996-02-04T00:00:00+00:00\",\r\n        \"email\": \"user21@email.com\",\r\n        \"adresse\": \"adrresUser21\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"ROLE_ADMIN\",\r\n        \"motpass\": \"123\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/signup",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"signup"
+					]
+				},
+				"description": "http://127.0.0.1:8000/api/signup"
+			},
+			"response": []
+		},
+		{
+			"name": "UserLogin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"email\": \"user7@email.com\",\r\n        \"motpass\": \"123\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/login_check",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"login_check"
+					]
+				},
+				"description": "https://127.0.0.1:8000/api/login"
+			},
+			"response": []
+		},
+		{
+			"name": "refreshToken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"refresh_token\": \"c6749843abda025df1e673046df1748d3b88eb945e09b78da0e7fa69fba0db48ca030765312d74bbc5c0dec4fd97116b39a6dec7ab59b1c779431a971ab9a661\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/token/refresh",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"token",
+						"refresh"
+					]
+				},
+				"description": "http://127.0.0.1:8000/api/token/refresh"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1ODY5Nzg1OTQsImV4cCI6MTU4Njk4MjE5NCwicm9sZXMiOlsiUk9MRV9NQU5BR0VSIiwiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoidXNlcjdAZW1haWwuY29tIn0.jRrAjWHYDD1R-xhqqn3efCrQ3NEo8_wrVIWOiw3BJq57um6zhngE3HO_DDlO6PyR37qtOJF8kjWaRHhDoOOPiJzjoZgA4rOxyv7ggu6OqzLOhopyYumI2egNuNLXlNBEgT9OBCDaEUCZXeNz0ezKyyD5x4VU1KomwzccPH4ew8_6eJNVtFuMqSvU5Cbm2JwRIEKxlG_I6sMSjRWbdyeM7U_VnF07_SbCPvBCdKZl4cmMjolsGh4Yabc4cC8JEk6hC4YRFnHIMyI0ov0tfCiB-C1FFqbt-eiarIBUEcylUt-43FEZzMxuEK8SsKYW8Mzn5NXSHI7vGKp1FRLiVgE7jfHaIanZI5hc6ulbe79-BdzuvuCY8RvEA6U1F0QUpMIfejDyYO1eVZqJBZRhTW6OE16cxwKIINsu0xgyR0w9eGcaQefwjhhiblsnRdrVdPP-9EGE9XETcWO457DJt6yo8bqHRokuWfRJHuusP8OKilUop3bE6YWmRZSiFOIbXdUvVt--aw8VPjWOYC-WdHR8EtbvS8bdJKrbPssFW1dL3a4vOnUaON60wgv08BuBo1j_MU1PZbAEaM-0dkYa7EjnUiui4LV8Ri6e5kk5Od0MMIxHnPqIVF9GwiDSJx465jJFP97RH23cEz1zM0pI-7OxXZVjPaRgkskAV10YXLtok3Y",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "316a33d2-da77-4705-b284-e62c2a08fcd2",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "7dc9a8a3-d1c4-4237-802d-e421a3885a56",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"protocolProfileBehavior": {}

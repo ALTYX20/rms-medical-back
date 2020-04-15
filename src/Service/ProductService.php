@@ -7,14 +7,14 @@ use App\Entity\Product;
 use App\Entity\Project;
 use App\Entity\Log;
 use App\Entity\Users;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ProductServiceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
+
+
+
 
 
 
@@ -22,31 +22,14 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class ProductService implements ProductServiceInterface
 {
     private $entityManager;
-    private $propertyAccessor;
-    private $session;
 
-    public function __construct(EntityManagerInterface $entityManager , SessionInterface $session)
+
+    public function __construct(EntityManagerInterface $entityManager )
     {
         $this->entityManager = $entityManager;
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $this->session = $session;
     }
 
-    
-    /**
-     * @param Request $request
-     * @return object[]
-     */
-    public function ConvertToArray(Request $request){
 
-        // Getting Parameters from Json Request
-        $parameters = [];
-        if ($content = $request->getContent()) {
-            $parameters = json_decode($content, true);
-        }
-        return $parameters;
-
-    }
 
     /**
      * @return object[]
@@ -80,20 +63,22 @@ class ProductService implements ProductServiceInterface
 
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
     public function SetProduct(Request $request){
         
-        $product = $this->entityManager->getRepository(Product::class)->findOneBy(['nom' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]')]);
+        $product = $this->entityManager->getRepository(Product::class)->findOneBy(['nom' => $request->get('nom')]);
         if($product){
             return 'this product already exist';
         }
         $product = new Product();
-        $product->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
-        $product->setLogo($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]'));
-        $product->setPrix($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prix]'));
-        $product->setType($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]'));
-        $product->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
-        $product->setProject($this->entityManager->getRepository(Project::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[project]')));
+        $product->setNom($request->get('nom'));
+        $product->setLogo($request->get('logo'));
+        $product->setPrix($request->get('prix'));
+        $product->setType($request->get('type'));
+        $product->setDescription($request->get('description'));
+        $product->setProject($this->entityManager->getRepository(Project::class)->find($request->get('project')));
         
         //Prepare and inject product into database
         $this->entityManager->persist($product);
@@ -101,7 +86,7 @@ class ProductService implements ProductServiceInterface
 
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('now'));
+        $log->setDate(new DateTime('now'));
         $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));//$this->session->get("CurrentUser")));// after will get user id from session
         $log->setAction("Add Product");
         $log->setModule("Product");
@@ -124,17 +109,17 @@ class ProductService implements ProductServiceInterface
         $product = $this->entityManager->getRepository(Product::class)->find($id);
         if($product){
 
-            $product->setNom($this->propertyAccessor->getValue($this->ConvertToArray($request), '[nom]'));
-            $product->setType($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]'));
-            $product->setLogo($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]'));
-            $product->setPrix($this->propertyAccessor->getValue($this->ConvertToArray($request), '[prix]'));
-            $product->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
+            $product->setNom($request->get('nom'));
+            $product->setType($request->get('type'));
+            $product->setLogo($request->get('logo'));
+            $product->setPrix($request->get('prix'));
+            $product->setDescription($request->get('description'));
         
             $this->entityManager->flush();
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Product");
             $log->setModule("Product");
@@ -163,7 +148,7 @@ class ProductService implements ProductServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Product");
             $log->setModule("Product");

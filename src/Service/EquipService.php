@@ -7,34 +7,20 @@ use App\Entity\Equip;
 use App\Entity\Users;
 use App\Entity\Company;
 use App\Entity\Log;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\EquipServiceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Serializer;
+
 
 class EquipService implements EquipServiceInterface
 {
     private $entityManager;
-    private $propertyAccessor;
 
     public function __construct(EntityManagerInterface $entityManager )
     {
         $this->entityManager = $entityManager;
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-    }
-
-    public function ConvertToArray(Request $request){
-
-        // Getting Parameters from Json Request
-        $parameters = [];
-        if ($content = $request->getContent()) {
-            $parameters = json_decode($content, true);
-        }
-        return $parameters;
-
     }
 
     /**
@@ -75,25 +61,25 @@ class EquipService implements EquipServiceInterface
      */
     public function SetEquip(Request $request){
 
-         $equip = $this->entityManager->getRepository(Equip::class)->findOneBy(['leader' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[leader]')]);
+         $equip = $this->entityManager->getRepository(Equip::class)->findOneBy(['leader' => $request->get('leader')]);
         if($equip){
             return 'this equip already exist';
         } 
         $equip = new Equip();
 
-        $equip->setCompany($this->entityManager->getRepository(Company::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[company]')));
+        $equip->setCompany($this->entityManager->getRepository(Company::class)->find($request->get('company')));
         
-        $leader = $this->entityManager->getRepository(Users::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[leader]'));
+        $leader = $this->entityManager->getRepository(Users::class)->find($request->get('leader'));
         
-        if($equip->getCompany() == $leader->getCompany()){
+        if($equip->getCompany() === $leader->getCompany()){
             $equip->addLeader($leader);
         }
 
-        $members[] = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[members]');
+        $members[] = $request->get('members');
         foreach($members[0] as $member){
             
             $addmember = $this->entityManager->getRepository(Users::class)->find($member);
-            if($equip->getCompany() == $addmember->getCompany()){
+            if($equip->getCompany() === $addmember->getCompany()){
                 $equip->addMember($addmember);
             }
             
@@ -107,7 +93,7 @@ class EquipService implements EquipServiceInterface
         
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('now'));
+        $log->setDate(new DateTime('now'));
         $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
         $log->setAction("Add Equip");
         $log->setModule("Equip");
@@ -120,16 +106,17 @@ class EquipService implements EquipServiceInterface
 
     /**
      * @param Request $request
+     * @param int $id
      * @return string
      */
     public function AddMembers(Request $request , int $id)
     {
         $equip = $this->entityManager->getRepository(Equip::class)->find($id);
-        $members[] = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[members]');
+        $members[] = $request->get('members');
         foreach($members[0] as $member){
 
             $addmember = $this->entityManager->getRepository(Users::class)->find($member);
-            if($equip->getCompany() == $addmember->getCompany()){
+            if($equip->getCompany() === $addmember->getCompany()){
                 $equip->addMember($addmember);
             }
             //$equip->addMember($this->entityManager->getRepository(Users::class)->find($member));
@@ -141,12 +128,13 @@ class EquipService implements EquipServiceInterface
 
     /**
      * @param Request $request
+     * @param int $id
      * @return string
      */
     public function RemoveMembers(Request $request , int $id)
     {
         $equip = $this->entityManager->getRepository(Equip::class)->find($id);
-        $members[] = $this->propertyAccessor->getValue($this->ConvertToArray($request), '[members]');
+        $members[] = $request->get('members');
         foreach($members[0] as $member){
             $equip->removeMember($this->entityManager->getRepository(Users::class)->find($member));
         }
@@ -168,7 +156,7 @@ class EquipService implements EquipServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Equip");
             $log->setModule("Equip");

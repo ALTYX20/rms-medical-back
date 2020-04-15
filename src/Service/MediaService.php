@@ -6,41 +6,25 @@ namespace App\Service;
 use App\Entity\Media;
 use App\Entity\Users;
 use App\Entity\Log;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\MediaServiceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+
 
 class MediaService implements MediaServiceInterface
 {
     private $entityManager;
-    private $propertyAccessor;
-    private $session;
 
-    public function __construct(EntityManagerInterface $entityManager , SessionInterface $session)
+    public function __construct(EntityManagerInterface $entityManager )
     {
         $this->entityManager = $entityManager;
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $this->session = $session;
-    }
-
-    
-    /**
-     * @param Request $request
-     * @return object[]
-     */
-    public function ConvertToArray(Request $request){
-
-        // Getting Parameters from Json Request
-        $parameters = [];
-        if ($content = $request->getContent()) {
-            $parameters = json_decode($content, true);
-        }
-        return $parameters;
 
     }
+
 
     /**
      * @return object[]
@@ -78,15 +62,17 @@ class MediaService implements MediaServiceInterface
      */
     public function SetMedia(Request $request){
 
-        $media = $this->entityManager->getRepository(Media::class)->findOneBy(['lien' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[lien]')]);
+        $media = $this->entityManager->getRepository(Media::class)->findOneBy(['lien' => $request->get('lien')]);
         if($media){
             return 'this file already exist';
         }
         $media = new Media();
-        $media->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
-        $media->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
-        $media->setLien($this->propertyAccessor->getValue($this->ConvertToArray($request), '[lien]'));
-        $media->setType($this->propertyAccessor->getValue($this->ConvertToArray($request), '[type]'));
+
+        
+        $media->setTitre($request->get('titre'));
+        $media->setDescription($request->get('description'));
+        $media->setLien('---');
+        $media->setType($request->get('type'));
         
         //Prepare and inject media into database
         $this->entityManager->persist($media);
@@ -94,7 +80,7 @@ class MediaService implements MediaServiceInterface
 
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('now'));
+        $log->setDate(new DateTime('now'));
         $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
         $log->setAction("Add Media");
         $log->setModule("Media");
@@ -114,18 +100,16 @@ class MediaService implements MediaServiceInterface
      */
     public function ModifyMedia(int $id,Request $request){
 
-        $media = $this->entityManager->getRepository(Media::class)->findOneBy(['id' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[id]')]);
+        $media = $this->entityManager->getRepository(Media::class)->find($id);
         if($media){
 
-            $media->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
-            $media->setDescription($this->propertyAccessor->getValue($this->ConvertToArray($request), '[description]'));
-            $media->setLien($this->propertyAccessor->getValue($this->ConvertToArray($request), '[lien]'));
-        
+            $media->setTitre($request->get('titre'));
+            $media->setDescription($request->get('description'));
             $this->entityManager->flush();
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Media");
             $log->setModule("Media");
@@ -155,7 +139,7 @@ class MediaService implements MediaServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Media");
             $log->setModule("Media");
@@ -167,5 +151,34 @@ class MediaService implements MediaServiceInterface
             return 'media doesn\'t exist';
 
     }
-    
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @param string $uploadDir
+     * @return string
+     */
+    public function UploadFile(Request $request, int $id , string $uploadDir)
+    {
+        
+        /** @var UploadedFile $file */
+        $file = ($request->files->get('image'));
+        $filename = md5(uniqid()) . '.' . $file->guessClientExtension();
+        if ($file) {
+            $file->move(
+                $uploadDir,
+                $filename
+            );
+
+            $media = $this->entityManager->getRepository(Media::class)->find($id);
+            if(!$media){ 
+                return 'no media to upload found';
+            }
+            $media->setLien('/uploads/' . $filename);
+            $this->entityManager->flush();
+            return 'upload done ';
+        }
+        return 'no file';
+    }
+
 }

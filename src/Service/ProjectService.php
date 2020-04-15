@@ -7,42 +7,25 @@ use App\Entity\Project;
 use App\Entity\Presentation;
 use App\Entity\Users;
 use App\Entity\Log;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ProjectServiceInterface;
 use Exception;
-use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
+
 
 class ProjectService implements ProjectServiceInterface
 {
     private $entityManager;
-    private $propertyAccessor;
-    private $session;
 
-    public function __construct(EntityManagerInterface $entityManager, SessionInterface $session)
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $this->session = $session;
-    }
-
-    
-    /**
-     * @param Request $request
-     * @return object[]
-     */
-    public function ConvertToArray(Request $request){
-
-        // Getting Parameters from Json Request
-        $parameters = [];
-        if ($content = $request->getContent()) {
-            $parameters = json_decode($content, true);
-        }
-        return $parameters;
 
     }
+
 
     /**
      * @return object[]
@@ -75,19 +58,21 @@ class ProjectService implements ProjectServiceInterface
 
     /**
      * @param Request $request
+     * @return string
+     * @throws Exception
      */
     public function SetProject(Request $request){
-        $project = $this->entityManager->getRepository(Project::class)->findOneBy(['titre' => $this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]')]);
+        $project = $this->entityManager->getRepository(Project::class)->findOneBy(['titre' => $request->get('titre')]);
         if($project){
             return 'this project already exist';
         }
         $project = new Project();
-        $project->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
-        $project->setLogo($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]'));
-        $project->setStatus($this->propertyAccessor->getValue($this->ConvertToArray($request), '[status]'));
-        $project->setTerritories($this->propertyAccessor->getValue($this->ConvertToArray($request), '[territories]'));
-        if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')){
-            $project->addPresentation($this->entityManager->getRepository(Presentation::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')));
+        $project->setTitre($request->get('titre'));
+        $project->setLogo($request->get('logo'));
+        $project->setStatus($request->get('status'));
+        $project->setTerritories($request->get('territories'));
+        if($request->get('presentation')){
+            $project->addPresentation($this->entityManager->getRepository(Presentation::class)->find($request->get('presentation')));
         }
         $project->addProjectCreator($this->entityManager->getRepository(Users::class)->find("10"));
         
@@ -97,7 +82,7 @@ class ProjectService implements ProjectServiceInterface
 
         //add to Log 
         $log = new Log();
-        $log->setDate(new \DateTime('now'));
+        $log->setDate(new DateTime('now'));
         $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));
         $log->setAction("Add Project");
         $log->setModule("Project");
@@ -120,19 +105,19 @@ class ProjectService implements ProjectServiceInterface
         $project = $this->entityManager->getRepository(Project::class)->find($id);
         if($project){
 
-            $project->setTitre($this->propertyAccessor->getValue($this->ConvertToArray($request), '[titre]'));
-            $project->setLogo($this->propertyAccessor->getValue($this->ConvertToArray($request), '[logo]'));
-            $project->setStatus($this->propertyAccessor->getValue($this->ConvertToArray($request), '[status]'));
-            $project->setTerritories($this->propertyAccessor->getValue($this->ConvertToArray($request), '[territories]'));
-            if($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')){
-                $project->addPresentation($this->entityManager->getRepository(Presentation::class)->find($this->propertyAccessor->getValue($this->ConvertToArray($request), '[presentation]')));
+            $project->setTitre($request->get('titre'));
+            $project->setLogo($request->get('logo'));
+            $project->setStatus($request->get('status'));
+            $project->setTerritories($request->get('territories'));
+            if($request->get('presentation')){
+                $project->addPresentation($this->entityManager->getRepository(Presentation::class)->find($request->get('presentation')));
             }
             
             $this->entityManager->flush();
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Modify Project");
             $log->setModule("Project");
@@ -161,7 +146,7 @@ class ProjectService implements ProjectServiceInterface
 
             //add to Log 
             $log = new Log();
-            $log->setDate(new \DateTime('now'));
+            $log->setDate(new DateTime('now'));
             $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
             $log->setAction("Delete Project");
             $log->setModule("Project");

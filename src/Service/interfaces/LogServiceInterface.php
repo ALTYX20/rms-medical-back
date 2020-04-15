@@ -3,8 +3,6 @@
 
 namespace App\Service\interfaces;
 
-use App\Entity\Log;
-use Symfony\Component\HttpFoundation\Request;
 
 interface LogServiceInterface
 {

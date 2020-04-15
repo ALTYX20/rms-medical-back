@@ -6,6 +6,7 @@ namespace JMS\Serializer\Tests\Serializer;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\Serializer\Accessor\DefaultAccessorStrategy;
+use JMS\Serializer\Construction\ObjectConstructorInterface;
 use JMS\Serializer\Construction\UnserializeObjectConstructor;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\EventDispatcher\EventDispatcher;
@@ -128,7 +129,45 @@ class GraphNavigatorTest extends TestCase
 
         $navigator = new SerializationGraphNavigator($this->metadataFactory, $this->handlerRegistry, $this->accessor, $this->dispatcher);
         $navigator->initialize($this->serializationVisitor, $this->context);
+        $this->context->initialize(TestSubscribingHandler::FORMAT, $this->serializationVisitor, $navigator, $this->metadataFactory);
+
         $navigator->accept($object, null);
+    }
+
+    public function testExposeAcceptHandlerExceptionOnSerialization()
+    {
+        $object = new SerializableClass();
+        $typeName = 'JsonSerializable';
+        $msg = 'Useful serialization error with relevant context information';
+
+        $handler = static function ($visitor, $data, array $type, SerializationContext $context) use ($msg) {
+            $context->startVisiting(new \stdClass());
+            throw new \RuntimeException($msg);
+        };
+        $this->handlerRegistry->registerHandler(GraphNavigatorInterface::DIRECTION_SERIALIZATION, $typeName, TestSubscribingHandler::FORMAT, $handler);
+
+        $this->context->method('getFormat')->willReturn(TestSubscribingHandler::FORMAT);
+
+        $navigator = new SerializationGraphNavigator($this->metadataFactory, $this->handlerRegistry, $this->accessor, $this->dispatcher);
+        $navigator->initialize($this->serializationVisitor, $this->context);
+        $this->context->initialize(TestSubscribingHandler::FORMAT, $this->serializationVisitor, $navigator, $this->metadataFactory);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage($msg);
+        $navigator->accept($object, ['name' => $typeName, 'params' => []]);
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testNavigatorDoesNotCrashWhenObjectConstructorReturnsNull()
+    {
+        $objectConstructor = $this->getMockBuilder(ObjectConstructorInterface::class)->getMock();
+        $objectConstructor->method('construct')->willReturn(null);
+        $navigator = new DeserializationGraphNavigator($this->metadataFactory, $this->handlerRegistry, $objectConstructor, $this->accessor, $this->dispatcher);
+        $navigator->initialize($this->deserializationVisitor, $this->deserializationContext);
+
+        $navigator->accept(['id' => 1234], ['name' => SerializableClass::class]);
     }
 
     protected function setUp(): void
@@ -138,7 +177,7 @@ class GraphNavigatorTest extends TestCase
 
         $this->context = $this->getMockBuilder(SerializationContext::class)
             ->enableOriginalConstructor()
-            ->setMethodsExcept(['getExclusionStrategy'])
+            ->setMethodsExcept(['getExclusionStrategy', 'initialize', 'startVisiting', 'stopVisiting'])
             ->getMock();
 
         $this->deserializationContext = $this->getMockBuilder(DeserializationContext::class)
@@ -168,11 +207,13 @@ class SerializableClass
 
 class TestSubscribingHandler implements SubscribingHandlerInterface
 {
+    public const FORMAT = 'foo';
+
     public static function getSubscribingMethods()
     {
         return [[
             'type' => 'JsonSerializable',
-            'format' => 'foo',
+            'format' => self::FORMAT,
             'direction' => GraphNavigatorInterface::DIRECTION_SERIALIZATION,
             'method' => 'serialize',
         ],

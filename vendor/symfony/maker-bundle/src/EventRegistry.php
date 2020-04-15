@@ -107,6 +107,10 @@ class EventRegistry
             if (isset(self::$newEventsMap[$listenerKey])) {
                 unset($listeners[$listenerKey]);
             }
+
+            if (!isset(self::$eventsMap[$listenerKey])) {
+                self::$eventsMap[$listenerKey] = $this->getEventClassName($listenerKey);
+            }
         }
 
         $activeEvents = array_unique(array_merge($activeEvents, array_keys($listeners)));
@@ -121,6 +125,11 @@ class EventRegistry
      */
     public function getEventClassName(string $event)
     {
+        // if the event is already a class name, use it
+        if (class_exists($event)) {
+            return $event;
+        }
+
         if (isset(self::$eventsMap[$event])) {
             return self::$eventsMap[$event];
         }

@@ -3,7 +3,6 @@
 
 namespace App\Service\interfaces;
 
-use App\Entity\Company;
 use Symfony\Component\HttpFoundation\Request;
 
 interface CompanyServiceInterface

@@ -2,17 +2,20 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Users
  *
  * @ORM\Table(name="users", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
  */
-class Users
+class Users implements UserInterface
 {
     /**
      * @var int
@@ -80,15 +83,9 @@ class Users
     private $sexe;
 
     /**
-     * @var string
-     * 
-     * It suppose to be Array but i couldn't make it
-     * to show so convert it to string :p
-     * maybe later 
-     * 
-     * @ORM\Column(name="role", type="json", nullable=false)
+     * @ORM\Column(name="roles", type="json", nullable=false)
      */
-    private $role ;
+    private $roles = [];
 
     /**
      * @var string
@@ -98,7 +95,7 @@ class Users
     private $motpass;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_naissance", type="date", nullable=false)
      */
@@ -129,18 +126,21 @@ class Users
     private $logs;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Equip", inversedBy="member")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Equip", inversedBy="member" )
+     * @ORM\JoinColumn(nullable=true)
      */
     private $equip;
 
 
-
-    public function __construct()
+    public function __construct($email, array $roles)
     {
         $this->presentations = new ArrayCollection();
         $this->project = new ArrayCollection();
         $this->logs = new ArrayCollection();
+        $this->email = $email;
+        $this->roles = $roles;
     }
+
 
     public function getId(): ?int
     {
@@ -243,36 +243,16 @@ class Users
         return $this;
     }
 
-    public function getRole(): string
+
+    public function getRoles(): array
     {
-        $role = $this->role;
+        $roles[] = $this->roles;
         // guarantee every user at least has ROLE_USER
-        //$role[] = "ROLE_USER";
-        
-    
-        return ($role);
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
-    public function setRole(string $role): self
-    {
-        switch(\strtoupper($role)){
-
-            case 'VIEWER':
-                $this->role = 'ROLE_USER';
-                break;
-            case 'EDITOR':
-                $this->role = 'ROLE_EDITOR';
-                break;
-            case 'MANAGER':
-                $this->role = 'ROLE_MANAGER';
-                break;
-            case 'ADMIN':
-                $this->role = 'ROLE_ADMIN';
-                break;
-
-        }
-    return $this;
-    }
 
     public function getMotpass(): ?string
     {
@@ -286,12 +266,12 @@ class Users
         return $this;
     }
 
-    public function getDateNaissance(): ?\DateTimeInterface
+    public function getDateNaissance(): ?DateTimeInterface
     {
         return $this->dateNaissance;
     }
 
-    public function setDateNaissance(\DateTimeInterface $dateNaissance): self
+    public function setDateNaissance(DateTimeInterface $dateNaissance): self
     {
         $this->dateNaissance = $dateNaissance;
 
@@ -412,4 +392,55 @@ class Users
     }
 
 
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getPassword()
+    {
+        return $this->motpass;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function createFromPayload($email, array $payload)
+    {
+        return new self(
+            $email,
+            $payload['roles']  // Custom
+        );
+    }
+
+    public function setRoles(string $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
 }
