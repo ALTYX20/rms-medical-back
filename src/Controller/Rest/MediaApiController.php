@@ -9,6 +9,8 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 
@@ -28,10 +30,12 @@ class MediaApiController  extends AbstractFOSRestController
      * This call post modes data.
      *
      * @Rest\Get("/media", name="get_all_medias")
+     * @Security("is_granted('ROLE_VIEWER')")
      * @return View
      */
     public function findAllMedia(): View
     {
+        
         $media = $this->MediaService->getAllMedia();
         return View::create($media, Response::HTTP_OK);
 
@@ -40,6 +44,7 @@ class MediaApiController  extends AbstractFOSRestController
     /**
      * Retrieves an media resource
      * @Rest\Get("/media/{id}" , name="Get_Media_byId")
+     * @Security("is_granted('ROLE_VIEWER')")
      * @param int $id
      * @return View
      */
@@ -56,6 +61,7 @@ class MediaApiController  extends AbstractFOSRestController
     /**
      * Creates a Media resource
      * @Rest\Post("/media" , name="add_Media")
+     * @Security("is_granted('ROLE_EDITOR')")
      * @param Request $request
      * @return View
      */
@@ -93,6 +99,7 @@ class MediaApiController  extends AbstractFOSRestController
     /**
      * Modify Media byID 
      * @Rest\Put("/media/{id}" , name ="Modify_media")
+     * @Security("is_granted('ROLE_EDITOR')")
      * @param Request $request
      * @param int $id
      * @return View
@@ -107,6 +114,7 @@ class MediaApiController  extends AbstractFOSRestController
     /**
      * Delete media byID 
      * @Rest\Delete("/media/{id}" ,name="Delete_media")
+     * @Security("is_granted('ROLE_EDITOR')")
      * @param int $id
      * @return View
      */

@@ -9,6 +9,8 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 
@@ -26,12 +28,14 @@ class ReferanceApiController  extends AbstractFOSRestController
      * Retrieves All referances resource.
      *
      * This call post modes data.
-     *
+     * 
      * @Rest\Get("/referance", name="get_all_referances")
+     * @Security("is_granted('ROLE_VIEWER')")
      * @return View
      */
     public function findAllReferance(): View
     {
+
         $referance = $this->ReferanceService->getAllReferance();
         return View::create($referance, Response::HTTP_OK);
 
@@ -39,7 +43,8 @@ class ReferanceApiController  extends AbstractFOSRestController
 
     /**
      * Retrieves an referance resource
-     * @Rest\Get("/referance/{id}")
+     * @Rest\Get("/referance/{id}" ,name ="get_reference_byId")
+     * @Security("is_granted('ROLE_VIEWER')")
      * @param int $id
      * @return View
      */
@@ -54,7 +59,8 @@ class ReferanceApiController  extends AbstractFOSRestController
 
     /**
      * Creates a referance resource
-     * @Rest\Post("/referance", name="add_referenc")
+     * @Rest\Post("/referance", name="add_reference")
+     * @Security("is_granted('ROLE_EDITOR')")
      * @param Request $request
      * @return View
      */
@@ -73,6 +79,7 @@ class ReferanceApiController  extends AbstractFOSRestController
     /**
      * Modify referance byID 
      * @Rest\Put("/referance/{id}", name="Modify_reference")
+     * @Security("is_granted('ROLE_EDITOR')")
      * @param Request $request
      * @param int $id
      * @return View
@@ -88,6 +95,7 @@ class ReferanceApiController  extends AbstractFOSRestController
     /**
      * Delete referance byID 
      * @Rest\Delete("/referance/{id}" , name="Delete_Reference")
+     * @Security("is_granted('ROLE_EDITOR')")
      * @param int $id
      * @return View
      */

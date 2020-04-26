@@ -9,7 +9,8 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CompanyApiController  extends AbstractFOSRestController
 {
@@ -28,6 +29,7 @@ class CompanyApiController  extends AbstractFOSRestController
      * This call post modes data.
      *
      * @Rest\Get("/company", name="get_all_companys")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @return View
      */
     public function findAllCompanys(): View
@@ -40,6 +42,7 @@ class CompanyApiController  extends AbstractFOSRestController
     /**
      * Retrieves an user resource
      * @Rest\Get("/company/{id}" , name ="Get_company_byId")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param int $id
      * @return View
      */
@@ -54,7 +57,8 @@ class CompanyApiController  extends AbstractFOSRestController
 
     /**
      * Creates a Company resource
-     * @Rest\Post("/company")
+     * @Rest\Post("/company" , name ="Add_company")
+     * 
      * @param Request $request
      * @return View
      */
@@ -73,6 +77,7 @@ class CompanyApiController  extends AbstractFOSRestController
     /**
      * Delete a Company resource
      * @Rest\Delete("/company/{id}" , name ="Delete_Company")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param int $id
      * @return View
      */
@@ -85,6 +90,7 @@ class CompanyApiController  extends AbstractFOSRestController
     /**
      * Modify company byID 
      * @Rest\Put("/company/{id}" , name = "Modify_Company")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param int $id
      * @param Request $request
      * @return View

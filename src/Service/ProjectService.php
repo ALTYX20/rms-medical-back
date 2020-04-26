@@ -12,18 +12,20 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ProjectServiceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
 class ProjectService implements ProjectServiceInterface
 {
     private $entityManager;
+    private $tokenStorage;
 
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TokenStorageInterface $tokenStorage )
     {
         $this->entityManager = $entityManager;
-
+        $this->tokenStorage = $tokenStorage;
     }
 
 
@@ -34,6 +36,8 @@ class ProjectService implements ProjectServiceInterface
         return $this->entityManager->createQueryBuilder()
             ->select('p.id , p.titre , p.logo , p.status , p.territories')
             ->from('App:Project', 'p')
+            ->where('p.company = :company')
+            ->setParameter('company', $this->getUser()->getCompany())
             ->getQuery()->getResult();
 
     }
@@ -52,9 +56,25 @@ class ProjectService implements ProjectServiceInterface
             ->where('p.id = :id')
             ->setParameter('id', $id)
             ->getQuery()->getResult();
-        //return $this->entityManager->getRepository(Project::class)->find($id);
     }
 
+    /**
+     * @return Users
+     *
+     * @throws UnauthorizedHttpException
+     */
+    public function getUser(): Users
+    {
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(
+            ['email' =>  $this->tokenStorage->getToken()->getUser()->getUsername()]
+        );
+
+        if (null === $user) {
+            throw new UnauthorizedHttpException('/');
+        }
+
+        return $user;
+    }
 
     /**
      * @param Request $request
@@ -62,10 +82,10 @@ class ProjectService implements ProjectServiceInterface
      * @throws Exception
      */
     public function SetProject(Request $request){
-        $project = $this->entityManager->getRepository(Project::class)->findOneBy(['titre' => $request->get('titre')]);
+/*         $project = $this->entityManager->getRepository(Project::class)->findOneBy(['titre' => $request->get('titre')]);
         if($project){
             return 'this project already exist';
-        }
+        } */
         $project = new Project();
         $project->setTitre($request->get('titre'));
         $project->setLogo($request->get('logo'));
@@ -74,7 +94,8 @@ class ProjectService implements ProjectServiceInterface
         if($request->get('presentation')){
             $project->addPresentation($this->entityManager->getRepository(Presentation::class)->find($request->get('presentation')));
         }
-        $project->addProjectCreator($this->entityManager->getRepository(Users::class)->find("10"));
+        $project->addProjectCreator($this->getUser());
+        $project->setCompany($this->getUser()->getCompany());
         
         //Prepar and inject product into database
         $this->entityManager->persist($project);
@@ -83,7 +104,8 @@ class ProjectService implements ProjectServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));
+        $log->setUser($this->getUser());
+        $log->setCompany($this->getUser()->getCompany());
         $log->setAction("Add Project");
         $log->setModule("Project");
         $log->setUrl('/project');
@@ -118,7 +140,8 @@ class ProjectService implements ProjectServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Modify Project");
             $log->setModule("Project");
             $log->setUrl('/project');
@@ -147,7 +170,8 @@ class ProjectService implements ProjectServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Delete Project");
             $log->setModule("Project");
             $log->setUrl('/project');

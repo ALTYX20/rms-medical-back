@@ -12,17 +12,20 @@ use App\Service\interfaces\MediaServiceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
 class MediaService implements MediaServiceInterface
 {
     private $entityManager;
+    private $tokenStorage;
 
-    public function __construct(EntityManagerInterface $entityManager )
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TokenStorageInterface $tokenStorage )
     {
         $this->entityManager = $entityManager;
-
+        $this->tokenStorage = $tokenStorage;
     }
 
 
@@ -34,11 +37,11 @@ class MediaService implements MediaServiceInterface
         return $this->entityManager->createQueryBuilder()
             ->select('m.id , m.titre , m.description , m.lien , m.type')
             ->from('App:Media', 'm')
+            ->where('m.company = :company')
+            ->setParameter('company', $this->getUser()->getCompany())
             ->getQuery()->getResult();
 
     }
-
-
 
     /**
      * @param int $id
@@ -54,6 +57,27 @@ class MediaService implements MediaServiceInterface
             ->getQuery()->getResult();
 
     }
+
+
+    
+    /**
+     * @return Users
+     *
+     * @throws UnauthorizedHttpException
+     */
+    public function getUser(): Users
+    {
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(
+            ['email' =>  $this->tokenStorage->getToken()->getUser()->getUsername()]
+        );
+
+        if (null === $user) {
+            throw new UnauthorizedHttpException('/');
+        }
+
+        return $user;
+    }
+
 
     /**
      * @param Request $request
@@ -73,6 +97,7 @@ class MediaService implements MediaServiceInterface
         $media->setDescription($request->get('description'));
         $media->setLien('---');
         $media->setType($request->get('type'));
+        $media->setCompany($this->getUser()->getCompany());
         
         //Prepare and inject media into database
         $this->entityManager->persist($media);
@@ -81,7 +106,8 @@ class MediaService implements MediaServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setUser($this->getUser());
+        $log->setCompany($this->getUser()->getCompany());
         $log->setAction("Add Media");
         $log->setModule("Media");
         $log->setUrl('/media');
@@ -110,7 +136,8 @@ class MediaService implements MediaServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Modify Media");
             $log->setModule("Media");
             $log->setUrl('/media');
@@ -140,7 +167,8 @@ class MediaService implements MediaServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Delete Media");
             $log->setModule("Media");
             $log->setUrl('/media');

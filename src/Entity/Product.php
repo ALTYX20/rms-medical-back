@@ -62,6 +62,12 @@ class Product
      */
     private $project;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $company;
+
 
     public function __construct()
     {
@@ -141,6 +147,18 @@ class Product
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
 
         return $this;
     }

@@ -9,6 +9,8 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 
@@ -27,6 +29,7 @@ class ProductApiController  extends AbstractFOSRestController
      * This call post modes data.
      *
      * @Rest\Get("/product", name="get_all_products")
+     * @Security("is_granted('ROLE_VIEWER')")
      * @return View
      */
     public function findAllProduct(): View
@@ -39,6 +42,7 @@ class ProductApiController  extends AbstractFOSRestController
     /**
      * Retrieves an product resource
      * @Rest\Get("/product/{id}")
+     * @Security("is_granted('ROLE_VIEWER')")
      * @param int $id
      * @return View
      */
@@ -53,7 +57,8 @@ class ProductApiController  extends AbstractFOSRestController
 
     /**
      * Creates a User resource
-     * @Rest\Post("/product")
+     * @Rest\Post("/product" ,name = "add_product")
+     * @Security("is_granted('ROLE_EDITOR')")
      * @param Request $request
      * @return View
      */
@@ -73,6 +78,7 @@ class ProductApiController  extends AbstractFOSRestController
     /**
      * Modify product byID 
      * @Rest\Put("/product/{id}" , name="Modify_product")
+     * @Security("is_granted('ROLE_EDITOR')")
      * @param Request $request
      * @param int $id
      * @return View
@@ -87,6 +93,7 @@ class ProductApiController  extends AbstractFOSRestController
     /**
      * Delete product byID 
      * @Rest\Delete("/product/{id}", name="Delete_product")
+     * @Security("is_granted('ROLE_EDITOR')")
      * @param int $id
      * @return View
      */

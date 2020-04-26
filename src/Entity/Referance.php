@@ -42,6 +42,12 @@ class Referance
      */
     private $presentations;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="referances")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $company;
+
     public function __construct()
     {
         $this->presentations = new ArrayCollection();
@@ -100,6 +106,18 @@ class Referance
             $this->presentations->removeElement($presentation);
             $presentation->removeReferance($this);
         }
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
 
         return $this;
     }

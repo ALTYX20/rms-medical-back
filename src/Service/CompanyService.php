@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
 class CompanyService implements CompanyServiceInterface
@@ -27,33 +28,40 @@ class CompanyService implements CompanyServiceInterface
     private $propertyAccessor;
     private $mailer;
     private $Encoder;
+    private $tokenStorage;
 
     public function __construct(
         EntityManagerInterface $entityManager,
          MailerInterface $mailer ,
-         UserPasswordEncoderInterface $Encoder )
+         UserPasswordEncoderInterface $Encoder ,
+         TokenStorageInterface $tokenStorage )
     {
         $this->entityManager = $entityManager;
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
         $this->mailer = $mailer;
         $this->Encoder = $Encoder;
+        $this->tokenStorage = $tokenStorage;
     }
 
 
     /**
-     * @param Request $request
-     * @return object[]
+     * @return Users
+     *
+     * @throws UnauthorizedHttpException
      */
-    public function ConvertToArray(Request $request){
+    public function getUser(): Users
+    {
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(
+            ['email' =>  $this->tokenStorage->getToken()->getUser()->getUsername()]
+        );
 
-        // Getting Parameters from Json Request
-        $parameters = [];
-        if ($content = $request->getContent()) {
-            $parameters = json_decode($content, true);
+        if (null === $user) {
+            throw new UnauthorizedHttpException('/');
         }
-        return $parameters;
 
+        return $user;
     }
+
     /**
      * @return object[]
      */
@@ -156,13 +164,14 @@ class CompanyService implements CompanyServiceInterface
         $log = new Log();
         $log->setDate(new DateTime('now'));
         $log->setUser($user);
+        $log->setCompany($user->getCompany());
         $log->setAction("Add Company");
         $log->setModule("Company");
         $log->setUrl('/company');
         $this->entityManager->persist($log);
         $this->entityManager->flush(); 
 
-        return [$user->getId(),$user->getNom(),$user->getRoles()];
+        return 'added company';
         
     }
 
@@ -286,7 +295,8 @@ class CompanyService implements CompanyServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Delete Company");
             $log->setModule("Company");
             $log->setUrl('/company');
@@ -329,7 +339,8 @@ class CompanyService implements CompanyServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Modify Company");
             $log->setModule("Company");
             $log->setUrl('/company');
@@ -357,7 +368,8 @@ class CompanyService implements CompanyServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Disable Company");
             $log->setModule("Company");
             $log->setUrl('/company');

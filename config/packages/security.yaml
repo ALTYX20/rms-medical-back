@@ -3,6 +3,14 @@ security:
         App\Entity\Users:
             algorithm: bcrypt
             cost: 12
+    
+    role_hierarchy:
+        ROLE_VIEWER:      ROLE_USER
+        ROLE_EDITOR:      [ROLE_EDITOR,ROLE_VIEWER]
+        ROLE_MANAGER:     [ROLE_MANAGER,ROLE_EDITOR,ROLE_VIEWER]
+        ROLE_ADMIN:       [ROLE_ADMIN,ROLE_MANAGER,ROLE_EDITOR,ROLE_VIEWER]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         users:
@@ -11,6 +19,7 @@ security:
                 class: 'App\Entity\Users'
                 # the property to query by - e.g. username, email, etc
                 property: 'email'
+
     firewalls:
 
         dev:
@@ -34,10 +43,95 @@ security:
             stateless: true
             anonymous: true
 
+        company:
+            pattern: ^/api/company
+            stateless: true
+            anonymous: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+        
+        equip:
+            pattern: ^/api/equip
+            stateless: true
+            anonymous: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+        log:
+            pattern: ^/api/log
+            stateless: true
+            anonymous: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+            
+        media:
+            pattern: ^/api/media
+            stateless: true
+            anonymous: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+        presentation:
+            pattern: ^/api/presentation
+            stateless: true
+            anonymous: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+        product:
+            pattern: ^/api/product
+            stateless: true
+            anonymous: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+        project:
+            pattern: ^/api/project
+            stateless: true
+            anonymous: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+        referance:
+            pattern: ^/api/referance
+            stateless: true
+            anonymous: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+        user:
+            pattern: ^/api/user
+            stateless: true
+            anonymous: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
         register:
             pattern: ^/api/signup
             stateless: true
             anonymous: true
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
         
         api:
             pattern:   ^/api
@@ -58,17 +152,15 @@ security:
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
 
+    
+
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/signup, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/company, roles: IS_AUTHENTICATED_ANONYMOUSLY , methods: [POST]}
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 
-    #role_hierarchy:
-    #    ROLE_VIEWER:      ROLE_USER
-    #    ROLE_EDITOR:      ROLE_EDITOR
-    #    ROLE_MANAGER:     ROLE_MANAGER
-    #    ROLE_ADMIN:       ROLE_ADMIN
-    #    ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]*/
+    

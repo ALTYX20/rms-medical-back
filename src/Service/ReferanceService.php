@@ -11,20 +11,23 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\ReferanceServiceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ReferanceService implements ReferanceServiceInterface
 {
     private $entityManager;
+    private $tokenStorage;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TokenStorageInterface $tokenStorage )
     {
         $this->entityManager = $entityManager;
+        $this->tokenStorage = $tokenStorage;
     }
 
     
-
-
+      
     /**
      * @return object[]
      */
@@ -33,6 +36,8 @@ class ReferanceService implements ReferanceServiceInterface
         return $this->entityManager->createQueryBuilder()
             ->select('r.id , r.titre , r.description')
             ->from('App:Referance', 'r')
+            ->where('r.company = :company')
+            ->setParameter('company', $this->getUser()->getCompany())
             ->getQuery()->getResult();
 
     }
@@ -56,19 +61,35 @@ class ReferanceService implements ReferanceServiceInterface
     }
 
     /**
+     * @return Users
+     *
+     * @throws UnauthorizedHttpException
+     */
+    public function getUser(): Users
+    {
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(
+            ['email' =>  $this->tokenStorage->getToken()->getUser()->getUsername()]
+        );
+
+        if (null === $user) {
+            throw new UnauthorizedHttpException('/');
+        }
+
+        return $user;
+    }
+
+
+    /**
      * @param Request $request
      * @return string
      * @throws Exception
      */
-    public function SetReferance(Request $request){
-
-        $referance = $this->entityManager->getRepository(Referance::class)->findOneBy(['titre' => $request->get('titre')]);
-        if($referance){
-            return 'this referance already exist';
-        }
+    public function SetReferance(Request $request)
+    {
         $referance = new Referance();
         $referance->setTitre($request->get('titre'));
         $referance->setDescription($request->get('description'));
+        $referance->setCompany($this->getUser()->getCompany());
         
         //Prepar and inject product into database
         $this->entityManager->persist($referance);
@@ -77,7 +98,8 @@ class ReferanceService implements ReferanceServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setUser($this->getUser());
+        $log->setCompany($this->getUser()->getCompany());
         $log->setAction("Add Referance");
         $log->setModule("Referance");
         $log->setUrl('/referance');
@@ -106,7 +128,8 @@ class ReferanceService implements ReferanceServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Add Referance");
             $log->setModule("Referance");
             $log->setUrl('/referance');
@@ -135,7 +158,8 @@ class ReferanceService implements ReferanceServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Add Referance");
             $log->setModule("Referance");
             $log->setUrl('/referance');

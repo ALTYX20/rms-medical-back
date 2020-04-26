@@ -8,6 +8,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 class LogApiController  extends AbstractFOSRestController
@@ -25,6 +27,7 @@ class LogApiController  extends AbstractFOSRestController
      * This call post modes data.
      *
      * @Rest\Get("/logs", name="get_all_logs")
+     * @Security("is_granted('ROLE_MANAGER')")
      * @return View
      */
     public function findAlllogs(): View
@@ -37,6 +40,7 @@ class LogApiController  extends AbstractFOSRestController
     /**
      * Retrieves an Log resource
      * @Rest\Get("/log/{id}")
+     * @Security("is_granted('ROLE_MANAGER')")
      * @param int $id
      * @return View
      */

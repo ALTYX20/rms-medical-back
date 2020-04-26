@@ -139,10 +139,46 @@ class Company
      */
     private $equips;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="company", orphanRemoval=true)
+     */
+    private $media;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Referance", mappedBy="company", orphanRemoval=true)
+     */
+    private $referances;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="company", orphanRemoval=true)
+     */
+    private $products;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="company", orphanRemoval=true)
+     */
+    private $projects;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Presentation", mappedBy="company", orphanRemoval=true)
+     */
+    private $presentations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Log", mappedBy="company", orphanRemoval=true)
+     */
+    private $logs;
+
     public function __construct()
     {
         $this->employes = new ArrayCollection();
         $this->equips = new ArrayCollection();
+        $this->media = new ArrayCollection();
+        $this->referances = new ArrayCollection();
+        $this->products = new ArrayCollection();
+        $this->projects = new ArrayCollection();
+        $this->presentations = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -386,6 +422,192 @@ class Company
             // set the owning side to null (unless already changed)
             if ($equip->getCompany() === $this) {
                 $equip->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Media[]
+     */
+    public function getMedia(): Collection
+    {
+        return $this->media;
+    }
+
+    public function addMedium(Media $medium): self
+    {
+        if (!$this->media->contains($medium)) {
+            $this->media[] = $medium;
+            $medium->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedium(Media $medium): self
+    {
+        if ($this->media->contains($medium)) {
+            $this->media->removeElement($medium);
+            // set the owning side to null (unless already changed)
+            if ($medium->getCompany() === $this) {
+                $medium->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Referance[]
+     */
+    public function getReferances(): Collection
+    {
+        return $this->referances;
+    }
+
+    public function addReferance(Referance $referance): self
+    {
+        if (!$this->referances->contains($referance)) {
+            $this->referances[] = $referance;
+            $referance->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReferance(Referance $referance): self
+    {
+        if ($this->referances->contains($referance)) {
+            $this->referances->removeElement($referance);
+            // set the owning side to null (unless already changed)
+            if ($referance->getCompany() === $this) {
+                $referance->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
+            // set the owning side to null (unless already changed)
+            if ($product->getCompany() === $this) {
+                $product->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->contains($project)) {
+            $this->projects->removeElement($project);
+            // set the owning side to null (unless already changed)
+            if ($project->getCompany() === $this) {
+                $project->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Presentation[]
+     */
+    public function getPresentations(): Collection
+    {
+        return $this->presentations;
+    }
+
+    public function addPresentation(Presentation $presentation): self
+    {
+        if (!$this->presentations->contains($presentation)) {
+            $this->presentations[] = $presentation;
+            $presentation->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removePresentation(Presentation $presentation): self
+    {
+        if ($this->presentations->contains($presentation)) {
+            $this->presentations->removeElement($presentation);
+            // set the owning side to null (unless already changed)
+            if ($presentation->getCompany() === $this) {
+                $presentation->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Log[]
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    public function addLog(Log $log): self
+    {
+        if (!$this->logs->contains($log)) {
+            $this->logs[] = $log;
+            $log->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLog(Log $log): self
+    {
+        if ($this->logs->contains($log)) {
+            $this->logs->removeElement($log);
+            // set the owning side to null (unless already changed)
+            if ($log->getCompany() === $this) {
+                $log->setCompany(null);
             }
         }
 

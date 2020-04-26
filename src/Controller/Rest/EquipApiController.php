@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 
 class EquipApiController  extends AbstractFOSRestController
@@ -28,6 +30,7 @@ class EquipApiController  extends AbstractFOSRestController
      * This call post modes data.
      *
      * @Rest\Get("/equip", name="get_all_equips")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @return View
      */
     public function findAllEquips(): View
@@ -40,6 +43,7 @@ class EquipApiController  extends AbstractFOSRestController
     /**
      * Retrieves an equip resource
      * @Rest\Get("/equip/{id}" , name = "get_equip_byId")
+     * @Security("is_granted('ROLE_MANAGER')")
      * @param int $id
      * @return View
      */
@@ -58,6 +62,7 @@ class EquipApiController  extends AbstractFOSRestController
      * This call post modes data.
      *
      * @Rest\Post("/equip", name="add_equip")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param Request $request
      * @return View
      */
@@ -71,6 +76,7 @@ class EquipApiController  extends AbstractFOSRestController
     /**
      * Delete equip 
      * @Rest\Delete("/equip/{id}" ,name="Delete_equip")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param int $id
      * @return View
      */
@@ -82,7 +88,8 @@ class EquipApiController  extends AbstractFOSRestController
 
     /**
      * Retrieves an equip resource
-     * @Rest\Get("/equip/{id}/members")
+     * @Rest\Get("/equip/{id}/members" , name ="get_equip_members")
+     * @Security("is_granted('ROLE_MANAGER')")
      * @return View
      */
     public function showMembers(int $id): View
@@ -93,7 +100,8 @@ class EquipApiController  extends AbstractFOSRestController
 
     /**
      * Retrieves an equip resource
-     * @Rest\Post("/equip/{id}/addMembers")
+     * @Rest\Post("/equip/{id}/addMembers" , name ="add_member_to_equip")
+     * @Security("is_granted('ROLE_MANAGER')")
      * @return View
      */
     public function addMembers(Request $request, int $id): View
@@ -104,7 +112,8 @@ class EquipApiController  extends AbstractFOSRestController
 
     /**
      * Retrieves an equip resource
-     * @Rest\Post("/equip/{id}/removeMembers")
+     * @Rest\Post("/equip/{id}/removeMembers" , name ="remove_member_from_equip")
+     * @Security("is_granted('ROLE_MANAGER')")
      * @return View
      */
     public function removeMembers(Request $request, int $id): View

@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
 
@@ -26,15 +26,18 @@ class PresentationService implements PresentationServiceInterface
 {
     private $entityManager;
     private $serializer;
+    private $tokenStorage;
 
-
-    public function __construct(EntityManagerInterface $entityManager )
+    public function __construct(
+        EntityManagerInterface $entityManager ,
+        TokenStorageInterface $tokenStorage )
     {
         $this->entityManager = $entityManager;
         $this->serializer = new Serializer(
             [new GetSetMethodNormalizer(), new ArrayDenormalizer()],
             [new JsonEncoder()]
         );
+        $this->tokenStorage = $tokenStorage;
     }
 
 
@@ -47,6 +50,8 @@ class PresentationService implements PresentationServiceInterface
             ->select('p.id , p.titre , p.territories , u.nom as presentationCreator  ')
             ->from('App:Presentation', 'p')
             ->join('p.presentationCreator' , 'u')
+            ->where('p.company = :company')
+            ->setParameter('company', $this->getUser()->getCompany())
             ->getQuery()->getResult();
     }
 
@@ -69,33 +74,49 @@ class PresentationService implements PresentationServiceInterface
     }
 
     /**
+     * @return Users
+     *
+     * @throws UnauthorizedHttpException
+     */
+    public function getUser(): Users
+    {
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(
+            ['email' =>  $this->tokenStorage->getToken()->getUser()->getUsername()]
+        );
+
+        if (null === $user) {
+            throw new UnauthorizedHttpException('/');
+        }
+
+        return $user;
+    }
+
+    /**
      * @param Request $request
      * @return string
      * @throws Exception
      */
     public function SetPresentation(Request $request){
 
-        $presentation = $this->entityManager->getRepository(Presentation::class)->findOneBy(['titre' => $request->get('titre')]);
-        if($presentation){
-            return 'this presentation already exist';
-        }
+        
         $presentation = new Presentation();
         $presentation->setTitre($request->get('titre'));
         $presentation->setTerritories($request->get('territories'));
-        $presentation->setPresentationCreator($this->entityManager->getRepository(Users::class)->find("10"));
-
+        $presentation->setPresentationCreator($this->getUser());
+        $presentation->setCompany($this->getUser()->getCompany());
+        
         $projects[] = $request->get('project');
         foreach($projects[0] as $project){
             $presentation->addProject($this->entityManager->getRepository(Project::class)->find($project));
         }
 
-        
         if($request->get('referance')){
             $referances = $request->get('referance');
             foreach ($referances[0] as $referance){
                 $presentation->addReferance($this->entityManager->getRepository(Referance::class)->find($referance));
             }
         }
+
         if($request->get('media')){
             $medias[] = $request->get('media');
             foreach ( $medias[0] as $media){
@@ -109,7 +130,8 @@ class PresentationService implements PresentationServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setUser($this->getUser());
+        $log->setCompany($this->getUser()->getCompany());
         $log->setAction("Add Presentation");
         $log->setModule("Presentation");
         $log->setUrl('/presentation');
@@ -184,7 +206,8 @@ class PresentationService implements PresentationServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Modify Presentation");
             $log->setModule("Presentation");
             $log->setUrl('/presentation');
@@ -214,7 +237,8 @@ class PresentationService implements PresentationServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Delete Presentation");
             $log->setModule("Presentation");
             $log->setUrl('/presentation');

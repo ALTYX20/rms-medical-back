@@ -12,15 +12,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Service\interfaces\EquipServiceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class EquipService implements EquipServiceInterface
 {
     private $entityManager;
+    private $tokenStorage;
 
-    public function __construct(EntityManagerInterface $entityManager )
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TokenStorageInterface $tokenStorage )
     {
         $this->entityManager = $entityManager;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -32,6 +36,8 @@ class EquipService implements EquipServiceInterface
             ->select('e.id as num_equip , c.name as Company_name')
             ->from('App:Equip', 'e')
             ->join('e.company' , 'c')
+            ->where('c = :company')
+            ->setParameter('company', $this->getUser()->getCompany())
             ->getQuery()->getResult();
 
     }
@@ -55,19 +61,33 @@ class EquipService implements EquipServiceInterface
     }
 
     /**
+     * @return Users
+     *
+     * @throws UnauthorizedHttpException
+     */
+    public function getUser(): Users
+    {
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(
+            ['email' =>  $this->tokenStorage->getToken()->getUser()->getUsername()]
+        );
+
+        if (null === $user) {
+            throw new UnauthorizedHttpException('/');
+        }
+
+        return $user;
+    }
+
+    /**
      * @param Request $request
      * @return string
      * @throws Exception
      */
     public function SetEquip(Request $request){
 
-         $equip = $this->entityManager->getRepository(Equip::class)->findOneBy(['leader' => $request->get('leader')]);
-        if($equip){
-            return 'this equip already exist';
-        } 
         $equip = new Equip();
 
-        $equip->setCompany($this->entityManager->getRepository(Company::class)->find($request->get('company')));
+        $equip->setCompany($this->getUser()->getCompany());
         
         $leader = $this->entityManager->getRepository(Users::class)->find($request->get('leader'));
         
@@ -94,7 +114,8 @@ class EquipService implements EquipServiceInterface
         //add to Log 
         $log = new Log();
         $log->setDate(new DateTime('now'));
-        $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+        $log->setUser($this->getUser());
+        $log->setCompany($this->getUser()->getCompany());
         $log->setAction("Add Equip");
         $log->setModule("Equip");
         $log->setUrl('/Equip');
@@ -157,7 +178,8 @@ class EquipService implements EquipServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Delete Equip");
             $log->setModule("Equip");
             $log->setUrl('/equip');

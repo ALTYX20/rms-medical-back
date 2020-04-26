@@ -56,6 +56,12 @@ class Media
      */
     private $presentations;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="media")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $company;
+
     public function __construct()
     {
         $this->presentations = new ArrayCollection();
@@ -138,6 +144,18 @@ class Media
             $this->presentations->removeElement($presentation);
             $presentation->removeMedia($this);
         }
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
 
         return $this;
     }

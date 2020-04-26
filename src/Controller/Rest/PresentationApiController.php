@@ -9,6 +9,8 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 
@@ -28,6 +30,7 @@ class PresentationApiController  extends AbstractFOSRestController
      * This call post modes data.
      *
      * @Rest\Get("/presentation", name="get_all_presentation")
+     * @Security("is_granted('ROLE_VIEWER')")
      * @return View
      */
     public function findAllPresentation(): View
@@ -40,6 +43,7 @@ class PresentationApiController  extends AbstractFOSRestController
     /**
      * Retrieves an presentation resource
      * @Rest\Get("/presentation/{id}", name="Get_Presentation_byId")
+     * @Security("is_granted('ROLE_VIEWER')")
      * @param int $id
      * @return View
      */
@@ -55,6 +59,7 @@ class PresentationApiController  extends AbstractFOSRestController
     /**
      * Creates a presentation resource
      * @Rest\Post("/presentation" , name ="add_Presentation")
+     * @Security("is_granted('ROLE_MANAGER')")
      * @param Request $request
      * @return View
      */
@@ -73,6 +78,7 @@ class PresentationApiController  extends AbstractFOSRestController
     /**
      * Modify presentation byID 
      * @Rest\Put("/presentation/{id}",name="Modify_Presentation")
+     * @Security("is_granted('ROLE_EDITOR')")
      * @param Request $request
      * @param int $id
      * @return View
@@ -87,6 +93,7 @@ class PresentationApiController  extends AbstractFOSRestController
     /**
      * Delete presentation byID
      * @Rest\Delete("/presentation/{id}" ,name="delete_presentatio")
+     * @Security("is_granted('ROLE_MANAGER')")
      * @param int $id
      * @return View
      */

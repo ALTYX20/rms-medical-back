@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface as ExceptionInterf
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
 
@@ -22,13 +23,17 @@ class UsersService implements UsersServiceInterface
 {
     private $entityManager;
     private $Encoder;
+    private $tokenStorage;
 
     public function __construct(
         EntityManagerInterface $entityManager ,
-        UserPasswordEncoderInterface $Encoder)
+        UserPasswordEncoderInterface $Encoder,
+        TokenStorageInterface $tokenStorage)
     {
         $this->entityManager = $entityManager;
         $this->Encoder = $Encoder;
+        $this->tokenStorage = $tokenStorage;
+
     }
 
 
@@ -38,9 +43,12 @@ class UsersService implements UsersServiceInterface
      */
     function getAllUsers() {
 
+
         return $this->entityManager->createQueryBuilder()
         ->select('u.id , u.nom, u.prenom , u.email , u.adresse , u.codepostal , u.city , u.numTel , u.roles , u.motpass , u.dateNaissance')
         ->from('App:Users', 'u')
+        ->where('u.company = :company')
+        ->setParameter('company', $this->getUser()->getCompany())
         ->getQuery()->getResult(); 
 
     }
@@ -62,6 +70,25 @@ class UsersService implements UsersServiceInterface
         ->setParameter('id', $id)
         ->getQuery()->getResult(); 
 
+    }
+
+
+    /**
+     * @return Users
+     *
+     * @throws UnauthorizedHttpException
+     */
+    public function getUser(): Users
+    {
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(
+            ['email' =>  $this->tokenStorage->getToken()->getUser()->getUsername()]
+        );
+
+        if (null === $user) {
+            throw new UnauthorizedHttpException('/');
+        }
+
+        return $user;
     }
 
 
@@ -117,6 +144,7 @@ class UsersService implements UsersServiceInterface
         $log = new Log();
         $log->setDate(new DateTime('now'));
         $log->setUser($user);
+        $log->setCompany($this->getUser()->getCompany());
         $log->setAction("Add User");
         $log->setModule("User");
         $log->setUrl('/user');
@@ -125,46 +153,6 @@ class UsersService implements UsersServiceInterface
 
         return 'User Created successfully ';
         
-    }
-
-
-    /**
-     * @param Request $request
-     * @return array|string
-     * @throws Exception
-     */
-    public Function UserExist(Request $request)
-    {
-
-        //getting User from database
-        $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $request->get('email')]);
-
-        // if User exist in database check Password
-        if ($user ) {
-
-            if ($user->getMotpass() == $request->get('motpass') ) {
-
-
-                //add to Log 
-                $log = new Log();
-                $log->setDate(new DateTime('now'));
-                $log->setUser($user);// after will get user id from session
-                $log->setAction("Login");
-                $log->setModule("User");
-                $log->setUrl('/Login');
-                $this->entityManager->persist($log);
-                $this->entityManager->flush();
-                /* return ['token' => $this->JWTManager->create($user->createFromPayload($user->getEmail(), ['roles' => $user->getRoles()])),
-                        'RefreshToken' => $this->RefreshToken($user) 
-            ];*/
-                return [$user->getId(),$user->getNom(),$user->getRoles()];
-            }
-            return 'password incorrect';
-
-        }
-
-        return 'user doesn\'t exist';
-
     }
 
 
@@ -184,7 +172,8 @@ class UsersService implements UsersServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10")); // after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Delete User");
             $log->setModule("User");
             $log->setUrl('/user');
@@ -231,7 +220,8 @@ class UsersService implements UsersServiceInterface
             //add to Log 
             $log = new Log();
             $log->setDate(new DateTime('now'));
-            $log->setUser($this->entityManager->getRepository(Users::class)->find("10"));// after will get user id from session
+            $log->setUser($this->getUser());
+            $log->setCompany($this->getUser()->getCompany());
             $log->setAction("Modify User");
             $log->setModule("User");
             $log->setUrl('/user');

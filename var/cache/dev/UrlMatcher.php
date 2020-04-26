@@ -12,7 +12,7 @@ return [
         '/api/token/refresh' => [[['_route' => 'gesdinet_jwt_refresh_token', '_controller' => 'gesdinet.jwtrefreshtoken::refresh'], null, ['POST' => 0], null, false, false, null]],
         '/api/company' => [
             [['_route' => 'get_all_companys', '_controller' => 'App\\Controller\\Rest\\CompanyApiController::findAllCompanys'], null, ['GET' => 0], null, false, false, null],
-            [['_route' => 'app_rest_companyapi_addcompany', '_controller' => 'App\\Controller\\Rest\\CompanyApiController::AddCompany'], null, ['POST' => 0], null, false, false, null],
+            [['_route' => 'Add_company', '_controller' => 'App\\Controller\\Rest\\CompanyApiController::AddCompany'], null, ['POST' => 0], null, false, false, null],
         ],
         '/api/equip' => [
             [['_route' => 'get_all_equips', '_controller' => 'App\\Controller\\Rest\\EquipApiController::findAllEquips'], null, ['GET' => 0], null, false, false, null],
@@ -28,7 +28,7 @@ return [
         ],
         '/api/product' => [
             [['_route' => 'get_all_products', '_controller' => 'App\\Controller\\Rest\\ProductApiController::findAllProduct'], null, ['GET' => 0], null, false, false, null],
-            [['_route' => 'app_rest_productapi_addproduct', '_controller' => 'App\\Controller\\Rest\\ProductApiController::AddProduct'], null, ['POST' => 0], null, false, false, null],
+            [['_route' => 'add_product', '_controller' => 'App\\Controller\\Rest\\ProductApiController::AddProduct'], null, ['POST' => 0], null, false, false, null],
         ],
         '/api/project' => [
             [['_route' => 'get_all_projects', '_controller' => 'App\\Controller\\Rest\\ProjectApiController::findAllProject'], null, ['GET' => 0], null, false, false, null],
@@ -36,11 +36,10 @@ return [
         ],
         '/api/referance' => [
             [['_route' => 'get_all_referances', '_controller' => 'App\\Controller\\Rest\\ReferanceApiController::findAllReferance'], null, ['GET' => 0], null, false, false, null],
-            [['_route' => 'add_referenc', '_controller' => 'App\\Controller\\Rest\\ReferanceApiController::AddReferance'], null, ['POST' => 0], null, false, false, null],
+            [['_route' => 'add_reference', '_controller' => 'App\\Controller\\Rest\\ReferanceApiController::AddReferance'], null, ['POST' => 0], null, false, false, null],
         ],
         '/api/users' => [[['_route' => 'get_all_users', '_controller' => 'App\\Controller\\Rest\\UserApiController::findAllUsers'], null, ['GET' => 0], null, false, false, null]],
         '/api/signup' => [[['_route' => 'add_user', '_controller' => 'App\\Controller\\Rest\\UserApiController::AddUser'], null, ['POST' => 0], null, false, false, null]],
-        '/api/login' => [[['_route' => 'user_login', '_controller' => 'App\\Controller\\Rest\\UserApiController::Login'], null, ['POST' => 0], null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
@@ -141,9 +140,9 @@ return [
             [['_route' => 'get_equip_byId', '_controller' => 'App\\Controller\\Rest\\EquipApiController::findEquipById'], ['id'], ['GET' => 0], null, false, true, null],
             [['_route' => 'Delete_equip', '_controller' => 'App\\Controller\\Rest\\EquipApiController::DeleteEquip'], ['id'], ['DELETE' => 0], null, false, true, null],
         ],
-        316 => [[['_route' => 'app_rest_equipapi_showmembers', '_controller' => 'App\\Controller\\Rest\\EquipApiController::showMembers'], ['id'], ['GET' => 0], null, false, false, null]],
-        334 => [[['_route' => 'app_rest_equipapi_addmembers', '_controller' => 'App\\Controller\\Rest\\EquipApiController::addMembers'], ['id'], ['POST' => 0], null, false, false, null]],
-        355 => [[['_route' => 'app_rest_equipapi_removemembers', '_controller' => 'App\\Controller\\Rest\\EquipApiController::removeMembers'], ['id'], ['POST' => 0], null, false, false, null]],
+        316 => [[['_route' => 'get_equip_members', '_controller' => 'App\\Controller\\Rest\\EquipApiController::showMembers'], ['id'], ['GET' => 0], null, false, false, null]],
+        334 => [[['_route' => 'add_member_to_equip', '_controller' => 'App\\Controller\\Rest\\EquipApiController::addMembers'], ['id'], ['POST' => 0], null, false, false, null]],
+        355 => [[['_route' => 'remove_member_from_equip', '_controller' => 'App\\Controller\\Rest\\EquipApiController::removeMembers'], ['id'], ['POST' => 0], null, false, false, null]],
         394 => [
             [['_route' => 'api_logs_get_collection', '_controller' => 'api_platform.action.get_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Log', '_api_collection_operation_name' => 'get'], ['_format'], ['GET' => 0], null, false, true, null],
             [['_route' => 'api_logs_post_collection', '_controller' => 'api_platform.action.post_collection', '_format' => null, '_api_resource_class' => 'App\\Entity\\Log', '_api_collection_operation_name' => 'post'], ['_format'], ['POST' => 0], null, false, true, null],
@@ -178,12 +177,12 @@ return [
             [['_route' => 'Delete_project', '_controller' => 'App\\Controller\\Rest\\ProjectApiController::DeleteProject'], ['id'], ['DELETE' => 0], null, false, true, null],
         ],
         630 => [
-            [['_route' => 'app_rest_referanceapi_findreferancebyid', '_controller' => 'App\\Controller\\Rest\\ReferanceApiController::findReferanceById'], ['id'], ['GET' => 0], null, false, true, null],
+            [['_route' => 'get_reference_byId', '_controller' => 'App\\Controller\\Rest\\ReferanceApiController::findReferanceById'], ['id'], ['GET' => 0], null, false, true, null],
             [['_route' => 'Modify_reference', '_controller' => 'App\\Controller\\Rest\\ReferanceApiController::ModifyReferance'], ['id'], ['PUT' => 0], null, false, true, null],
             [['_route' => 'Delete_Reference', '_controller' => 'App\\Controller\\Rest\\ReferanceApiController::DeleteReferance'], ['id'], ['DELETE' => 0], null, false, true, null],
         ],
         655 => [
-            [['_route' => 'app_rest_userapi_findusersbyid', '_controller' => 'App\\Controller\\Rest\\UserApiController::findUsersById'], ['id'], ['GET' => 0], null, false, true, null],
+            [['_route' => 'get_uer_byId', '_controller' => 'App\\Controller\\Rest\\UserApiController::findUsersById'], ['id'], ['GET' => 0], null, false, true, null],
             [['_route' => 'Modify_user', '_controller' => 'App\\Controller\\Rest\\UserApiController::ModifyUser'], ['id'], ['PUT' => 0], null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

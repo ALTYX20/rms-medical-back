@@ -40,46 +40,6 @@
 					"response": []
 				},
 				{
-					"name": "Create Company",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "    {\r\n    \t\"name\": \"Company14\",\r\n        \"email\": \"Company14@mail.com\",\r\n        \"motpass\": \"123\",\r\n        \"adresse\": \"adressCompany13\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numtel\": \"22555555\",\r\n        \"website\": \"www.Company13.com\",\r\n        \"staffcount\": 25,\r\n        \"sector\": \"informatique\",\r\n        \"file\": \"hdhhdhhdskksllc.zip\",\r\n        \"activity\": \"produceCompany13\",\r\n        \"description\": \"looooooooooooooooong texxxxxxxxxxxxte\",\r\n        \"period_subscription\": \"2020-04-01T00:00:00+00:00\",\r\n        \"databasesize\": 255,\r\n        \"slatype\": \"type3\",\r\n        \"supporttype\": \"support3\",\r\n        \"status\": true,\r\n        \"employee\":[[\"saifeddin1996@gmail.com\",\"omarsaifeddingorrab@gmail.com\"],[\"manager@mail.com\"],[\"editor@mail.com\",\"editor2@email.com\"],[\"viewer@mail.com\"]]\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://127.0.0.1:8000/api/company",
-							"protocol": "https",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"company"
-							]
-						},
-						"description": "CreatCompany\nhttps://127.0.0.1:8000/api/company /Delete"
-					},
-					"response": []
-				},
-				{
 					"name": "DeleteCompany",
 					"request": {
 						"method": "DELETE",
@@ -236,7 +196,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/delete/24",
+							"raw": "http://127.0.0.1:8000/api/delete/17",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -248,7 +208,7 @@
 							"path": [
 								"api",
 								"delete",
-								"24"
+								"17"
 							]
 						},
 						"description": "https://127.0.0.1:8000/api/delete"
@@ -299,7 +259,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"titre\": \"Project10\",\r\n        \"logo\": \"Project10.png\",\r\n        \"status\": \"1\",\r\n        \"territories\": \"nabeul\",\r\n        \"project_creator\": \"10\"\r\n        \r\n    }",
+							"raw": "{\r\n        \"titre\": \"Project10\",\r\n        \"logo\": \"Project10.png\",\r\n        \"status\": \"1\",\r\n        \"territories\": \"nabeul\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -459,8 +419,8 @@
 							}
 						},
 						"url": {
-							"raw": "https://127.0.0.1:8000/api/product",
-							"protocol": "https",
+							"raw": "http://127.0.0.1:8000/api/product",
+							"protocol": "http",
 							"host": [
 								"127",
 								"0",
@@ -499,7 +459,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/product/1",
+							"raw": "http://127.0.0.1:8000/api/product/9",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -511,7 +471,7 @@
 							"path": [
 								"api",
 								"product",
-								"1"
+								"9"
 							]
 						},
 						"description": "https://127.0.0.1:8000/api/product /put"
@@ -615,7 +575,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"titre\": \"video56\",\r\n        \"description\": \"video Of company \",\r\n        \"type\": \"video\"\r\n\r\n}",
+							"raw": "{\r\n        \"titre\": \"video3\",\r\n        \"description\": \"video Of company \",\r\n        \"type\": \"video\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -794,7 +754,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"titre\": \"referance5\",\r\n    \"description\": \"lonnnnnng text tooooooooooooooooooooooooooooooo referance 5\"\r\n\r\n }",
+							"raw": "{\r\n    \"titre\": \"referance2\",\r\n    \"description\": \"lonnnnnng text tooooooooooooooooooooooooooooooo referance 2\"\r\n\r\n }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1109,7 +1069,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"leader\" : 9,\n    \"company\" : 4,\n    \"members\" : [10,11]\n}",
+							"raw": "{\n\t\"leader\" : 9,\n    \"members\" : [10,11]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1141,7 +1101,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/equip/1/members",
+							"raw": "http://127.0.0.1:8000/api/equip/3/members",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1153,7 +1113,7 @@
 							"path": [
 								"api",
 								"equip",
-								"1",
+								"3",
 								"members"
 							]
 						},
@@ -1308,7 +1268,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "    {\r\n    \t\"company\": \"4\",\r\n        \"nom\": \"User21name\",\r\n        \"prenom\": \"user21prename\",\r\n        \"dateNaissance\": \"1996-02-04T00:00:00+00:00\",\r\n        \"email\": \"user21@email.com\",\r\n        \"adresse\": \"adrresUser21\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"ROLE_ADMIN\",\r\n        \"motpass\": \"123\"\r\n    }",
+					"raw": "    {\r\n    \t\"company\": \"4\",\r\n        \"nom\": \"User22name\",\r\n        \"prenom\": \"user22prename\",\r\n        \"dateNaissance\": \"1996-02-04T00:00:00+00:00\",\r\n        \"email\": \"user22@email.com\",\r\n        \"adresse\": \"adrresUser22\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numTel\": \"25222555\",\r\n        \"sexe\": \"homme\",\r\n        \"role\": \"ROLE_ADMIN\",\r\n        \"motpass\": \"123\"\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1375,6 +1335,49 @@
 			"response": []
 		},
 		{
+			"name": "Create Company",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n    \t\"name\": \"Company28\",\r\n        \"email\": \"Company28@mail.com\",\r\n        \"motpass\": \"123\",\r\n        \"adresse\": \"adressCompany13\",\r\n        \"codepostal\": \"22\",\r\n        \"city\": \"nabeul\",\r\n        \"numtel\": \"22555555\",\r\n        \"website\": \"www.Company13.com\",\r\n        \"staffcount\": 25,\r\n        \"sector\": \"informatique\",\r\n        \"file\": \"hdhhdhhdskksllc.zip\",\r\n        \"activity\": \"produceCompany13\",\r\n        \"description\": \"looooooooooooooooong texxxxxxxxxxxxte\",\r\n        \"period_subscription\": \"2020-04-01T00:00:00+00:00\",\r\n        \"databasesize\": 255,\r\n        \"slatype\": \"type3\",\r\n        \"supporttype\": \"support3\",\r\n        \"status\": true,\r\n        \"employee\":[[\"saifeddin1996@gmail.com\",\"omarsaifeddingorrab@gmail.com\"],[\"manager@mail.com\"],[\"editor@mail.com\",\"editor2@email.com\"],[\"viewer@mail.com\"]]\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/company",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"company"
+					]
+				},
+				"description": "CreatCompany\nhttps://127.0.0.1:8000/api/company /Delete"
+			},
+			"response": []
+		},
+		{
 			"name": "refreshToken",
 			"request": {
 				"method": "POST",
@@ -1414,7 +1417,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1ODY5Nzg1OTQsImV4cCI6MTU4Njk4MjE5NCwicm9sZXMiOlsiUk9MRV9NQU5BR0VSIiwiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoidXNlcjdAZW1haWwuY29tIn0.jRrAjWHYDD1R-xhqqn3efCrQ3NEo8_wrVIWOiw3BJq57um6zhngE3HO_DDlO6PyR37qtOJF8kjWaRHhDoOOPiJzjoZgA4rOxyv7ggu6OqzLOhopyYumI2egNuNLXlNBEgT9OBCDaEUCZXeNz0ezKyyD5x4VU1KomwzccPH4ew8_6eJNVtFuMqSvU5Cbm2JwRIEKxlG_I6sMSjRWbdyeM7U_VnF07_SbCPvBCdKZl4cmMjolsGh4Yabc4cC8JEk6hC4YRFnHIMyI0ov0tfCiB-C1FFqbt-eiarIBUEcylUt-43FEZzMxuEK8SsKYW8Mzn5NXSHI7vGKp1FRLiVgE7jfHaIanZI5hc6ulbe79-BdzuvuCY8RvEA6U1F0QUpMIfejDyYO1eVZqJBZRhTW6OE16cxwKIINsu0xgyR0w9eGcaQefwjhhiblsnRdrVdPP-9EGE9XETcWO457DJt6yo8bqHRokuWfRJHuusP8OKilUop3bE6YWmRZSiFOIbXdUvVt--aw8VPjWOYC-WdHR8EtbvS8bdJKrbPssFW1dL3a4vOnUaON60wgv08BuBo1j_MU1PZbAEaM-0dkYa7EjnUiui4LV8Ri6e5kk5Od0MMIxHnPqIVF9GwiDSJx465jJFP97RH23cEz1zM0pI-7OxXZVjPaRgkskAV10YXLtok3Y",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1ODc4NTk5MjgsImV4cCI6MTU4Nzg2MzUyOCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6InVzZXIzQGVtYWlsLmNvbSJ9.CCNV82Xg2ifnSpSaXsP5LBUuauckL2mCPZXwrZXJWRNGKdEFXjjv_pQOtU1wNwekDtsYOZwyujZpjcZmOXp0ZtSAPSthfmcfGMV9_ElpV2EdjfE-xtrtQPbVYfXGs3WxAt9kEuGc5kg5VGXc9y_yoceJxTBYpezywoJe4P-LRde1sKUflbwhc3lJ5nG6xxrkXELq2T8VSqXzglAxWYPpaPF3f57iNF4Yh81mveFUyrcATwrlbkMx8YvhMEFQBS5tzfn0JfDyqeinznCgV2K2Ul91yEbhiQGY9OKeuGZXyvtFUTZ9PeXYu_y_GxdHwgtzxgFh_kM8B-WrT5JuBMV0inyf1RA-VpMtKO2VucSyQt_OM0t6KH4CLdWnnT1VqD_D1OCh9A99Rpa3WlMVN3kPfNFkOPLriz7QhCe8f2X9Tgt7tQ_uAz2GR7ABwEvoCEm6e3OdWC8zRtG2zbQsQvS3EZz6zbL06tDP8v3xTs87RX7OAUZ_FSXHAbC06SlA4HM_OteZIxtE4-iL7adiEzt796paWispR8uj0Lo-y2gYtoveDbF30n6ii4GYmwXZGIqfR3VIY62NYzAs7m09qg63s5fAg7haLliOAYd4CWF9PqPEP-HwZEXm4-gK03MG7jwDUe8fKq8BBCXO8mIRZL4dNVbPMSvsyv42XakNhcBqe00",
 				"type": "string"
 			}
 		]
